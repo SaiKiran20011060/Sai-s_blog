@@ -11,7 +11,7 @@
         <header class="hero">
             <div class="hero-content">
                 <h1 class="glitch" data-text="SAI'S TECH HUB">SAI'S TECH HUB</h1>
-                <p class="subtitle">Exploring <span id="dynamic-text">AI</span></p>
+                <p class="subtitle">Exploring <span class="dynamic-container"><span id="dynamic-text">AI</span></span></p>
             </div>
         </header>
 
@@ -36,16 +36,16 @@
         const dynamicText = document.getElementById('dynamic-text');
 
         function changeText() {
-            dynamicText.classList.add('slide-out');
+            currentIndex = (currentIndex + 1) % texts.length;
+            dynamicText.style.animation = 'none';
+            dynamicText.style.transform = 'translateX(100%)';
+            dynamicText.textContent = texts[currentIndex];
             setTimeout(() => {
-                currentIndex = (currentIndex + 1) % texts.length;
-                dynamicText.textContent = texts[currentIndex];
-                dynamicText.classList.remove('slide-out');
-                dynamicText.style.animation = 'slideInRight 0.6s ease-out';
-            }, 300);
+                dynamicText.style.animation = 'marqueeSlide 3s ease-in-out';
+            }, 50);
         }
 
-        setInterval(changeText, 2000);
+        setInterval(changeText, 3000);
     </script>
 </body>
 </html>
