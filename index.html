@@ -36,11 +36,12 @@
         const dynamicText = document.getElementById('dynamic-text');
 
         function changeText() {
-            dynamicText.style.opacity = '0';
+            dynamicText.classList.add('slide-out');
             setTimeout(() => {
                 currentIndex = (currentIndex + 1) % texts.length;
                 dynamicText.textContent = texts[currentIndex];
-                dynamicText.style.opacity = '1';
+                dynamicText.classList.remove('slide-out');
+                dynamicText.style.animation = 'slideInRight 0.6s ease-out';
             }, 300);
         }
 
