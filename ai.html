@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My AI Learning Blog</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <nav class="back-nav">
+        <button onclick="window.location.href='main.html'" class="back-btn">← Back to Hub</button>
+    </nav>
+    <header>
+        <h1>My AI Learning Journey</h1>
+        <p>Documenting what I learn about Artificial Intelligence</p>
+    </header>
+
+    <main>
+        <div class="blog-sections">
+            <div class="section-card" onclick="triggerGlowAndNavigate(this, 'basics.html')">
+                <div class="section-icon">📚</div>
+                <h3>AI Basics</h3>
+                <p>Learn fundamental concepts like supervised learning, classification, regression, and clustering</p>
+            </div>
+            <div class="section-card" onclick="triggerGlowAndNavigate(this, 'prompt-engineering.html')">
+                <div class="section-icon">🎯</div>
+                <h3>Prompt Engineering</h3>
+                <p>Master the art of crafting effective prompts for AI models and getting better results</p>
+            </div>
+            <div class="section-card" onclick="triggerGlowAndNavigate(this, 'deep-learning.html')">
+                <div class="section-icon">🧠</div>
+                <h3>Deep Learning</h3>
+                <p>Neural networks, CNNs, RNNs, Transformers and advanced architectures</p>
+            </div>
+            <div class="section-card" onclick="triggerGlowAndNavigate(this, 'generative-ai.html')">
+                <div class="section-icon">🧩</div>
+                <h3>Generative AI</h3>
+                <p>Gemini, ChatGPT, Midjourney, prompt engineering and AI that creates</p>
+            </div>
+            <div class="section-card" onclick="triggerGlowAndNavigate(this, 'cloud-ai.html')">
+                <div class="section-icon">☁️</div>
+                <h3>AI on Cloud</h3>
+                <p>Vertex AI (GCP), AWS SageMaker, Azure AI and cloud-based ML platforms</p>
+            </div>
+            <div class="section-card" onclick="triggerGlowAndNavigate(this, 'data-engineering.html')">
+                <div class="section-icon">🧮</div>
+                <h3>Data Engineering for AI</h3>
+                <p>Data preprocessing, feature engineering, pipelines and ML workflows</p>
+            </div>
+        </div>
+
+        <article class="blog-post">
+            <h2>Welcome to My AI Learning Journey</h2>
+            <p class="date">December 2024</p>
+            <p>This is where I'll document my journey learning about AI. Click on the sections above to explore different topics and concepts.</p>
+        </article>
+    </main>
+
+    <footer>
+        <p>&copy; 2024 My AI Learning Blog</p>
+    </footer>
+
+    <!-- Gemini AI Chatbot -->
+    <div id="chatbot-container">
+        <div id="chatbot-toggle">
+            <img src="AI_img-removebg-preview.png" alt="AI" style="width: 40px; height: 40px; border-radius: 50%; object-fit: cover;">
+        </div>
+        <div id="chatbot-window">
+            <div id="chatbot-header">
+                <span>AI Assistant</span>
+                <div class="chatbot-controls">
+                    <button id="chatbot-refresh" class="refresh-btn">
+                        <svg viewBox="0 0 24 24">
+                            <path d="M17.65 6.35C16.2 4.9 14.21 4 12 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08c-.82 2.33-3.04 4-5.65 4-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"/>
+                        </svg>
+                    </button>
+                    <button id="chatbot-close">×</button>
+                </div>
+            </div>
+            <div id="chatbot-messages"></div>
+            <div id="chatbot-input-container">
+                <input type="text" id="chatbot-input" placeholder="Ask me about AI...">
+                <button id="chatbot-send">Send</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="ai-background.js"></script>
+    <script src="chatbot-frontend.js"></script>
+    <script>
+        function triggerGlowAndNavigate(element, url) {
+            element.classList.remove('glow');
+            element.classList.add('glow');
+            setTimeout(() => {
+                window.location.href = url;
+            }, 400);
+        }
+    </script>
+</body>
+</html>

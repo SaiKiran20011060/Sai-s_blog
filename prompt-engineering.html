@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prompt Engineering - Sai's Tech Hub</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <nav class="back-nav">
+        <button onclick="window.location.href='ai.html'" class="back-btn">← Back to AI Hub</button>
+    </nav>
+    
+    <header>
+        <h1>🎯 Prompt Engineering</h1>
+        <p>Master the art of communicating with AI</p>
+    </header>
+
+    <main>
+        
+
+        <div class="blog-post">
+            <div class="topic-header">
+                <div class="topic-icon">🎯</div>
+                <div>
+                    <h3>What is Prompt Engineering?</h3>
+                </div>
+            </div>
+            <p><strong>Prompt Engineering</strong> is the art and science of crafting effective instructions for AI models to get the best possible outputs. It's like learning how to ask the right questions in the right way.</p>
+            <div class="concept-visual">
+                <div class="learning-type">
+                    <h4>Bad Prompt</h4>
+                    <div class="visual-box">
+                        "Write something about dogs"<br>
+                        → Vague, unclear output
+                    </div>
+                </div>
+                <div class="learning-type">
+                    <h4>Good Prompt</h4>
+                    <div class="visual-box">
+                        "Write a 200-word informative article about dog training tips for new pet owners"<br>
+                        → Clear, specific output
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="blog-post">
+            <div class="topic-header">
+                <div class="topic-icon">🔧</div>
+                <div>
+                    <h3>Prompt Engineering Techniques</h3>
+                </div>
+            </div>
+            <div class="training-visual">
+                <div class="training-step">
+                    <div class="step-name">Zero-Shot</div>
+                    <div class="step-desc">Direct instruction without examples</div>
+                </div>
+                <div class="arrow">──➤</div>
+                <div class="training-step">
+                    <div class="step-name">Few-Shot</div>
+                    <div class="step-desc">2-5 examples for pattern learning</div>
+                </div>
+                <!-- <div class="arrow">→</div> -->
+                <div class="training-step">
+                    <div class="step-name">Chain-of-Thought</div>
+                    <div class="step-desc">Step-by-step reasoning</div>
+                </div>
+                <div class="arrow">⮜----╯</div>
+            </div>
+        </div>
+
+        <div class="blog-post">
+            <div class="topic-header">
+                <div class="topic-icon">📝</div>
+                <div>
+                    <h3>Best Practices</h3>
+                </div>
+            </div>
+            <ul>
+                <li><strong>Be Specific:</strong> Clear instructions yield better results</li>
+                <li><strong>Provide Context:</strong> Give background information when needed</li>
+                <li><strong>Use Examples:</strong> Show the AI what you want</li>
+                <li><strong>Set Constraints:</strong> Specify length, format, tone</li>
+                <li><strong>Iterate:</strong> Refine prompts based on outputs</li>
+            </ul>
+        </div>
+
+        <div class="blog-post">
+            <div class="topic-header">
+                <div class="topic-icon">🛠️</div>
+                <div>
+                    <h3>Common Applications</h3>
+                </div>
+            </div>
+            <div class="classification-visual">
+                <div class="class-example">✍️ Content Writing</div>
+                <div class="class-example">💻 Code Generation</div>
+                <div class="class-example">📊 Data Analysis</div>
+                <div class="class-example">🎨 Creative Tasks</div>
+                <div class="class-example">🔍 Research</div>
+                <div class="class-example">📚 Education</div>
+            </div>
+        </div>
+
+        <article class="blog-post">
+            <h2>Mastering Prompt Engineering</h2>
+            <p class="date">January 2025</p>
+            <p>Effective prompt engineering is essential for getting the most out of AI tools like ChatGPT, Gemini, and Claude.</p>
+            
+            <h3>Key Principles:</h3>
+            <ul>
+                <li><strong>Clarity:</strong> Use clear, unambiguous language</li>
+                <li><strong>Context:</strong> Provide relevant background information</li>
+                <li><strong>Structure:</strong> Organize your prompts logically</li>
+                <li><strong>Examples:</strong> Show don't just tell</li>
+            </ul>
+
+            <h3>Advanced Techniques:</h3>
+            <ul>
+                <li>Role-playing prompts ("Act as a...")</li>
+                <li>Multi-step reasoning</li>
+                <li>Template-based prompts</li>
+                <li>Prompt chaining for complex tasks</li>
+            </ul>
+        </article>
+    </main>
+
+    <footer>
+        <p>&copy; 2024 My AI Learning Blog</p>
+    </footer>
+
+    <!-- Gemini AI Chatbot -->
+    <div id="chatbot-container">
+        <div id="chatbot-toggle">
+            <img src="AI_img-removebg-preview.png" alt="AI" style="width: 40px; height: 40px; border-radius: 50%; object-fit: cover;">
+        </div>
+        <div id="chatbot-window">
+            <div id="chatbot-header">
+                <span>AI Assistant</span>
+                <div class="chatbot-controls">
+                    <button id="chatbot-refresh" class="refresh-btn">
+                        <svg viewBox="0 0 24 24">
+                            <path d="M17.65 6.35C16.2 4.9 14.21 4 12 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08c-.82 2.33-3.04 4-5.65 4-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"/>
+                        </svg>
+                    </button>
+                    <button id="chatbot-close">×</button>
+                </div>
+            </div>
+            <div id="chatbot-messages"></div>
+            <div id="chatbot-input-container">
+                <input type="text" id="chatbot-input" placeholder="Ask me about AI...">
+                <button id="chatbot-send">Send</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="ai-background.js"></script>
+    <script src="chatbot-frontend.js"></script>
+</body>
+</html>

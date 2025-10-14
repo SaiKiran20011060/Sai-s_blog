@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Generative AI - My AI Learning Blog</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <nav class="back-nav">
+        <button onclick="window.location.href='ai.html'" class="back-btn">← Back to AI Hub</button>
+    </nav>
+    
+    <header>
+        <h1>🧩 Generative AI</h1>
+        <p>Exploring the world of AI that creates</p>
+    </header>
+
+    <main>
+        <div class="blog-post">
+            <div class="topic-header">
+                <div class="topic-icon">🤖</div>
+                <div>
+                    <h3>Major Models</h3>
+                </div>
+            </div>
+            <div class="concept-visual">
+                <div class="learning-type">
+                    <h4>Gemini (Google)</h4>
+                    <div class="visual-box">
+                        Multimodal AI: Text + Images + Code + Audio<br>
+                        Best for: Reasoning, Code Generation
+                    </div>
+                </div>
+                <div class="learning-type">
+                    <h4>ChatGPT (OpenAI)</h4>
+                    <div class="visual-box">
+                        GPT-3.5/4 Conversational AI<br>
+                        Best for: Writing, Analysis
+                    </div>
+                </div>
+                <div class="learning-type">
+                    <h4>Midjourney</h4>
+                    <div class="visual-box">
+                        Text-to-Image Generation<br>
+                        Best for: Artistic Visuals
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="blog-post">
+            <div class="topic-header">
+                <div class="topic-icon">🎯</div>
+                <div>
+                    <h3>Prompt Engineering</h3>
+                </div>
+            </div>
+            <div class="training-visual">
+                <div class="training-step">
+                    <div class="step-name">Zero-Shot</div>
+                    <div class="step-desc">Direct instruction without examples</div>
+                </div>
+                <div class="arrow">→</div>
+                <div class="training-step">
+                    <div class="step-name">Few-Shot</div>
+                    <div class="step-desc">2-5 examples for pattern learning</div>
+                </div>
+                <div class="arrow">→</div>
+                <div class="training-step">
+                    <div class="step-name">Chain-of-Thought</div>
+                    <div class="step-desc">Step-by-step reasoning</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="blog-post">
+            <div class="topic-header">
+                <div class="topic-icon">⚡</div>
+                <div>
+                    <h3>Technical Concepts</h3>
+                </div>
+            </div>
+            <ul>
+                <li><strong>Transformers:</strong> Architecture powering modern LLMs</li>
+                <li><strong>Attention Mechanism:</strong> How models focus on relevant parts</li>
+                <li><strong>Fine-tuning:</strong> Adapting pre-trained models</li>
+                <li><strong>RLHF:</strong> Reinforcement Learning from Human Feedback</li>
+                <li><strong>Multimodal AI:</strong> Processing text, images, audio together</li>
+            </ul>
+        </div>
+
+        <div class="blog-post">
+            <div class="topic-header">
+                <div class="topic-icon">🔧</div>
+                <div>
+                    <h3>Applications</h3>
+                </div>
+            </div>
+            <div class="classification-visual">
+                <div class="class-example">📝 Content Creation</div>
+                <div class="class-example">💬 Chatbots</div>
+                <div class="class-example">🎨 Image Generation</div>
+                <div class="class-example">💻 Code Generation</div>
+                <div class="class-example">📚 Creative Writing</div>
+                <div class="class-example">🔍 Data Analysis</div>
+            </div>
+        </div>
+
+        <article class="blog-post">
+            <h2>The Generative AI Revolution</h2>
+            <p class="date">December 2024</p>
+            <p>Generative AI has transformed how we interact with technology. From ChatGPT's conversational abilities to Midjourney's artistic creations, these models are reshaping industries.</p>
+            
+            <h3>Key Takeaways:</h3>
+            <ul>
+                <li>Prompt engineering is crucial for getting good results</li>
+                <li>Different models excel at different tasks</li>
+                <li>Multimodal capabilities are the future</li>
+                <li>Responsible AI practices are essential</li>
+            </ul>
+        </article>
+    </main>
+
+    <footer>
+        <p>&copy; 2024 My AI Learning Blog</p>
+    </footer>
+
+    <!-- Gemini AI Chatbot -->
+    <div id="chatbot-container">
+        <div id="chatbot-toggle">
+            <img src="AI_img-removebg-preview.png" alt="AI" style="width: 40px; height: 40px; border-radius: 50%; object-fit: cover;">
+        </div>
+        <div id="chatbot-window">
+            <div id="chatbot-header">
+                <span>AI Assistant</span>
+                <div class="chatbot-controls">
+                    <button id="chatbot-refresh" class="refresh-btn">
+                        <svg viewBox="0 0 24 24">
+                            <path d="M17.65 6.35C16.2 4.9 14.21 4 12 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08c-.82 2.33-3.04 4-5.65 4-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"/>
+                        </svg>
+                    </button>
+                    <button id="chatbot-close">×</button>
+                </div>
+            </div>
+            <div id="chatbot-messages"></div>
+            <div id="chatbot-input-container">
+                <input type="text" id="chatbot-input" placeholder="Ask me about AI...">
+                <button id="chatbot-send">Send</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="ai-background.js"></script>
+    <script src="chatbot-frontend.js"></script>
+</body>
+</html>

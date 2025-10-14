@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Deep Learning - Sai's Tech Hub</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <nav class="back-nav">
+        <button onclick="window.location.href='ai.html'" class="back-btn">← Back to AI Blog</button>
+    </nav>
+    <header>
+        <h1>🧠 Deep Learning</h1>
+        <p>Neural networks, CNNs, RNNs, Transformers and beyond</p>
+    </header>
+
+    <main>
+        <article class="blog-post">
+            <div class="topic-header">
+                <div class="topic-icon">🧠</div>
+                <h2>What is Deep Learning?</h2>
+            </div>
+            <p class="date">December 2024</p>
+            <p><strong>Deep Learning</strong> is a subset of machine learning that uses neural networks with multiple layers (hence "deep") to learn complex patterns in data. It's inspired by how the human brain processes information through interconnected neurons.</p>
+            <div class="deep-learning-visual">
+                <div class="layer">Input Layer</div>
+                <div class="arrow">→</div>
+                <div class="layer">Hidden Layers</div>
+                <div class="arrow">→</div>
+                <div class="layer">Output Layer</div>
+            </div>
+            <p><strong>Key Features:</strong></p>
+            <ul>
+                <li>Automatic feature extraction from raw data</li>
+                <li>Learns hierarchical representations</li>
+                <li>Excels with large datasets</li>
+                <li>Powers modern AI applications</li>
+            </ul>
+        </article>
+
+        <article class="blog-post">
+            <div class="topic-header">
+                <div class="topic-icon">🔗</div>
+                <h2>Neural Networks</h2>
+            </div>
+            <p class="date">December 2024</p>
+            <div class="neural-network-visual">
+                <div class="neuron-layer">
+                    <div class="neuron">🔵</div>
+                    <div class="neuron">🔵</div>
+                    <div class="neuron">🔵</div>
+                </div>
+                <div class="connections">
+                    <div class="connection-line"></div>
+                    <div class="connection-line"></div>
+                    <div class="connection-line"></div>
+                </div>
+                <div class="neuron-layer">
+                    <div class="neuron">🟢</div>
+                    <div class="neuron">🟢</div>
+                </div>
+                <div class="connections">
+                    <div class="connection-line"></div>
+                    <div class="connection-line"></div>
+                </div>
+                <div class="neuron-layer">
+                    <div class="neuron">🔴</div>
+                </div>
+            </div>
+            <p>A <strong>Neural Network</strong> consists of interconnected nodes (neurons) organized in layers. Each connection has a weight, and neurons apply activation functions to process information.</p>
+            <p><strong>Components:</strong></p>
+            <ul>
+                <li><strong>Neurons:</strong> Processing units that receive inputs and produce outputs</li>
+                <li><strong>Weights:</strong> Parameters that determine connection strength</li>
+                <li><strong>Biases:</strong> Additional parameters for fine-tuning</li>
+                <li><strong>Activation Functions:</strong> ReLU, Sigmoid, Tanh</li>
+            </ul>
+        </article>
+
+        <article class="blog-post">
+            <div class="topic-header">
+                <div class="topic-icon">🖼️</div>
+                <h2>Convolutional Neural Networks (CNNs)</h2>
+            </div>
+            <p class="date">December 2024</p>
+            <div class="cnn-visual">
+                <div class="cnn-layer">
+                    <div class="layer-name">Input Image</div>
+                    <div class="image-grid">
+                        <div class="pixel"></div>
+                        <div class="pixel"></div>
+                        <div class="pixel"></div>
+                        <div class="pixel"></div>
+                    </div>
+                </div>
+                <div class="arrow">→</div>
+                <div class="cnn-layer">
+                    <div class="layer-name">Conv + Pool</div>
+                    <div class="feature-map"></div>
+                </div>
+                <div class="arrow">→</div>
+                <div class="cnn-layer">
+                    <div class="layer-name">Fully Connected</div>
+                    <div class="output">Cat 🐱</div>
+                </div>
+            </div>
+            <p><strong>CNNs</strong> are specialized for processing grid-like data such as images. They use convolution operations to detect features like edges, shapes, and patterns.</p>
+            <p><strong>Key Layers:</strong></p>
+            <ul>
+                <li><strong>Convolutional Layer:</strong> Applies filters to detect features</li>
+                <li><strong>Pooling Layer:</strong> Reduces spatial dimensions</li>
+                <li><strong>Fully Connected Layer:</strong> Makes final predictions</li>
+            </ul>
+            <p><strong>Applications:</strong> Image recognition, medical imaging, autonomous vehicles, facial recognition</p>
+        </article>
+
+        <article class="blog-post">
+            <div class="topic-header">
+                <div class="topic-icon">🔄</div>
+                <h2>Recurrent Neural Networks (RNNs)</h2>
+            </div>
+            <p class="date">December 2024</p>
+            <div class="rnn-visual">
+                <div class="rnn-cell">
+                    <div class="input">Word 1</div>
+                    <div class="hidden-state">h₁</div>
+                    <div class="memory-arrow">↻</div>
+                </div>
+                <div class="arrow">→</div>
+                <div class="rnn-cell">
+                    <div class="input">Word 2</div>
+                    <div class="hidden-state">h₂</div>
+                    <div class="memory-arrow">↻</div>
+                </div>
+                <div class="arrow">→</div>
+                <div class="rnn-cell">
+                    <div class="input">Word 3</div>
+                    <div class="hidden-state">h₃</div>
+                    <div class="output">Prediction</div>
+                </div>
+            </div>
+            <p><strong>RNNs</strong> are designed for sequential data. They have memory to remember previous inputs, making them perfect for time series and text processing.</p>
+            <p><strong>Types:</strong></p>
+            <ul>
+                <li><strong>Vanilla RNN:</strong> Basic recurrent structure</li>
+                <li><strong>LSTM:</strong> Long Short-Term Memory (solves vanishing gradient)</li>
+                <li><strong>GRU:</strong> Gated Recurrent Unit (simpler than LSTM)</li>
+            </ul>
+            <p><strong>Applications:</strong> Language modeling, machine translation, speech recognition, time series forecasting</p>
+        </article>
+
+        <article class="blog-post">
+            <div class="topic-header">
+                <div class="topic-icon">⚡</div>
+                <h2>Transformers</h2>
+            </div>
+            <p class="date">December 2024</p>
+            <div class="transformer-visual">
+                <div class="attention-block">
+                    <div class="attention-head">Attention Head 1</div>
+                    <div class="attention-head">Attention Head 2</div>
+                    <div class="attention-head">Attention Head 3</div>
+                </div>
+                <div class="arrow">↓</div>
+                <div class="transformer-output">Multi-Head Attention</div>
+                <div class="arrow">↓</div>
+                <div class="transformer-output">Feed Forward</div>
+            </div>
+            <p><strong>Transformers</strong> revolutionized AI by using attention mechanisms to process sequences in parallel, making them much more efficient than RNNs.</p>
+            <p><strong>Key Innovations:</strong></p>
+            <ul>
+                <li><strong>Self-Attention:</strong> Relates different positions in a sequence</li>
+                <li><strong>Multi-Head Attention:</strong> Multiple attention mechanisms working together</li>
+                <li><strong>Positional Encoding:</strong> Adds position information to inputs</li>
+                <li><strong>Parallel Processing:</strong> Much faster training than RNNs</li>
+            </ul>
+            <p><strong>Famous Models:</strong> GPT (ChatGPT), BERT, T5, PaLM, Claude</p>
+            <p><strong>Applications:</strong> Large language models, machine translation, text summarization, code generation</p>
+        </article>
+
+        <article class="blog-post">
+            <div class="topic-header">
+                <div class="topic-icon">🎯</div>
+                <h2>Training Deep Networks</h2>
+            </div>
+            <p class="date">December 2024</p>
+            <div class="training-visual">
+                <div class="training-step">
+                    <div class="step-name">Forward Pass</div>
+                    <div class="step-desc">Data → Prediction</div>
+                </div>
+                <div class="arrow">→</div>
+                <div class="training-step">
+                    <div class="step-name">Loss Calculation</div>
+                    <div class="step-desc">Error Measurement</div>
+                </div>
+                <div class="arrow">→</div>
+                <div class="training-step">
+                    <div class="step-name">Backpropagation</div>
+                    <div class="step-desc">Update Weights</div>
+                </div>
+            </div>
+            <p><strong>Training Process:</strong></p>
+            <ul>
+                <li><strong>Forward Pass:</strong> Input data flows through the network</li>
+                <li><strong>Loss Calculation:</strong> Measure prediction error</li>
+                <li><strong>Backpropagation:</strong> Calculate gradients and update weights</li>
+                <li><strong>Optimization:</strong> Use algorithms like Adam, SGD</li>
+            </ul>
+            <p><strong>Challenges:</strong></p>
+            <ul>
+                <li>Vanishing/Exploding gradients</li>
+                <li>Overfitting</li>
+                <li>Computational requirements</li>
+                <li>Data requirements</li>
+            </ul>
+        </article>
+
+        <article class="blog-post">
+            <h2>Key Takeaways</h2>
+            <p class="date">December 2024</p>
+            <p>Deep Learning has transformed AI and continues to drive innovation:</p>
+            <ul>
+                <li><strong>Neural Networks</strong> are the foundation of deep learning</li>
+                <li><strong>CNNs</strong> excel at computer vision tasks</li>
+                <li><strong>RNNs</strong> handle sequential data with memory</li>
+                <li><strong>Transformers</strong> power modern language models</li>
+                <li>Each architecture is designed for specific types of problems</li>
+                <li>The field continues to evolve rapidly with new architectures</li>
+            </ul>
+        </article>
+    </main>
+
+    <footer>
+        <p>&copy; 2024 Sai's AI Learning Blog</p>
+    </footer>
+
+    <!-- Gemini AI Chatbot -->
+    <div id="chatbot-container">
+        <div id="chatbot-toggle">
+            <img src="AI_img-removebg-preview.png" alt="AI" style="width: 40px; height: 40px; border-radius: 50%; object-fit: cover;">
+        </div>
+        <div id="chatbot-window">
+            <div id="chatbot-header">
+                <span>AI Assistant</span>
+                <div class="chatbot-controls">
+                    <button id="chatbot-refresh" class="refresh-btn">
+                        <svg viewBox="0 0 24 24">
+                            <path d="M17.65 6.35C16.2 4.9 14.21 4 12 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08c-.82 2.33-3.04 4-5.65 4-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"/>
+                        </svg>
+                    </button>
+                    <button id="chatbot-close">×</button>
+                </div>
+            </div>
+            <div id="chatbot-messages"></div>
+            <div id="chatbot-input-container">
+                <input type="text" id="chatbot-input" placeholder="Ask me about AI...">
+                <button id="chatbot-send">Send</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="ai-background.js"></script>
+    <script src="chatbot-frontend.js"></script>
+</body>
+</html>

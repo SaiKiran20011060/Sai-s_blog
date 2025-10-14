@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI on Cloud - Sai's Tech Hub</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <nav class="back-nav">
+        <button onclick="window.location.href='ai.html'" class="back-btn">← Back to AI Hub</button>
+    </nav>
+    
+    <header>
+        <h1>☁️ AI on Cloud</h1>
+        <p>Cloud-based AI platforms and services</p>
+    </header>
+
+    <main>
+        <div class="blog-post">
+            <div class="topic-header">
+                <div class="topic-icon">🌐</div>
+                <div>
+                    <h3>Major Cloud AI Platforms</h3>
+                </div>
+            </div>
+            <div class="concept-visual">
+                <div class="learning-type">
+                    <h4>Google Cloud Vertex AI</h4>
+                    <div class="visual-box">
+                        Unified ML platform: AutoML + Custom Training<br>
+                        Best for: TensorFlow, BigQuery ML, Vision API
+                    </div>
+                </div>
+                <div class="learning-type">
+                    <h4>AWS SageMaker</h4>
+                    <div class="visual-box">
+                        End-to-end ML workflow platform<br>
+                        Best for: Jupyter notebooks, Model deployment
+                    </div>
+                </div>
+                <div class="learning-type">
+                    <h4>Azure AI</h4>
+                    <div class="visual-box">
+                        Cognitive Services + ML Studio<br>
+                        Best for: Enterprise integration, .NET apps
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="blog-post">
+            <div class="topic-header">
+                <div class="topic-icon">🔧</div>
+                <div>
+                    <h3>Cloud AI Services</h3>
+                </div>
+            </div>
+            <div class="training-visual">
+                <div class="training-step">
+                    <div class="step-name">Pre-trained APIs</div>
+                    <div class="step-desc">Vision, Speech, Language APIs</div>
+                </div>
+                <div class="arrow">→</div>
+                <div class="training-step">
+                    <div class="step-name">AutoML</div>
+                    <div class="step-desc">No-code model training</div>
+                </div>
+                <div class="arrow">→</div>
+                <div class="training-step">
+                    <div class="step-name">Custom ML</div>
+                    <div class="step-desc">Full control training</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="blog-post">
+            <div class="topic-header">
+                <div class="topic-icon">⚡</div>
+                <div>
+                    <h3>Key Benefits</h3>
+                </div>
+            </div>
+            <ul>
+                <li><strong>Scalability:</strong> Auto-scaling compute resources</li>
+                <li><strong>Cost-effective:</strong> Pay-per-use pricing models</li>
+                <li><strong>Managed Services:</strong> No infrastructure management</li>
+                <li><strong>Pre-built Models:</strong> Ready-to-use AI APIs</li>
+                <li><strong>Integration:</strong> Easy integration with existing systems</li>
+            </ul>
+        </div>
+
+        <div class="blog-post">
+            <div class="topic-header">
+                <div class="topic-icon">🛠️</div>
+                <div>
+                    <h3>Common Use Cases</h3>
+                </div>
+            </div>
+            <div class="classification-visual">
+                <div class="class-example">📊 Business Analytics</div>
+                <div class="class-example">🖼️ Image Recognition</div>
+                <div class="class-example">🗣️ Speech Processing</div>
+                <div class="class-example">📝 Text Analysis</div>
+                <div class="class-example">🤖 Chatbots</div>
+                <div class="class-example">📈 Predictive Models</div>
+            </div>
+        </div>
+
+        <article class="blog-post">
+            <h2>The Cloud AI Revolution</h2>
+            <p class="date">January 2025</p>
+            <p>Cloud AI platforms have democratized machine learning, making it accessible to businesses of all sizes without requiring extensive ML expertise or infrastructure.</p>
+            
+            <h3>Platform Comparison:</h3>
+            <ul>
+                <li><strong>Google Vertex AI:</strong> Strong in TensorFlow, BigQuery integration</li>
+                <li><strong>AWS SageMaker:</strong> Comprehensive ML workflow, largest ecosystem</li>
+                <li><strong>Azure AI:</strong> Best for Microsoft-centric enterprises</li>
+                <li><strong>All platforms:</strong> Offer AutoML, pre-trained models, and custom training</li>
+            </ul>
+
+            <h3>Getting Started:</h3>
+            <ul>
+                <li>Start with pre-trained APIs for common tasks</li>
+                <li>Use AutoML for custom models without coding</li>
+                <li>Scale to custom training as needs grow</li>
+                <li>Consider data location and compliance requirements</li>
+            </ul>
+        </article>
+    </main>
+
+    <footer>
+        <p>&copy; 2024 My AI Learning Blog</p>
+    </footer>
+
+    <!-- Gemini AI Chatbot -->
+    <div id="chatbot-container">
+        <div id="chatbot-toggle">
+            <img src="AI_img-removebg-preview.png" alt="AI" style="width: 40px; height: 40px; border-radius: 50%; object-fit: cover;">
+        </div>
+        <div id="chatbot-window">
+            <div id="chatbot-header">
+                <span>AI Assistant</span>
+                <div class="chatbot-controls">
+                    <button id="chatbot-refresh" class="refresh-btn">
+                        <svg viewBox="0 0 24 24">
+                            <path d="M17.65 6.35C16.2 4.9 14.21 4 12 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08c-.82 2.33-3.04 4-5.65 4-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"/>
+                        </svg>
+                    </button>
+                    <button id="chatbot-close">×</button>
+                </div>
+            </div>
+            <div id="chatbot-messages"></div>
+            <div id="chatbot-input-container">
+                <input type="text" id="chatbot-input" placeholder="Ask me about AI...">
+                <button id="chatbot-send">Send</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="ai-background.js"></script>
+    <script src="chatbot-frontend.js"></script>
+</body>
+</html>
