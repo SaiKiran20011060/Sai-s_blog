@@ -37,13 +37,18 @@
 
         function changeText() {
             currentIndex = (currentIndex + 1) % texts.length;
-            dynamicText.style.animation = 'none';
+            dynamicText.classList.remove('animate-slide');
             dynamicText.style.transform = 'translateX(100%)';
             dynamicText.textContent = texts[currentIndex];
-            setTimeout(() => {
-                dynamicText.style.animation = 'marqueeSlide 3s ease-in-out';
-            }, 50);
+            requestAnimationFrame(() => {
+                dynamicText.classList.add('animate-slide');
+            });
         }
+
+        // Start first animation
+        setTimeout(() => {
+            dynamicText.classList.add('animate-slide');
+        }, 500);
 
         setInterval(changeText, 3000);
     </script>

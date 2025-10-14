@@ -94,31 +94,35 @@ body {
     display: inline-block;
     position: relative;
     overflow: hidden;
-    width: 180px;
+    width: 200px;
     height: 1.2em;
-    vertical-align: top;
+    vertical-align: baseline;
 }
 
 #dynamic-text {
     color: #00ff88;
     font-weight: bold;
-    display: inline-block;
+    display: block;
     position: absolute;
     top: 0;
     left: 0;
     white-space: nowrap;
     line-height: 1.2;
-    animation: marqueeSlide 3s ease-in-out;
+    transform: translateX(100%);
+}
+
+.animate-slide {
+    animation: marqueeSlide 3s ease-in-out forwards;
 }
 
 @keyframes marqueeSlide {
     0% {
         transform: translateX(100%);
     }
-    15% {
+    20% {
         transform: translateX(0);
     }
-    85% {
+    80% {
         transform: translateX(0);
     }
     100% {
