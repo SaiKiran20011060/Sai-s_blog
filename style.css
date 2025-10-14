@@ -94,35 +94,31 @@ body {
     display: inline-block;
     position: relative;
     overflow: hidden;
-    width: 200px;
+    width: 180px;
     height: 1.2em;
-    vertical-align: baseline;
+    vertical-align: top;
 }
 
 #dynamic-text {
     color: #00ff88;
     font-weight: bold;
-    display: block;
+    display: inline-block;
     position: absolute;
     top: 0;
     left: 0;
     white-space: nowrap;
     line-height: 1.2;
-    transform: translateX(100%);
-}
-
-.animate-slide {
-    animation: marqueeSlide 3s ease-in-out forwards;
+    animation: marqueeSlide 3s ease-in-out;
 }
 
 @keyframes marqueeSlide {
     0% {
         transform: translateX(100%);
     }
-    20% {
+    15% {
         transform: translateX(0);
     }
-    80% {
+    85% {
         transform: translateX(0);
     }
     100% {
