@@ -11,7 +11,7 @@
         <header class="hero">
             <div class="hero-content">
                 <h1 class="glitch" data-text="SAI'S TECH HUB">SAI'S TECH HUB</h1>
-                <p class="subtitle">Exploring AI, Cloud & Beyond</p>
+                <p class="subtitle">Exploring <span id="dynamic-text">AI</span></p>
             </div>
         </header>
 
@@ -30,5 +30,21 @@
     </div>
 
     <script src="script.js"></script>
+    <script>
+        const texts = ['AI', 'Cloud', 'Data Engineering', 'Data Warehouse', 'Machine Learning', 'DevOps'];
+        let currentIndex = 0;
+        const dynamicText = document.getElementById('dynamic-text');
+
+        function changeText() {
+            dynamicText.style.opacity = '0';
+            setTimeout(() => {
+                currentIndex = (currentIndex + 1) % texts.length;
+                dynamicText.textContent = texts[currentIndex];
+                dynamicText.style.opacity = '1';
+            }, 300);
+        }
+
+        setInterval(changeText, 2000);
+    </script>
 </body>
 </html>

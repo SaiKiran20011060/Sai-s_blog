@@ -90,6 +90,12 @@ body {
     animation: fadeInUp 1s ease-out 0.5s both;
 }
 
+#dynamic-text {
+    color: #00ff88;
+    transition: opacity 0.3s ease;
+    font-weight: bold;
+}
+
 .blog-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
