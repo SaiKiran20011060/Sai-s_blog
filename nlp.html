@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Natural Language Processing (NLP) - AI Learning Blog</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <nav class="back-nav">
+        <button onclick="window.location.href='ai.html'" class="back-btn">← Back to AI Topics</button>
+    </nav>
+
+    <header>
+        <h1>🧠 Natural Language Processing (NLP)</h1>
+        <p>How Machines Understand and Process Human Language</p>
+    </header>
+
+    <main>
+        <div class="blog-post">
+            <div class="topic-header">
+                <div class="topic-icon">🧠</div>
+                <div>
+                    <h3>What is Natural Language Processing?</h3>
+                </div>
+            </div>
+            <p>Natural Language Processing (NLP) is a branch of AI that helps computers understand, interpret, and generate human language in a valuable way. It bridges the gap between human communication and computer understanding.</p>
+        </div>
+
+        <article class="blog-post">
+            <div class="topic-header">
+                <div class="topic-icon">🔤</div>
+                <h2>Tokenization: Breaking Down Text</h2>
+            </div>
+            <p class="date">December 2024</p>
+            <p><strong>Tokenization</strong> is the process of breaking down text into smaller units called tokens. It's the first and most crucial step in NLP.</p>
+            
+            <div class="visual-box">
+                <h4>Example: "How machines understand text"</h4>
+                <p><strong>Word Tokens:</strong> ["How", "machines", "understand", "text"]</p>
+                <p><strong>Subword Tokens:</strong> ["How", "mach", "ines", "under", "stand", "text"]</p>
+                <p><strong>Character Tokens:</strong> ["H", "o", "w", " ", "m", "a", "c", "h", "i", "n", "e", "s", ...]</p>
+            </div>
+
+            <div class="concept-visual">
+                <div class="learning-type">
+                    <h4>Word-level</h4>
+                    <div class="visual-box">
+                        Split by spaces and punctuation<br>
+                        Simple but limited vocabulary
+                    </div>
+                </div>
+                <div class="learning-type">
+                    <h4>Subword-level</h4>
+                    <div class="visual-box">
+                        BPE, WordPiece algorithms<br>
+                        Handles unknown words better
+                    </div>
+                </div>
+                <div class="learning-type">
+                    <h4>Character-level</h4>
+                    <div class="visual-box">
+                        Individual characters as tokens<br>
+                        No vocabulary limitations
+                    </div>
+                </div>
+            </div>
+        </article>
+
+        <article class="blog-post">
+            <div class="topic-header">
+                <div class="topic-icon">🔢</div>
+                <h2>Embeddings: Converting Words to Numbers</h2>
+            </div>
+            <p class="date">December 2024</p>
+            <p>Embeddings transform words into numerical vectors that capture semantic meaning and relationships.</p>
+            
+            <div class="concept-visual">
+                <div class="learning-type">
+                    <h4>Word2Vec</h4>
+                    <div class="visual-box">
+                        king - man + woman ≈ queen<br>
+                        Vector arithmetic captures relationships
+                    </div>
+                </div>
+                <div class="learning-type">
+                    <h4>GloVe</h4>
+                    <div class="visual-box">
+                        Global word co-occurrence statistics<br>
+                        Captures both local and global context
+                    </div>
+                </div>
+                <div class="learning-type">
+                    <h4>FastText</h4>
+                    <div class="visual-box">
+                        Subword information included<br>
+                        Better handling of rare words
+                    </div>
+                </div>
+            </div>
+        </article>
+
+        <article class="blog-post">
+            <div class="topic-header">
+                <div class="topic-icon">🎯</div>
+                <h2>Attention Mechanism</h2>
+            </div>
+            <p class="date">December 2024</p>
+            <p>Attention allows models to focus on relevant parts of the input when processing each word, similar to how humans pay attention to specific words in a sentence.</p>
+            
+            <div class="visual-box">
+                <h4>Self-Attention Example:</h4>
+                <p>In "The cat sat on the mat":</p>
+                <p>When processing "sat", the model pays attention to:</p>
+                <p><strong>High attention:</strong> "cat" (subject), "mat" (location)</p>
+                <p><strong>Low attention:</strong> "the", "on" (less relevant)</p>
+            </div>
+        </article>
+
+        <article class="blog-post">
+            <div class="topic-header">
+                <div class="topic-icon">🔄</div>
+                <h2>Transformers: The Revolution</h2>
+            </div>
+            <p class="date">December 2024</p>
+            <p>Transformers use self-attention mechanisms to process sequences in parallel, making them highly efficient and effective for NLP tasks.</p>
+
+            <div class="classification-visual">
+                <div class="class-example">BERT</div>
+                <div class="class-example">GPT</div>
+                <div class="class-example">T5</div>
+                <div class="class-example">RoBERTa</div>
+            </div>
+
+            <div class="concept-visual">
+                <div class="learning-type">
+                    <h4>BERT</h4>
+                    <div class="visual-box">
+                        Bidirectional Encoder<br>
+                        Great for understanding tasks
+                    </div>
+                </div>
+                <div class="learning-type">
+                    <h4>GPT</h4>
+                    <div class="visual-box">
+                        Generative Pre-trained Transformer<br>
+                        Excellent for text generation
+                    </div>
+                </div>
+            </div>
+        </article>
+
+        <article class="blog-post">
+            <div class="topic-header">
+                <div class="topic-icon">🛠️</div>
+                <h2>Common NLP Tasks</h2>
+            </div>
+            <p class="date">December 2024</p>
+            <div class="classification-visual">
+                <div class="class-example">Sentiment Analysis</div>
+                <div class="class-example">Named Entity Recognition</div>
+                <div class="class-example">Machine Translation</div>
+                <div class="class-example">Question Answering</div>
+                <div class="class-example">Text Summarization</div>
+                <div class="class-example">Language Generation</div>
+            </div>
+        </article>
+
+        <article class="blog-post">
+            <div class="topic-header">
+                <div class="topic-icon">🔧</div>
+                <h2>Popular NLP Libraries & Tools</h2>
+            </div>
+            <p class="date">December 2024</p>
+            <div class="concept-visual">
+                <div class="learning-type">
+                    <h4>Python Libraries</h4>
+                    <div class="visual-box">
+                        • NLTK<br>
+                        • spaCy<br>
+                        • Transformers (Hugging Face)<br>
+                        • Gensim
+                    </div>
+                </div>
+                <div class="learning-type">
+                    <h4>Pre-trained Models</h4>
+                    <div class="visual-box">
+                        • BERT, RoBERTa<br>
+                        • GPT-3/4<br>
+                        • T5, BART<br>
+                        • DistilBERT
+                    </div>
+                </div>
+            </div>
+        </article>
+
+        <article class="blog-post">
+            <div class="topic-header">
+                <div class="topic-icon">💡</div>
+                <h2>Real-World Applications</h2>
+            </div>
+            <p class="date">December 2024</p>
+            <ul>
+                <li><strong>Chatbots & Virtual Assistants:</strong> Siri, Alexa, ChatGPT</li>
+                <li><strong>Search Engines:</strong> Google Search understanding queries</li>
+                <li><strong>Translation:</strong> Google Translate, DeepL</li>
+                <li><strong>Content Moderation:</strong> Detecting spam, hate speech</li>
+                <li><strong>Document Analysis:</strong> Legal document processing</li>
+                <li><strong>Social Media:</strong> Sentiment analysis, trend detection</li>
+            </ul>
+        </article>
+
+        <article class="blog-post">
+            <h2>Key Takeaways</h2>
+            <p class="date">December 2024</p>
+            <div class="visual-box">
+                <h4>💡 Pro Tip:</h4>
+                <p>Start with pre-trained models like BERT or GPT and fine-tune them for your specific task. This approach often yields better results than training from scratch!</p>
+            </div>
+        </article>
+    </main>
+
+    <footer>
+        <p>&copy; 2024 My AI Learning Blog</p>
+    </footer>
+
+    <!-- Gemini AI Chatbot -->
+    <div id="chatbot-container">
+        <div id="chatbot-toggle">
+            <img src="AI_img-removebg-preview.png" alt="AI" style="width: 40px; height: 40px; border-radius: 50%; object-fit: cover;">
+        </div>
+        <div id="chatbot-window">
+            <div id="chatbot-header">
+                <span>AI Assistant</span>
+                <div class="chatbot-controls">
+                    <button id="chatbot-refresh" class="refresh-btn">
+                        <svg viewBox="0 0 24 24">
+                            <path d="M17.65 6.35C16.2 4.9 14.21 4 12 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08c-.82 2.33-3.04 4-5.65 4-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"/>
+                        </svg>
+                    </button>
+                    <button id="chatbot-close">×</button>
+                </div>
+            </div>
+            <div id="chatbot-messages"></div>
+            <div id="chatbot-input-container">
+                <input type="text" id="chatbot-input" placeholder="Ask me about AI...">
+                <button id="chatbot-send">Send</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="ai-background.js"></script>
+    <script src="chatbot-frontend.js"></script>
+</body>
+</html>

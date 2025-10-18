@@ -18,34 +18,216 @@
     </header>
 
     <main>
+        <!-- Algorithm Tabs -->
         <div class="blog-post">
             <div class="topic-header">
-                <div class="topic-icon">🤖</div>
+                <div class="topic-icon">🧠</div>
                 <div>
-                    <h3>Major Models</h3>
+                    <h3>Generative AI Algorithms</h3>
                 </div>
             </div>
-            <div class="concept-visual">
-                <div class="learning-type">
-                    <h4>Gemini (Google)</h4>
+            
+            <div class="algorithm-tabs">
+                <button class="tab-btn active" onclick="showTab('transformers')">🔄 Transformers</button>
+                <button class="tab-btn" onclick="showTab('gans')">🎭 GANs</button>
+                <button class="tab-btn" onclick="showTab('vaes')">🔀 VAEs</button>
+                <button class="tab-btn" onclick="showTab('diffusion')">🌊 Diffusion</button>
+                <button class="tab-btn" onclick="showTab('rlhf')">🎯 RLHF</button>
+            </div>
+
+            <div class="tab-content">
+                <!-- Transformers Tab -->
+                <div id="transformers" class="tab-panel active">
+                    <h4>🔄 Transformer Architecture</h4>
                     <div class="visual-box">
-                        Multimodal AI: Text + Images + Code + Audio<br>
-                        Best for: Reasoning, Code Generation
+                        <strong>Core Innovation:</strong> Self-attention mechanism that processes all tokens simultaneously
                     </div>
+                    <div class="concept-visual">
+                        <div class="learning-type">
+                            <h4>Key Components</h4>
+                            <div class="visual-box">
+                                • Multi-Head Attention<br>
+                                • Position Encoding<br>
+                                • Feed-Forward Networks<br>
+                                • Layer Normalization
+                            </div>
+                        </div>
+                        <div class="learning-type">
+                            <h4>Applications</h4>
+                            <div class="visual-box">
+                                • GPT (Text Generation)<br>
+                                • BERT (Understanding)<br>
+                                • T5 (Text-to-Text)<br>
+                                • Vision Transformers
+                            </div>
+                        </div>
+                    </div>
+                    <p><strong>How it works:</strong> Uses attention to weigh the importance of different parts of the input when generating each output token, enabling parallel processing and long-range dependencies.</p>
                 </div>
-                <div class="learning-type">
-                    <h4>ChatGPT (OpenAI)</h4>
+
+                <!-- GANs Tab -->
+                <div id="gans" class="tab-panel">
+                    <h4>🎭 Generative Adversarial Networks</h4>
                     <div class="visual-box">
-                        GPT-3.5/4 Conversational AI<br>
-                        Best for: Writing, Analysis
+                        <strong>Core Concept:</strong> Two neural networks competing - Generator creates, Discriminator judges
                     </div>
+                    <div class="training-visual">
+                        <div class="training-step">
+                            <div class="step-name">Generator</div>
+                            <div class="step-desc">Creates fake data</div>
+                        </div>
+                        <div class="arrow">⚔️</div>
+                        <div class="training-step">
+                            <div class="step-name">Discriminator</div>
+                            <div class="step-desc">Detects fake vs real</div>
+                        </div>
+                    </div>
+                    <div class="concept-visual">
+                        <div class="learning-type">
+                            <h4>✅ Advantages</h4>
+                            <div class="visual-box">
+                                • High-quality outputs<br>
+                                • No explicit likelihood<br>
+                                • Flexible architectures<br>
+                                • Sharp, realistic images
+                            </div>
+                        </div>
+                        <div class="learning-type">
+                            <h4>❌ Challenges</h4>
+                            <div class="visual-box">
+                                • Training instability<br>
+                                • Mode collapse<br>
+                                • Difficult convergence<br>
+                                • Evaluation metrics
+                            </div>
+                        </div>
+                    </div>
+                    <p><strong>Popular variants:</strong> DCGAN, StyleGAN, CycleGAN, Pix2Pix</p>
                 </div>
-                <div class="learning-type">
-                    <h4>Midjourney</h4>
+
+                <!-- VAEs Tab -->
+                <div id="vaes" class="tab-panel">
+                    <h4>🔀 Variational Autoencoders</h4>
                     <div class="visual-box">
-                        Text-to-Image Generation<br>
-                        Best for: Artistic Visuals
+                        <strong>Core Idea:</strong> Learn a probabilistic latent space to generate new data
                     </div>
+                    <div class="training-visual">
+                        <div class="training-step">
+                            <div class="step-name">Encoder</div>
+                            <div class="step-desc">Data → Latent Space</div>
+                        </div>
+                        <div class="arrow">→</div>
+                        <div class="training-step">
+                            <div class="step-name">Decoder</div>
+                            <div class="step-desc">Latent Space → Data</div>
+                        </div>
+                    </div>
+                    <div class="concept-visual">
+                        <div class="learning-type">
+                            <h4>Key Features</h4>
+                            <div class="visual-box">
+                                • Probabilistic encoding<br>
+                                • Regularized latent space<br>
+                                • Smooth interpolation<br>
+                                • Principled generation
+                            </div>
+                        </div>
+                        <div class="learning-type">
+                            <h4>Use Cases</h4>
+                            <div class="visual-box">
+                                • Image generation<br>
+                                • Data compression<br>
+                                • Anomaly detection<br>
+                                • Drug discovery
+                            </div>
+                        </div>
+                    </div>
+                    <p><strong>Advantage over GANs:</strong> More stable training and meaningful latent space, but typically produces blurrier outputs.</p>
+                </div>
+
+                <!-- Diffusion Tab -->
+                <div id="diffusion" class="tab-panel">
+                    <h4>🌊 Diffusion Models</h4>
+                    <div class="visual-box">
+                        <strong>Process:</strong> Learn to reverse a gradual noising process to generate data
+                    </div>
+                    <div class="training-visual">
+                        <div class="training-step">
+                            <div class="step-name">Forward</div>
+                            <div class="step-desc">Add noise gradually</div>
+                        </div>
+                        <div class="arrow">→</div>
+                        <div class="training-step">
+                            <div class="step-name">Reverse</div>
+                            <div class="step-desc">Remove noise step by step</div>
+                        </div>
+                    </div>
+                    <div class="concept-visual">
+                        <div class="learning-type">
+                            <h4>✅ Strengths</h4>
+                            <div class="visual-box">
+                                • Stable training<br>
+                                • High-quality outputs<br>
+                                • Controllable generation<br>
+                                • No mode collapse
+                            </div>
+                        </div>
+                        <div class="learning-type">
+                            <h4>❌ Limitations</h4>
+                            <div class="visual-box">
+                                • Slow sampling<br>
+                                • Computationally expensive<br>
+                                • Many denoising steps<br>
+                                • Memory intensive
+                            </div>
+                        </div>
+                    </div>
+                    <p><strong>Famous models:</strong> DALL-E 2, Stable Diffusion, Midjourney use diffusion-based architectures.</p>
+                </div>
+
+                <!-- RLHF Tab -->
+                <div id="rlhf" class="tab-panel">
+                    <h4>🎯 Reinforcement Learning from Human Feedback</h4>
+                    <div class="visual-box">
+                        <strong>Goal:</strong> Align AI behavior with human preferences and values
+                    </div>
+                    <div class="training-visual">
+                        <div class="training-step">
+                            <div class="step-name">Collect Data</div>
+                            <div class="step-desc">Human preferences</div>
+                        </div>
+                        <div class="arrow">→</div>
+                        <div class="training-step">
+                            <div class="step-name">Train Reward</div>
+                            <div class="step-desc">Model preferences</div>
+                        </div>
+                        <div class="arrow">→</div>
+                        <div class="training-step">
+                            <div class="step-name">Optimize Policy</div>
+                            <div class="step-desc">Maximize reward</div>
+                        </div>
+                    </div>
+                    <div class="concept-visual">
+                        <div class="learning-type">
+                            <h4>Process Steps</h4>
+                            <div class="visual-box">
+                                1. Pre-train base model<br>
+                                2. Collect human feedback<br>
+                                3. Train reward model<br>
+                                4. Fine-tune with PPO/TRPO
+                            </div>
+                        </div>
+                        <div class="learning-type">
+                            <h4>Benefits</h4>
+                            <div class="visual-box">
+                                • Better alignment<br>
+                                • Reduced harmful outputs<br>
+                                • More helpful responses<br>
+                                • Human-like behavior
+                            </div>
+                        </div>
+                    </div>
+                    <p><strong>Success story:</strong> ChatGPT and GPT-4 use RLHF to become more helpful, harmless, and honest.</p>
                 </div>
             </div>
         </div>
@@ -77,22 +259,6 @@
 
         <div class="blog-post">
             <div class="topic-header">
-                <div class="topic-icon">⚡</div>
-                <div>
-                    <h3>Technical Concepts</h3>
-                </div>
-            </div>
-            <ul>
-                <li><strong>Transformers:</strong> Architecture powering modern LLMs</li>
-                <li><strong>Attention Mechanism:</strong> How models focus on relevant parts</li>
-                <li><strong>Fine-tuning:</strong> Adapting pre-trained models</li>
-                <li><strong>RLHF:</strong> Reinforcement Learning from Human Feedback</li>
-                <li><strong>Multimodal AI:</strong> Processing text, images, audio together</li>
-            </ul>
-        </div>
-
-        <div class="blog-post">
-            <div class="topic-header">
                 <div class="topic-icon">🔧</div>
                 <div>
                     <h3>Applications</h3>
@@ -110,13 +276,14 @@
 
         <article class="blog-post">
             <h2>The Generative AI Revolution</h2>
-            <p class="date">December 2024</p>
+            <p class="date">January 2025</p>
             <p>Generative AI has transformed how we interact with technology. From ChatGPT's conversational abilities to Midjourney's artistic creations, these models are reshaping industries.</p>
             
             <h3>Key Takeaways:</h3>
             <ul>
                 <li>Prompt engineering is crucial for getting good results</li>
                 <li>Different models excel at different tasks</li>
+                <li>Fine-tuning creates specialized versions of general models</li>
                 <li>Multimodal capabilities are the future</li>
                 <li>Responsible AI practices are essential</li>
             </ul>
@@ -154,5 +321,26 @@
 
     <script src="ai-background.js"></script>
     <script src="chatbot-frontend.js"></script>
+    <script>
+        function showTab(tabName) {
+            // Hide all tab panels
+            const panels = document.querySelectorAll('.tab-panel');
+            panels.forEach(panel => {
+                panel.classList.remove('active');
+            });
+            
+            // Remove active class from all buttons
+            const buttons = document.querySelectorAll('.tab-btn');
+            buttons.forEach(btn => {
+                btn.classList.remove('active');
+            });
+            
+            // Show selected tab panel
+            document.getElementById(tabName).classList.add('active');
+            
+            // Add active class to clicked button
+            event.target.classList.add('active');
+        }
+    </script>
 </body>
 </html>
