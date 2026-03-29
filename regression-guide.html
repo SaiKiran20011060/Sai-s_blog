@@ -1,0 +1,747 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Regression Guide - My AI Learning Blog</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <nav class="back-nav">
+        <button onclick="window.location.href='supervised-learning.html'" class="back-btn">← Back to Supervised Learning</button>
+    </nav>
+    
+    <header>
+        <h1>📊 Regression Guide</h1>
+        <p>Complete guide to regression techniques with formulas and examples</p>
+    </header>
+
+    <main>
+        <!-- Overview Block -->
+        <div class="blog-post">
+            <div class="topic-header">
+                <div class="topic-icon">🎯</div>
+                <div>
+                    <h3>What is Regression?</h3>
+                </div>
+            </div>
+            <p>Regression is a statistical method used to model the relationship between a dependent variable (target) and one or more independent variables (features). It's used to predict continuous numerical values.</p>
+            
+            <div class="visual-box">
+                <strong>Key Goal:</strong> Find the best line/curve that fits through data points to make predictions.
+            </div>
+
+            <h4>Types of Regression Problems:</h4>
+            <ul>
+                <li><strong>Simple Linear:</strong> One feature predicts one target</li>
+                <li><strong>Multiple Linear:</strong> Multiple features predict one target</li>
+                <li><strong>Polynomial:</strong> Non-linear relationships using polynomial terms</li>
+                <li><strong>Support Vector:</strong> Uses support vectors and kernels</li>
+                <li><strong>Tree-based:</strong> Uses decision trees (Decision Tree, Random Forest)</li>
+            </ul>
+
+            <h4>Common Applications:</h4>
+            <ul>
+                <li>House price prediction</li>
+                <li>Stock market forecasting</li>
+                <li>Sales revenue estimation</li>
+                <li>Temperature prediction</li>
+                <li>Medical diagnosis scoring</li>
+            </ul>
+        </div>
+
+        <!-- Regression Algorithms Tabs -->
+        <div class="blog-post">
+            <div class="topic-header">
+                <div class="topic-icon">📊</div>
+                <div>
+                    <h3>Regression Algorithms</h3>
+                </div>
+            </div>
+            
+            <div class="algorithm-tabs">
+                <button class="tab-btn active" onclick="showRegressionTab('simple-linear')">📈 Simple Linear</button>
+                <button class="tab-btn" onclick="showRegressionTab('multiple-linear')">📊 Multiple Linear</button>
+                <button class="tab-btn" onclick="showRegressionTab('polynomial')">🌊 Polynomial</button>
+                <button class="tab-btn" onclick="showRegressionTab('svr')">🎯 SVR</button>
+                <button class="tab-btn" onclick="showRegressionTab('decision-tree')">🌳 Decision Tree</button>
+                <button class="tab-btn" onclick="showRegressionTab('random-forest')">🌲 Random Forest</button>
+                <button class="tab-btn" onclick="showRegressionTab('r-squared')">📏 R-Squared</button>
+            </div>
+
+            <div class="tab-content">
+                <!-- Simple Linear Regression Tab -->
+                <div id="simple-linear" class="tab-panel active">
+                    <h4>📈 Simple Linear Regression</h4>
+                    <p>The simplest form of regression that models the relationship between one independent variable (X) and one dependent variable (Y) using a straight line.</p>
+
+                    <h4>Formula:</h4>
+                    <div class="visual-box">
+                        Y = β₀ + β₁X + ε
+                        <br><br>
+                        Where:<br>
+                        • Y = Dependent variable (target)<br>
+                        • X = Independent variable (feature)<br>
+                        • β₀ = Y-intercept (bias)<br>
+                        • β₁ = Slope (coefficient)<br>
+                        • ε = Error term
+                    </div>
+
+                    <h4>Coefficient Calculation:</h4>
+                    <div class="visual-box">
+                        β₁ = Σ[(Xi - X̄)(Yi - Ȳ)] / Σ[(Xi - X̄)²]
+                        <br><br>
+                        β₀ = Ȳ - β₁X̄
+                        <br><br>
+                        Where X̄ and Ȳ are means of X and Y respectively
+                    </div>
+
+                    <div class="visual-box">
+                        <h4>Example: Predicting House Prices</h4>
+                        <p><strong>Problem:</strong> Predict house price based on size (sq ft)</p>
+                        <p><strong>Data:</strong></p>
+                        <ul>
+                            <li>House 1: 1000 sq ft → $200,000</li>
+                            <li>House 2: 1500 sq ft → $300,000</li>
+                            <li>House 3: 2000 sq ft → $400,000</li>
+                        </ul>
+                        <p><strong>Result:</strong> Price = 100,000 + 150 × Size</p>
+                        <p><strong>Prediction:</strong> 1200 sq ft house = $280,000</p>
+                    </div>
+
+                    <h4>💻 Sample Code:</h4>
+                    <pre class="visual-box" style="text-align:left;overflow-x:auto;"><code>from sklearn.linear_model import LinearRegression
+import numpy as np
+
+X = np.array([[1000], [1500], [2000], [2500], [3000]])
+y = np.array([200000, 300000, 400000, 500000, 600000])
+
+model = LinearRegression()
+model.fit(X, y)
+
+print("Slope:", model.coef_[0])
+print("Intercept:", model.intercept_)
+print("Prediction for 1200 sqft: $", model.predict([[1200]])[0])</code></pre>
+
+                    <div class="concept-visual">
+                        <div class="learning-type">
+                            <h4>✅ Advantages</h4>
+                            <div class="visual-box">
+                                • Simple to understand and implement<br>
+                                • Fast computation<br>
+                                • No hyperparameters to tune<br>
+                                • Good baseline model<br>
+                                • Interpretable coefficients
+                            </div>
+                        </div>
+                        <div class="learning-type">
+                            <h4>❌ Disadvantages</h4>
+                            <div class="visual-box">
+                                • Assumes linear relationship<br>
+                                • Sensitive to outliers<br>
+                                • Only works with one feature<br>
+                                • May underfit complex data<br>
+                                • Assumes constant variance
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Multiple Linear Regression Tab -->
+                <div id="multiple-linear" class="tab-panel">
+                    <h4>📊 Multiple Linear Regression</h4>
+                    <p>Extension of simple linear regression that uses multiple independent variables to predict a dependent variable.</p>
+
+                    <h4>Formula:</h4>
+                    <div class="visual-box">
+                        Y = β₀ + β₁X₁ + β₂X₂ + ... + βₙXₙ + ε
+                        <br><br>
+                        Matrix form: Y = Xβ + ε
+                        <br><br>
+                        Where:<br>
+                        • Y = Target variable<br>
+                        • X₁, X₂, ..., Xₙ = Feature variables<br>
+                        • β₀, β₁, ..., βₙ = Coefficients<br>
+                        • ε = Error term
+                    </div>
+
+                    <h4>Coefficient Calculation (Normal Equation):</h4>
+                    <div class="visual-box">
+                        β = (XᵀX)⁻¹XᵀY
+                        <br><br>
+                        Where:<br>
+                        • Xᵀ = Transpose of X matrix<br>
+                        • (XᵀX)⁻¹ = Inverse of XᵀX
+                    </div>
+
+                    <div class="visual-box">
+                        <h4>Example: House Price with Multiple Features</h4>
+                        <p><strong>Features:</strong> Size, Bedrooms, Age</p>
+                        <p><strong>Formula:</strong> Price = β₀ + β₁×Size + β₂×Bedrooms + β₃×Age</p>
+                        <p><strong>Sample Result:</strong></p>
+                        <div class="visual-box">
+Price = 50,000 + 150×Size + 10,000×Bedrooms - 2,000×Age
+
+Example prediction:
+Size: 1500 sq ft, Bedrooms: 3, Age: 10 years
+Price = 50,000 + 150×1500 + 10,000×3 - 2,000×10
+Price = 50,000 + 225,000 + 30,000 - 20,000 = $285,000
+                        </div>
+                    </div>
+
+                    <h4>💻 Sample Code:</h4>
+                    <pre class="visual-box" style="text-align:left;overflow-x:auto;"><code>from sklearn.linear_model import LinearRegression
+import numpy as np
+
+# Features: size, bedrooms, age
+X = np.array([[1000,2,20],[1500,3,10],[2000,4,5],[2500,3,15],[3000,5,2]])
+y = np.array([200000, 300000, 420000, 380000, 600000])
+
+model = LinearRegression()
+model.fit(X, y)
+
+print("Coefficients:", model.coef_)
+print("Intercept:", model.intercept_)
+print("Prediction:", model.predict([[1800, 3, 8]])[0])</code></pre>
+
+                    <div class="concept-visual">
+                        <div class="learning-type">
+                            <h4>✅ Advantages</h4>
+                            <div class="visual-box">
+                                • Handles multiple features<br>
+                                • More accurate than simple linear<br>
+                                • Still interpretable<br>
+                                • Fast computation<br>
+                                • Well-established theory
+                            </div>
+                        </div>
+                        <div class="learning-type">
+                            <h4>❌ Disadvantages</h4>
+                            <div class="visual-box">
+                                • Assumes linear relationships<br>
+                                • Multicollinearity issues<br>
+                                • Sensitive to outliers<br>
+                                • Requires feature scaling<br>
+                                • May overfit with many features
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Polynomial Regression Tab -->
+                <div id="polynomial" class="tab-panel">
+                    <h4>🌊 Polynomial Regression</h4>
+                    <p>A form of regression that models non-linear relationships by using polynomial terms of the input features.</p>
+
+                    <h4>Formula:</h4>
+                    <div class="visual-box">
+                        Y = β₀ + β₁X + β₂X² + β₃X³ + ... + βₙXⁿ + ε
+                        <br><br>
+                        For multiple features:<br>
+                        Y = β₀ + β₁X₁ + β₂X₂ + β₃X₁² + β₄X₂² + β₅X₁X₂ + ... + ε
+                        <br><br>
+                        Where n is the degree of the polynomial
+                    </div>
+
+                    <h4>Feature Transformation:</h4>
+                    <div class="visual-box">
+                        Original: [X]
+                        Degree 2: [1, X, X²]
+                        Degree 3: [1, X, X², X³]
+                        <br><br>
+                        For 2 features (X₁, X₂) with degree 2:
+                        [1, X₁, X₂, X₁², X₁X₂, X₂²]
+                    </div>
+
+                    <div class="visual-box">
+                        <h4>Example: Temperature vs Ice Cream Sales</h4>
+                        <p><strong>Problem:</strong> Sales don't increase linearly with temperature</p>
+                        <div class="visual-box">
+Linear: Sales = 100 + 5×Temperature
+Polynomial (degree 2): Sales = 50 + 2×Temperature + 0.1×Temperature²
+
+At 20°C:
+Linear: 100 + 5×20 = 200 units
+Polynomial: 50 + 2×20 + 0.1×400 = 130 units
+
+At 35°C:
+Linear: 100 + 5×35 = 275 units  
+Polynomial: 50 + 2×35 + 0.1×1225 = 242.5 units
+                        </div>
+                    </div>
+
+                    <div class="visual-box">
+                        <strong>Choosing Degree:</strong> Higher degrees can fit training data better but may overfit. Use cross-validation to find optimal degree.
+                    </div>
+
+                    <h4>💻 Sample Code:</h4>
+                    <pre class="visual-box" style="text-align:left;overflow-x:auto;"><code>from sklearn.preprocessing import PolynomialFeatures
+from sklearn.linear_model import LinearRegression
+import numpy as np
+
+X = np.array([[15],[20],[25],[30],[35]]).reshape(-1,1)
+y = np.array([130, 200, 242, 310, 400])
+
+poly = PolynomialFeatures(degree=2)
+X_poly = poly.fit_transform(X)
+
+model = LinearRegression()
+model.fit(X_poly, y)
+
+print("Prediction at 28°C:", model.predict(poly.transform([[28]]))[0])</code></pre>
+
+                    <div class="concept-visual">
+                        <div class="learning-type">
+                            <h4>✅ Advantages</h4>
+                            <div class="visual-box">
+                                • Captures non-linear relationships<br>
+                                • Flexible model<br>
+                                • Still uses linear regression techniques<br>
+                                • Can model complex curves<br>
+                                • Good for trend analysis
+                            </div>
+                        </div>
+                        <div class="learning-type">
+                            <h4>❌ Disadvantages</h4>
+                            <div class="visual-box">
+                                • Prone to overfitting<br>
+                                • High computational cost<br>
+                                • Sensitive to outliers<br>
+                                • Difficult to interpret<br>
+                                • Extrapolation problems
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Support Vector Regression Tab -->
+                <div id="svr" class="tab-panel">
+                    <h4>🎯 Support Vector Regression (SVR)</h4>
+                    <p>SVR uses the same principles as SVM but for regression. It tries to fit the best line within a threshold value (epsilon).</p>
+
+                    <h4>Formula:</h4>
+                    <div class="visual-box">
+                        f(x) = wᵀφ(x) + b
+                        <br><br>
+                        Objective: Minimize ½||w||² + C∑(ξᵢ + ξᵢ*)
+                        <br><br>
+                        Subject to:
+                        • yᵢ - wᵀφ(xᵢ) - b ≤ ε + ξᵢ
+                        • wᵀφ(xᵢ) + b - yᵢ ≤ ε + ξᵢ*
+                        • ξᵢ, ξᵢ* ≥ 0
+                    </div>
+
+                    <h4>Key Concepts:</h4>
+                    <div class="visual-box">
+                        • ε (epsilon): Tolerance margin
+                        • C: Regularization parameter
+                        • φ(x): Kernel function transformation
+                        • ξ: Slack variables for points outside ε-tube
+                    </div>
+
+                    <h4>Common Kernels:</h4>
+                    <ul>
+                        <li><strong>Linear:</strong> K(x, x') = x · x'</li>
+                        <li><strong>Polynomial:</strong> K(x, x') = (γx · x' + r)ᵈ</li>
+                        <li><strong>RBF (Gaussian):</strong> K(x, x') = exp(-γ||x - x'||²)</li>
+                        <li><strong>Sigmoid:</strong> K(x, x') = tanh(γx · x' + r)</li>
+                    </ul>
+
+                    <div class="visual-box">
+                        <h4>Example: Stock Price Prediction</h4>
+                        <div class="visual-box">
+from sklearn.svm import SVR
+import numpy as np
+
+# Sample data: [day] -> [price]
+X = np.array([[1], [2], [3], [4], [5]])
+y = np.array([100, 120, 140, 180, 220])
+
+# SVR with RBF kernel
+svr = SVR(kernel='rbf', C=100, gamma=0.1, epsilon=0.1)
+svr.fit(X, y)
+
+# Predict day 6
+prediction = svr.predict([[6]])
+print(f"Day 6 price: ${prediction[0]:.2f}")
+                        </div>
+                    </div>
+
+                    <h4>💻 Sample Code:</h4>
+                    <pre class="visual-box" style="text-align:left;overflow-x:auto;"><code>from sklearn.svm import SVR
+from sklearn.preprocessing import StandardScaler
+import numpy as np
+
+X = np.array([[1],[2],[3],[4],[5],[6]])
+y = np.array([100, 120, 140, 180, 220, 270])
+
+scaler_X = StandardScaler()
+scaler_y = StandardScaler()
+X_scaled = scaler_X.fit_transform(X)
+y_scaled = scaler_y.fit_transform(y.reshape(-1,1)).ravel()
+
+model = SVR(kernel='rbf', C=100, gamma=0.1, epsilon=0.1)
+model.fit(X_scaled, y_scaled)
+
+pred = scaler_y.inverse_transform(model.predict(scaler_X.transform([[7]])).reshape(-1,1))
+print("Day 7 prediction: $", pred[0][0])</code></pre>
+
+                    <div class="concept-visual">
+                        <div class="learning-type">
+                            <h4>✅ Advantages</h4>
+                            <div class="visual-box">
+                                • Handles non-linear relationships<br>
+                                • Robust to outliers<br>
+                                • Works well with high dimensions<br>
+                                • Memory efficient<br>
+                                • Versatile (different kernels)
+                            </div>
+                        </div>
+                        <div class="learning-type">
+                            <h4>❌ Disadvantages</h4>
+                            <div class="visual-box">
+                                • Slow on large datasets<br>
+                                • Sensitive to feature scaling<br>
+                                • No probabilistic output<br>
+                                • Hard to interpret<br>
+                                • Many hyperparameters
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Decision Tree Regression Tab -->
+                <div id="decision-tree" class="tab-panel">
+                    <h4>🌳 Decision Tree Regression</h4>
+                    <p>Uses a tree-like model of decisions to predict continuous values by splitting data based on feature values.</p>
+
+                    <h4>How it Works:</h4>
+                    <div class="visual-box">
+                        1. Start with entire dataset
+                        2. Find best feature and split point that minimizes MSE
+                        3. Split data into two branches
+                        4. Repeat recursively for each branch
+                        5. Stop when criteria met (max depth, min samples, etc.)
+                    </div>
+
+                    <h4>Split Criteria (MSE):</h4>
+                    <div class="visual-box">
+                        MSE = (1/n) × Σ(yᵢ - ŷ)²
+                        <br><br>
+                        Best split minimizes weighted MSE:
+                        MSE_split = (n_left/n) × MSE_left + (n_right/n) × MSE_right
+                    </div>
+
+                    <h4>Prediction:</h4>
+                    <div class="visual-box">
+                        For each leaf node: ŷ = mean(y_values_in_leaf)
+                    </div>
+
+                    <div class="visual-box">
+                        <h4>Example: House Price Tree</h4>
+                        <div class="visual-box">
+Root: All houses (avg price: $300k)
+├── Size ≤ 1500 sq ft (avg: $250k)
+│   ├── Bedrooms ≤ 2 → $200k
+│   └── Bedrooms > 2 → $300k
+└── Size > 1500 sq ft (avg: $400k)
+    ├── Age ≤ 10 years → $450k
+    └── Age > 10 years → $350k
+
+New house: 1800 sq ft, 3 bedrooms, 5 years old
+Path: Root → Size > 1500 → Age ≤ 10 → Prediction: $450k
+                        </div>
+                    </div>
+
+                    <div class="visual-box">
+                        <strong>Hyperparameters:</strong> max_depth, min_samples_split, min_samples_leaf, max_features
+                    </div>
+
+                    <h4>💻 Sample Code:</h4>
+                    <pre class="visual-box" style="text-align:left;overflow-x:auto;"><code>from sklearn.tree import DecisionTreeRegressor
+import numpy as np
+
+X = np.array([[1000],[1500],[2000],[2500],[3000]])
+y = np.array([200000, 300000, 400000, 500000, 600000])
+
+model = DecisionTreeRegressor(max_depth=3)
+model.fit(X, y)
+
+print("Prediction for 1800 sqft: $", model.predict([[1800]])[0])
+print("Feature importance:", model.feature_importances_)</code></pre>
+
+                    <div class="concept-visual">
+                        <div class="learning-type">
+                            <h4>✅ Advantages</h4>
+                            <div class="visual-box">
+                                • Easy to understand and interpret<br>
+                                • No assumptions about data distribution<br>
+                                • Handles both numerical and categorical<br>
+                                • Automatic feature selection<br>
+                                • No need for feature scaling
+                            </div>
+                        </div>
+                        <div class="learning-type">
+                            <h4>❌ Disadvantages</h4>
+                            <div class="visual-box">
+                                • Prone to overfitting<br>
+                                • Unstable (small data changes = different tree)<br>
+                                • Biased toward features with more levels<br>
+                                • Poor extrapolation<br>
+                                • Can create overly complex trees
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Random Forest Regression Tab -->
+                <div id="random-forest" class="tab-panel">
+                    <h4>🌲 Random Forest Regression</h4>
+                    <p>An ensemble method that combines multiple decision trees to create a more robust and accurate model.</p>
+
+                    <h4>Algorithm:</h4>
+                    <div class="visual-box">
+                        1. Create n bootstrap samples from training data
+                        2. For each sample, train a decision tree with:
+                           • Random subset of features at each split
+                           • Different random seed
+                        3. For prediction: average all tree predictions
+                        <br><br>
+                        ŷ = (1/n) × Σ(tree_i_prediction)
+                    </div>
+
+                    <h4>Key Concepts:</h4>
+                    <ul>
+                        <li><strong>Bootstrap Sampling:</strong> Random sampling with replacement</li>
+                        <li><strong>Feature Randomness:</strong> Only consider subset of features per split</li>
+                        <li><strong>Bagging:</strong> Bootstrap Aggregating reduces overfitting</li>
+                        <li><strong>Out-of-Bag (OOB):</strong> Use unsampled data for validation</li>
+                    </ul>
+
+                    <div class="visual-box">
+                        <h4>Example: Ensemble Prediction</h4>
+                        <div class="visual-box">
+House: 1600 sq ft, 3 bedrooms, 8 years old
+
+Tree 1 prediction: $320k (trained on sample 1)
+Tree 2 prediction: $340k (trained on sample 2)  
+Tree 3 prediction: $310k (trained on sample 3)
+Tree 4 prediction: $330k (trained on sample 4)
+Tree 5 prediction: $325k (trained on sample 5)
+
+Random Forest prediction: 
+(320 + 340 + 310 + 330 + 325) / 5 = $325k
+                        </div>
+                    </div>
+
+                    <h4>Feature Importance:</h4>
+                    <div class="visual-box">
+                        Importance = Σ(weighted_impurity_decrease) / n_trees
+                        <br><br>
+                        Higher values indicate more important features
+                    </div>
+
+                    <h4>💻 Sample Code:</h4>
+                    <pre class="visual-box" style="text-align:left;overflow-x:auto;"><code>from sklearn.ensemble import RandomForestRegressor
+import numpy as np
+
+X = np.array([[1000,2,20],[1500,3,10],[2000,4,5],[2500,3,15],[3000,5,2]])
+y = np.array([200000, 300000, 420000, 380000, 600000])
+
+model = RandomForestRegressor(n_estimators=100, max_depth=4)
+model.fit(X, y)
+
+print("Prediction:", model.predict([[1600, 3, 8]])[0])
+print("Feature importances:", model.feature_importances_)</code></pre>
+
+                    <div class="concept-visual">
+                        <div class="learning-type">
+                            <h4>✅ Advantages</h4>
+                            <div class="visual-box">
+                                • Reduces overfitting vs single tree<br>
+                                • Handles missing values<br>
+                                • Provides feature importance<br>
+                                • Works with mixed data types<br>
+                                • Robust to outliers<br>
+                                • Parallel training possible
+                            </div>
+                        </div>
+                        <div class="learning-type">
+                            <h4>❌ Disadvantages</h4>
+                            <div class="visual-box">
+                                • Less interpretable than single tree<br>
+                                • Can overfit with very noisy data<br>
+                                • Biased toward categorical variables<br>
+                                • Memory intensive<br>
+                                • Slower prediction than single tree
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- R-Squared Tab -->
+                <div id="r-squared" class="tab-panel">
+                    <h4>📏 R-Squared (Coefficient of Determination)</h4>
+                    <p>R-squared measures how well the regression model explains the variability in the target variable. It's the most common metric for evaluating regression models.</p>
+
+                    <h4>Formula:</h4>
+                    <div class="visual-box">
+                        R² = 1 - (SS_res / SS_tot)
+                        <br><br>
+                        Where:<br>
+                        • SS_res = Σ(yᵢ - ŷᵢ)² (Residual Sum of Squares)<br>
+                        • SS_tot = Σ(yᵢ - ȳ)² (Total Sum of Squares)<br>
+                        • yᵢ = Actual values<br>
+                        • ŷᵢ = Predicted values<br>
+                        • ȳ = Mean of actual values
+                    </div>
+
+                    <h4>Alternative Formula:</h4>
+                    <div class="visual-box">
+                        R² = (SS_reg / SS_tot)
+                        <br><br>
+                        Where SS_reg = Σ(ŷᵢ - ȳ)² (Regression Sum of Squares)
+                        <br><br>
+                        Note: SS_tot = SS_reg + SS_res
+                    </div>
+
+                    <h4>Interpretation:</h4>
+                    <ul>
+                        <li><strong>R² = 1.0:</strong> Perfect fit (model explains 100% of variance)</li>
+                        <li><strong>R² = 0.8:</strong> Good fit (model explains 80% of variance)</li>
+                        <li><strong>R² = 0.5:</strong> Moderate fit (model explains 50% of variance)</li>
+                        <li><strong>R² = 0.0:</strong> Model performs as well as predicting the mean</li>
+                        <li><strong>R² < 0:</strong> Model performs worse than predicting the mean</li>
+                    </ul>
+
+                    <div class="visual-box">
+                        <h4>Example Calculation:</h4>
+                        <div class="visual-box">
+Actual values: [100, 120, 140, 160, 180]
+Predicted values: [110, 125, 135, 155, 175]
+Mean of actual: 140
+
+SS_res = (100-110)² + (120-125)² + (140-135)² + (160-155)² + (180-175)²
+       = 100 + 25 + 25 + 25 + 25 = 200
+
+SS_tot = (100-140)² + (120-140)² + (140-140)² + (160-140)² + (180-140)²
+       = 1600 + 400 + 0 + 400 + 1600 = 4000
+
+R² = 1 - (200/4000) = 1 - 0.05 = 0.95
+
+Interpretation: Model explains 95% of the variance
+                        </div>
+                    </div>
+
+                    <h4>Adjusted R-Squared:</h4>
+                    <div class="visual-box">
+                        Adjusted R² = 1 - [(1-R²)(n-1)/(n-k-1)]
+                        <br><br>
+                        Where:<br>
+                        • n = Number of observations<br>
+                        • k = Number of features<br>
+                        <br>
+                        Penalizes adding irrelevant features
+                    </div>
+
+                    <div class="visual-box">
+                        <strong>When to Use:</strong><br>
+                        • Comparing different regression models<br>
+                        • Understanding model performance<br>
+                        • Feature selection (higher R² with fewer features is better)<br>
+                        • Model validation and improvement
+                    </div>
+
+                    <h4>💻 Sample Code:</h4>
+                    <pre class="visual-box" style="text-align:left;overflow-x:auto;"><code>from sklearn.linear_model import LinearRegression
+from sklearn.metrics import r2_score
+import numpy as np
+
+y_actual = np.array([100, 120, 140, 160, 180])
+y_predicted = np.array([110, 125, 135, 155, 175])
+
+r2 = r2_score(y_actual, y_predicted)
+print("R² Score:", r2)
+
+# With sklearn model
+X = np.array([[1],[2],[3],[4],[5]])
+model = LinearRegression().fit(X, y_actual)
+print("Model R²:", model.score(X, y_actual))</code></pre>
+
+                    <h4>Limitations:</h4>
+                    <ul>
+                        <li>Can be misleading with non-linear relationships</li>
+                        <li>Doesn't indicate if model is appropriate</li>
+                        <li>High R² doesn't guarantee good predictions</li>
+                        <li>Sensitive to outliers</li>
+                        <li>Always increases with more features (use Adjusted R²)</li>
+                    </ul>
+
+                    <h4>Other Regression Metrics:</h4>
+                    <div class="visual-box">
+                        MAE = (1/n) × Σ|yᵢ - ŷᵢ| (Mean Absolute Error)
+                        <br><br>
+                        MSE = (1/n) × Σ(yᵢ - ŷᵢ)² (Mean Squared Error)
+                        <br><br>
+                        RMSE = √MSE (Root Mean Squared Error)
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <p>&copy; 2024 My AI Learning Blog</p>
+    </footer>
+
+    <!-- Gemini AI Chatbot -->
+    <div id="chatbot-container">
+        <div id="chatbot-toggle">
+            <img src="AI_img-removebg-preview.png" alt="AI" style="width: 40px; height: 40px; border-radius: 50%; object-fit: cover;">
+        </div>
+        <div id="chatbot-window">
+            <div id="chatbot-header">
+                <span>AI Assistant</span>
+                <div class="chatbot-controls">
+                    <button id="chatbot-refresh" class="refresh-btn">
+                        <svg viewBox="0 0 24 24">
+                            <path d="M17.65 6.35C16.2 4.9 14.21 4 12 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08c-.82 2.33-3.04 4-5.65 4-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"/>
+                        </svg>
+                    </button>
+                    <button id="chatbot-close">×</button>
+                </div>
+            </div>
+            <div id="chatbot-messages"></div>
+            <div id="chatbot-input-container">
+                <input type="text" id="chatbot-input" placeholder="Ask me about AI...">
+                <button id="chatbot-send">Send</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="ai-background.js"></script>
+    <script src="chatbot-frontend.js"></script>
+    <script>
+        function showRegressionTab(tabName) {
+            // Hide all tab panels
+            const panels = document.querySelectorAll('.tab-panel');
+            panels.forEach(panel => {
+                panel.classList.remove('active');
+            });
+            
+            // Remove active class from all buttons
+            const buttons = document.querySelectorAll('.tab-btn');
+            buttons.forEach(btn => {
+                btn.classList.remove('active');
+            });
+            
+            // Show selected tab panel
+            document.getElementById(tabName).classList.add('active');
+            
+            // Add active class to clicked button
+            event.target.classList.add('active');
+        }
+    </script>
+</body>
+</html>

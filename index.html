@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sai's Tech Hub</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <header class="hero">
+            <div class="hero-content">
+                <h1 class="glitch" data-text="SAI'S TECH HUB">SAI'S TECH HUB</h1>
+                <p class="subtitle">Exploring <span class="dynamic-container"><span id="dynamic-text">AI</span></span></p>
+            </div>
+        </header>
+
+        <main class="blog-grid" id="blogGrid">
+            <div class="blog-card main-blog" onclick="navigateTo('ai.html', this)">
+                <div class="card-content">
+                    <div class="icon">🤖</div>
+                    <h3>AI Blog</h3>
+                    <p>Dive into Artificial Intelligence</p>
+                </div>
+                <div class="card-glow"></div>
+            </div>
+        </main>
+
+
+    </div>
+
+    <script src="script.js"></script>
+    <script>
+        const texts = ['AI', 'Cloud', 'Data Engineering', 'Data Warehouse', 'Machine Learning', 'DevOps'];
+        let currentIndex = 0;
+        const dynamicText = document.getElementById('dynamic-text');
+
+        function changeText() {
+            currentIndex = (currentIndex + 1) % texts.length;
+            dynamicText.style.animation = 'none';
+            dynamicText.style.transform = 'translateX(100%)';
+            dynamicText.textContent = texts[currentIndex];
+            setTimeout(() => {
+                dynamicText.style.animation = 'marqueeSlide 3s ease-in-out';
+            }, 50);
+        }
+
+        setInterval(changeText, 3000);
+    </script>
+</body>
+</html>

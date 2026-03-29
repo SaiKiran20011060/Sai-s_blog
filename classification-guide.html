@@ -1,0 +1,785 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Classification Guide - My AI Learning Blog</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <nav class="back-nav">
+        <button onclick="window.location.href='supervised-learning.html'" class="back-btn">← Back to Supervised Learning</button>
+    </nav>
+    
+    <header>
+        <h1>🎯 Classification Guide</h1>
+        <p>Complete guide to classification algorithms with examples and implementations</p>
+    </header>
+
+    <main>
+        <!-- Overview Block -->
+        <div class="blog-post">
+            <div class="topic-header">
+                <div class="topic-icon">🎯</div>
+                <div>
+                    <h3>What is Classification?</h3>
+                </div>
+            </div>
+            <p>Classification is a supervised learning technique used to predict discrete categories or classes. Unlike regression which predicts continuous values, classification assigns input data to specific predefined categories.</p>
+            
+            <div class="visual-box">
+                <strong>Key Goal:</strong> Learn decision boundaries to separate different classes in the feature space.
+            </div>
+
+            <h4>Types of Classification:</h4>
+            <ul>
+                <li><strong>Binary Classification:</strong> Two classes (spam/not spam, yes/no)</li>
+                <li><strong>Multi-class Classification:</strong> Multiple classes (cat/dog/bird)</li>
+                <li><strong>Multi-label Classification:</strong> Multiple labels per instance</li>
+            </ul>
+
+            <h4>Common Applications:</h4>
+            <ul>
+                <li>Email spam detection</li>
+                <li>Image recognition</li>
+                <li>Medical diagnosis</li>
+                <li>Sentiment analysis</li>
+                <li>Credit approval</li>
+                <li>Fraud detection</li>
+            </ul>
+        </div>
+
+        <!-- Classification Algorithms Tabs -->
+        <div class="blog-post">
+            <div class="topic-header">
+                <div class="topic-icon">🤖</div>
+                <div>
+                    <h3>Classification Algorithms</h3>
+                </div>
+            </div>
+            
+            <div class="algorithm-tabs">
+                <button class="tab-btn active" onclick="showClassificationTab('logistic-regression')">📈 Logistic Regression</button>
+                <button class="tab-btn" onclick="showClassificationTab('knn')">👥 K-Nearest Neighbors</button>
+                <button class="tab-btn" onclick="showClassificationTab('svm')">🎯 Support Vector Machine</button>
+                <button class="tab-btn" onclick="showClassificationTab('kernel-svm')">🔄 Kernel SVM</button>
+                <button class="tab-btn" onclick="showClassificationTab('naive-bayes')">🧠 Naive Bayes</button>
+                <button class="tab-btn" onclick="showClassificationTab('decision-tree')">🌳 Decision Tree</button>
+                <button class="tab-btn" onclick="showClassificationTab('random-forest')">🌲 Random Forest</button>
+            </div>
+
+            <div class="tab-content">
+                <!-- Logistic Regression Tab -->
+                <div id="logistic-regression" class="tab-panel active">
+                    <h4>📈 Logistic Regression</h4>
+                    <p>Uses the logistic function to model the probability of binary or categorical outcomes. Despite its name, it's a classification algorithm.</p>
+
+                    <h4>Formula:</h4>
+                    <div class="visual-box">
+                        p = 1 / (1 + e^(-z))
+                        <br><br>
+                        Where z = β₀ + β₁x₁ + β₂x₂ + ... + βₙxₙ
+                        <br><br>
+                        • p = Probability of positive class
+                        • e = Euler's number (≈2.718)
+                        • β = Coefficients learned during training
+                    </div>
+
+                    <h4>Decision Boundary:</h4>
+                    <div class="visual-box">
+                        If p ≥ 0.5 → Class 1
+                        If p < 0.5 → Class 0
+                        <br><br>
+                        Linear decision boundary: β₀ + β₁x₁ + β₂x₂ = 0
+                    </div>
+
+                    <div class="visual-box">
+                        <h4>Example: Email Spam Detection</h4>
+                        <p><strong>Features:</strong> Number of exclamation marks, word count</p>
+                        <div class="visual-box">
+z = -2.5 + 0.8×exclamations + 0.001×word_count
+
+Email: 5 exclamations, 200 words
+z = -2.5 + 0.8×5 + 0.001×200 = -2.5 + 4 + 0.2 = 1.7
+p = 1/(1 + e^(-1.7)) = 1/(1 + 0.183) = 0.845
+
+Result: 84.5% probability of spam → Classified as SPAM
+                        </div>
+                    </div>
+
+                    <h4>💻 Sample Code:</h4>
+                    <pre class="visual-box" style="text-align:left;overflow-x:auto;"><code>from sklearn.linear_model import LogisticRegression
+from sklearn.model_selection import train_test_split
+from sklearn.datasets import load_breast_cancer
+
+X, y = load_breast_cancer(return_X_y=True)
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2)
+
+model = LogisticRegression(max_iter=1000)
+model.fit(X_train, y_train)
+
+print("Accuracy:", model.score(X_test, y_test))
+print("Probabilities:", model.predict_proba(X_test[:3]))</code></pre>
+
+                    <div class="concept-visual">
+                        <div class="learning-type">
+                            <h4>✅ Advantages</h4>
+                            <div class="visual-box">
+                                • Provides probability estimates<br>
+                                • No assumptions about feature distributions<br>
+                                • Less prone to overfitting<br>
+                                • Fast training and prediction<br>
+                                • Interpretable coefficients
+                            </div>
+                        </div>
+                        <div class="learning-type">
+                            <h4>❌ Disadvantages</h4>
+                            <div class="visual-box">
+                                • Assumes linear relationship<br>
+                                • Sensitive to outliers<br>
+                                • Requires large sample sizes<br>
+                                • Can struggle with complex relationships<br>
+                                • Feature scaling needed
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- K-Nearest Neighbors Tab -->
+                <div id="knn" class="tab-panel">
+                    <h4>👥 K-Nearest Neighbors (KNN)</h4>
+                    <p>A lazy learning algorithm that classifies data points based on the majority class of their k nearest neighbors in the feature space.</p>
+
+                    <h4>Algorithm:</h4>
+                    <div class="visual-box">
+                        1. Choose number of neighbors (k)
+                        2. Calculate distance to all training points
+                        3. Find k nearest neighbors
+                        4. Take majority vote of their classes
+                        5. Assign predicted class
+                    </div>
+
+                    <h4>Distance Metrics:</h4>
+                    <div class="visual-box">
+                        Euclidean: d = √[(x₁-x₂)² + (y₁-y₂)²]
+                        <br><br>
+                        Manhattan: d = |x₁-x₂| + |y₁-y₂|
+                        <br><br>
+                        Minkowski: d = (Σ|xᵢ-yᵢ|^p)^(1/p)
+                    </div>
+
+                    <div class="visual-box">
+                        <h4>Example: Flower Classification</h4>
+                        <p><strong>Features:</strong> Petal length, petal width</p>
+                        <div class="visual-box">
+New flower: petal_length=5.1, petal_width=2.3
+
+Distances to training data:
+Point 1 (Setosa): d = √[(5.1-4.2)² + (2.3-1.5)²] = 1.34
+Point 2 (Versicolor): d = √[(5.1-5.0)² + (2.3-2.2)²] = 0.14
+Point 3 (Virginica): d = √[(5.1-5.8)² + (2.3-2.7)²] = 0.84
+Point 4 (Versicolor): d = √[(5.1-4.9)² + (2.3-2.0)²] = 0.36
+Point 5 (Virginica): d = √[(5.1-6.1)² + (2.3-2.8)²] = 1.12
+
+For k=3, nearest neighbors: Versicolor, Virginica, Versicolor
+Majority vote: Versicolor → Prediction: Versicolor
+                        </div>
+                    </div>
+
+                    <h4>Choosing K:</h4>
+                    <div class="visual-box">
+                        • Small k: More sensitive to noise, complex boundaries
+                        • Large k: Smoother boundaries, may lose local patterns
+                        • Odd k: Avoids ties in binary classification
+                        • Rule of thumb: k = √n (where n = training samples)
+                    </div>
+
+                    <h4>💻 Sample Code:</h4>
+                    <pre class="visual-box" style="text-align:left;overflow-x:auto;"><code>from sklearn.neighbors import KNeighborsClassifier
+from sklearn.datasets import load_iris
+from sklearn.model_selection import train_test_split
+
+X, y = load_iris(return_X_y=True)
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2)
+
+model = KNeighborsClassifier(n_neighbors=5)
+model.fit(X_train, y_train)
+
+print("Accuracy:", model.score(X_test, y_test))
+print("Prediction:", model.predict(X_test[:3]))</code></pre>
+
+                    <div class="concept-visual">
+                        <div class="learning-type">
+                            <h4>✅ Advantages</h4>
+                            <div class="visual-box">
+                                • Simple to understand and implement<br>
+                                • No assumptions about data distribution<br>
+                                • Works well with small datasets<br>
+                                • Can handle multi-class naturally<br>
+                                • Adapts to new data easily
+                            </div>
+                        </div>
+                        <div class="learning-type">
+                            <h4>❌ Disadvantages</h4>
+                            <div class="visual-box">
+                                • Computationally expensive for large datasets<br>
+                                • Sensitive to irrelevant features<br>
+                                • Requires feature scaling<br>
+                                • Poor performance with high dimensions<br>
+                                • Memory intensive
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Support Vector Machine Tab -->
+                <div id="svm" class="tab-panel">
+                    <h4>🎯 Support Vector Machine (SVM)</h4>
+                    <p>Finds the optimal hyperplane that separates classes with maximum margin. The hyperplane is determined by support vectors.</p>
+
+                    <h4>Key Concepts:</h4>
+                    <div class="visual-box">
+                        • Hyperplane: Decision boundary separating classes
+                        • Support Vectors: Data points closest to hyperplane
+                        • Margin: Distance between hyperplane and nearest points
+                        • Goal: Maximize margin for better generalization
+                    </div>
+
+                    <h4>Mathematical Formulation:</h4>
+                    <div class="visual-box">
+                        Hyperplane: w·x + b = 0
+                        <br><br>
+                        Optimization: Minimize ½||w||²
+                        Subject to: yᵢ(w·xᵢ + b) ≥ 1 for all i
+                        <br><br>
+                        • w = Weight vector (normal to hyperplane)
+                        • b = Bias term
+                        • yᵢ = Class label (+1 or -1)
+                    </div>
+
+                    <div class="visual-box">
+                        <h4>Example: Binary Classification</h4>
+                        <div class="visual-box">
+Dataset: Customer credit approval
+Features: Income, Credit Score
+
+Training data:
+Customer A: Income=50k, Score=700, Label=Approved (+1)
+Customer B: Income=30k, Score=600, Label=Rejected (-1)
+Customer C: Income=70k, Score=750, Label=Approved (+1)
+Customer D: Income=25k, Score=550, Label=Rejected (-1)
+
+SVM finds hyperplane: 0.001×Income + 0.002×Score - 1.8 = 0
+
+New customer: Income=60k, Score=680
+Decision = 0.001×60000 + 0.002×680 - 1.8 = 60 + 1.36 - 1.8 = 59.56 > 0
+Result: Approved
+                        </div>
+                    </div>
+
+                    <h4>Soft Margin SVM:</h4>
+                    <div class="visual-box">
+                        For non-linearly separable data:
+                        Minimize: ½||w||² + C∑ξᵢ
+                        <br><br>
+                        • C = Regularization parameter
+                        • ξᵢ = Slack variables (allow misclassification)
+                        • Higher C = Less tolerance for misclassification
+                    </div>
+
+                    <h4>💻 Sample Code:</h4>
+                    <pre class="visual-box" style="text-align:left;overflow-x:auto;"><code>from sklearn.svm import SVC
+from sklearn.datasets import load_breast_cancer
+from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import StandardScaler
+
+X, y = load_breast_cancer(return_X_y=True)
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2)
+
+scaler = StandardScaler()
+X_train = scaler.fit_transform(X_train)
+X_test = scaler.transform(X_test)
+
+model = SVC(kernel='linear', C=1.0)
+model.fit(X_train, y_train)
+
+print("Accuracy:", model.score(X_test, y_test))</code></pre>
+
+                    <div class="concept-visual">
+                        <div class="learning-type">
+                            <h4>✅ Advantages</h4>
+                            <div class="visual-box">
+                                • Effective in high dimensions<br>
+                                • Memory efficient (uses support vectors)<br>
+                                • Versatile (different kernels)<br>
+                                • Works well with clear margin<br>
+                                • Robust to overfitting
+                            </div>
+                        </div>
+                        <div class="learning-type">
+                            <h4>❌ Disadvantages</h4>
+                            <div class="visual-box">
+                                • No probabilistic output<br>
+                                • Sensitive to feature scaling<br>
+                                • Poor performance on large datasets<br>
+                                • Sensitive to noise<br>
+                                • Choice of kernel and parameters crucial
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Kernel SVM Tab -->
+                <div id="kernel-svm" class="tab-panel">
+                    <h4>🔄 Kernel SVM</h4>
+                    <p>Extends linear SVM to handle non-linear classification by mapping data to higher-dimensional space using kernel functions.</p>
+
+                    <h4>Kernel Trick:</h4>
+                    <div class="visual-box">
+                        Instead of explicitly mapping φ(x), use kernel function:
+                        K(xᵢ, xⱼ) = φ(xᵢ) · φ(xⱼ)
+                        <br><br>
+                        This allows computing dot products in high-dimensional space
+                        without explicitly transforming the data.
+                    </div>
+
+                    <h4>Common Kernels:</h4>
+                    <div class="visual-box">
+                        <strong>Linear:</strong> K(x,y) = x·y
+                        <br><br>
+                        <strong>Polynomial:</strong> K(x,y) = (γx·y + r)^d
+                        • γ = kernel coefficient
+                        • r = independent term
+                        • d = degree
+                        <br><br>
+                        <strong>RBF (Gaussian):</strong> K(x,y) = exp(-γ||x-y||²)
+                        • γ = kernel coefficient (controls influence radius)
+                        <br><br>
+                        <strong>Sigmoid:</strong> K(x,y) = tanh(γx·y + r)
+                    </div>
+
+                    <div class="visual-box">
+                        <h4>Example: Non-linear Classification</h4>
+                        <div class="visual-box">
+Problem: Classify points inside/outside a circle
+
+Linear SVM: Cannot separate circular boundary
+RBF Kernel SVM: Maps to higher dimension where linear separation possible
+
+Data points:
+Point A: (1,1) → Inside circle → Class +1
+Point B: (3,3) → Outside circle → Class -1
+Point C: (0,2) → Inside circle → Class +1
+Point D: (4,1) → Outside circle → Class -1
+
+RBF Kernel with γ=0.5:
+K(A,C) = exp(-0.5×||(1,1)-(0,2)||²) = exp(-0.5×2) = 0.368
+K(A,B) = exp(-0.5×||(1,1)-(3,3)||²) = exp(-0.5×8) = 0.018
+
+The kernel creates non-linear decision boundary in original space.
+                        </div>
+                    </div>
+
+                    <h4>Hyperparameter Tuning:</h4>
+                    <div class="visual-box">
+                        <strong>C (Regularization):</strong>
+                        • High C: Hard margin, may overfit
+                        • Low C: Soft margin, may underfit
+                        <br><br>
+                        <strong>γ (RBF kernel):</strong>
+                        • High γ: Tight fit, complex boundary
+                        • Low γ: Loose fit, simple boundary
+                        <br><br>
+                        Use cross-validation to find optimal values.
+                    </div>
+
+                    <h4>💻 Sample Code:</h4>
+                    <pre class="visual-box" style="text-align:left;overflow-x:auto;"><code>from sklearn.svm import SVC
+from sklearn.datasets import load_breast_cancer
+from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import StandardScaler
+
+X, y = load_breast_cancer(return_X_y=True)
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2)
+
+scaler = StandardScaler()
+X_train = scaler.fit_transform(X_train)
+X_test = scaler.transform(X_test)
+
+# RBF kernel for non-linear classification
+model = SVC(kernel='rbf', C=10, gamma=0.01)
+model.fit(X_train, y_train)
+
+print("Accuracy:", model.score(X_test, y_test))</code></pre>
+
+                    <div class="concept-visual">
+                        <div class="learning-type">
+                            <h4>✅ Advantages</h4>
+                            <div class="visual-box">
+                                • Handles non-linear relationships<br>
+                                • Flexible with different kernels<br>
+                                • Effective in high dimensions<br>
+                                • Memory efficient<br>
+                                • Strong theoretical foundation
+                            </div>
+                        </div>
+                        <div class="learning-type">
+                            <h4>❌ Disadvantages</h4>
+                            <div class="visual-box">
+                                • Slow on large datasets<br>
+                                • Sensitive to hyperparameters<br>
+                                • No probabilistic interpretation<br>
+                                • Difficult to interpret<br>
+                                • Requires feature scaling
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Naive Bayes Tab -->
+                <div id="naive-bayes" class="tab-panel">
+                    <h4>🧠 Naive Bayes</h4>
+                    <p>Probabilistic classifier based on Bayes' theorem with the "naive" assumption of feature independence.</p>
+
+                    <h4>Bayes' Theorem:</h4>
+                    <div class="visual-box">
+                        P(Class|Features) = P(Features|Class) × P(Class) / P(Features)
+                        <br><br>
+                        Naive assumption: Features are independent
+                        P(x₁,x₂,...,xₙ|Class) = P(x₁|Class) × P(x₂|Class) × ... × P(xₙ|Class)
+                    </div>
+
+                    <h4>Classification Rule:</h4>
+                    <div class="visual-box">
+                        ŷ = argmax P(Cₖ) ∏ P(xᵢ|Cₖ)
+                        <br><br>
+                        Choose class with highest posterior probability
+                    </div>
+
+                    <h4>Types of Naive Bayes:</h4>
+                    <div class="visual-box">
+                        <strong>Gaussian NB:</strong> Continuous features (normal distribution)
+                        P(xᵢ|Cₖ) = (1/√2πσₖ²) × exp(-(xᵢ-μₖ)²/2σₖ²)
+                        <br><br>
+                        <strong>Multinomial NB:</strong> Discrete features (word counts)
+                        P(xᵢ|Cₖ) = (count(xᵢ,Cₖ) + α) / (count(Cₖ) + α×n)
+                        <br><br>
+                        <strong>Bernoulli NB:</strong> Binary features (presence/absence)
+                        P(xᵢ|Cₖ) = P(xᵢ=1|Cₖ)^xᵢ × (1-P(xᵢ=1|Cₖ))^(1-xᵢ)
+                    </div>
+
+                    <div class="visual-box">
+                        <h4>Example: Text Classification</h4>
+                        <div class="visual-box">
+Problem: Classify emails as Spam/Ham
+
+Training data:
+Spam emails: "buy now", "free money", "click here"
+Ham emails: "meeting tomorrow", "project update", "lunch plans"
+
+Word probabilities:
+P("free"|Spam) = 0.8, P("free"|Ham) = 0.1
+P("money"|Spam) = 0.7, P("money"|Ham) = 0.05
+P(Spam) = 0.4, P(Ham) = 0.6
+
+New email: "free money offer"
+P(Spam|email) ∝ P(Spam) × P("free"|Spam) × P("money"|Spam)
+                = 0.4 × 0.8 × 0.7 = 0.224
+
+P(Ham|email) ∝ P(Ham) × P("free"|Ham) × P("money"|Ham)
+               = 0.6 × 0.1 × 0.05 = 0.003
+
+Result: 0.224 > 0.003 → Classified as SPAM
+                        </div>
+                    </div>
+
+                    <h4>💻 Sample Code:</h4>
+                    <pre class="visual-box" style="text-align:left;overflow-x:auto;"><code>from sklearn.naive_bayes import GaussianNB
+from sklearn.datasets import load_iris
+from sklearn.model_selection import train_test_split
+
+X, y = load_iris(return_X_y=True)
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2)
+
+model = GaussianNB()
+model.fit(X_train, y_train)
+
+print("Accuracy:", model.score(X_test, y_test))
+print("Probabilities:", model.predict_proba(X_test[:3]))</code></pre>
+
+                    <div class="concept-visual">
+                        <div class="learning-type">
+                            <h4>✅ Advantages</h4>
+                            <div class="visual-box">
+                                • Fast training and prediction<br>
+                                • Works well with small datasets<br>
+                                • Handles multi-class naturally<br>
+                                • Not sensitive to irrelevant features<br>
+                                • Good baseline classifier
+                            </div>
+                        </div>
+                        <div class="learning-type">
+                            <h4>❌ Disadvantages</h4>
+                            <div class="visual-box">
+                                • Strong independence assumption<br>
+                                • Can be outperformed by more sophisticated methods<br>
+                                • Requires smoothing for zero probabilities<br>
+                                • Poor estimator for probability<br>
+                                • Categorical inputs need Laplace smoothing
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Decision Tree Tab -->
+                <div id="decision-tree" class="tab-panel">
+                    <h4>🌳 Decision Tree Classification</h4>
+                    <p>Creates a tree-like model of decisions by recursively splitting data based on feature values that best separate classes.</p>
+
+                    <h4>Algorithm:</h4>
+                    <div class="visual-box">
+                        1. Start with entire dataset at root
+                        2. Find best feature and split value
+                        3. Split data into branches
+                        4. Repeat recursively for each branch
+                        5. Stop when stopping criteria met
+                        6. Assign majority class to leaf nodes
+                    </div>
+
+                    <h4>Splitting Criteria:</h4>
+                    <div class="visual-box">
+                        <strong>Gini Impurity:</strong>
+                        Gini = 1 - Σ(pᵢ)²
+                        <br><br>
+                        <strong>Entropy:</strong>
+                        Entropy = -Σ(pᵢ × log₂(pᵢ))
+                        <br><br>
+                        <strong>Information Gain:</strong>
+                        IG = Entropy(parent) - Σ(wᵢ × Entropy(childᵢ))
+                        <br><br>
+                        Where pᵢ = proportion of class i
+                    </div>
+
+                    <div class="visual-box">
+                        <h4>Example: Loan Approval Decision Tree</h4>
+                        <div class="visual-box">
+Features: Income, Credit Score, Employment
+
+Root: All applicants (60% approved, 40% rejected)
+├── Income ≤ 50k (20% approved, 80% rejected)
+│   ├── Credit Score ≤ 600 → REJECT
+│   └── Credit Score > 600 → APPROVE
+└── Income > 50k (80% approved, 20% rejected)
+    ├── Employment < 2 years → REJECT
+    └── Employment ≥ 2 years → APPROVE
+
+New applicant: Income=60k, Credit=650, Employment=3 years
+Path: Root → Income > 50k → Employment ≥ 2 years → APPROVE
+                        </div>
+                    </div>
+
+                    <h4>Pruning:</h4>
+                    <div class="visual-box">
+                        <strong>Pre-pruning:</strong> Stop growing early
+                        • Max depth, min samples per leaf, min impurity decrease
+                        <br><br>
+                        <strong>Post-pruning:</strong> Remove branches after growing
+                        • Cost complexity pruning, reduced error pruning
+                    </div>
+
+                    <h4>💻 Sample Code:</h4>
+                    <pre class="visual-box" style="text-align:left;overflow-x:auto;"><code>from sklearn.tree import DecisionTreeClassifier
+from sklearn.datasets import load_iris
+from sklearn.model_selection import train_test_split
+
+X, y = load_iris(return_X_y=True)
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2)
+
+model = DecisionTreeClassifier(max_depth=4, criterion='gini')
+model.fit(X_train, y_train)
+
+print("Accuracy:", model.score(X_test, y_test))
+print("Feature importances:", model.feature_importances_)</code></pre>
+
+                    <div class="concept-visual">
+                        <div class="learning-type">
+                            <h4>✅ Advantages</h4>
+                            <div class="visual-box">
+                                • Easy to understand and interpret<br>
+                                • No assumptions about data distribution<br>
+                                • Handles both numerical and categorical<br>
+                                • Automatic feature selection<br>
+                                • No need for feature scaling
+                            </div>
+                        </div>
+                        <div class="learning-type">
+                            <h4>❌ Disadvantages</h4>
+                            <div class="visual-box">
+                                • Prone to overfitting<br>
+                                • Unstable (small changes = different tree)<br>
+                                • Biased toward features with more levels<br>
+                                • Difficulty with linear relationships<br>
+                                • Can create overly complex trees
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Random Forest Tab -->
+                <div id="random-forest" class="tab-panel">
+                    <h4>🌲 Random Forest Classification</h4>
+                    <p>Ensemble method that combines multiple decision trees using bootstrap sampling and random feature selection.</p>
+
+                    <h4>Algorithm:</h4>
+                    <div class="visual-box">
+                        1. Create n bootstrap samples from training data
+                        2. For each sample, train a decision tree with:
+                           • Random subset of features at each split
+                           • Different random seed
+                        3. For prediction: majority vote of all trees
+                        <br><br>
+                        Final prediction = mode(tree₁, tree₂, ..., treeₙ)
+                    </div>
+
+                    <h4>Key Concepts:</h4>
+                    <div class="visual-box">
+                        <strong>Bootstrap Sampling:</strong> Random sampling with replacement
+                        <br><br>
+                        <strong>Feature Randomness:</strong> √(total_features) features per split
+                        <br><br>
+                        <strong>Bagging:</strong> Bootstrap Aggregating reduces overfitting
+                        <br><br>
+                        <strong>Out-of-Bag (OOB):</strong> Use unsampled data for validation
+                    </div>
+
+                    <div class="visual-box">
+                        <h4>Example: Image Classification</h4>
+                        <div class="visual-box">
+Problem: Classify images as Cat/Dog/Bird
+
+Image features: Color histogram, texture, edges
+Training: 1000 images per class
+
+Random Forest with 100 trees:
+Tree 1: Trained on bootstrap sample 1, uses features [color, texture]
+Tree 2: Trained on bootstrap sample 2, uses features [edges, brightness]
+...
+Tree 100: Trained on bootstrap sample 100, uses features [contrast, color]
+
+New image prediction:
+Tree 1: Cat (confidence: 0.7)
+Tree 2: Dog (confidence: 0.6)
+Tree 3: Cat (confidence: 0.8)
+...
+Tree 100: Cat (confidence: 0.9)
+
+Vote count: Cat=65, Dog=25, Bird=10
+Final prediction: Cat (majority vote)
+                        </div>
+                    </div>
+
+                    <h4>Feature Importance:</h4>
+                    <div class="visual-box">
+                        Importance = Σ(weighted_impurity_decrease) / n_trees
+                        <br><br>
+                        Measures how much each feature contributes to decreasing
+                        impurity across all trees in the forest.
+                    </div>
+
+                    <h4>💻 Sample Code:</h4>
+                    <pre class="visual-box" style="text-align:left;overflow-x:auto;"><code>from sklearn.ensemble import RandomForestClassifier
+from sklearn.datasets import load_iris
+from sklearn.model_selection import train_test_split
+
+X, y = load_iris(return_X_y=True)
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2)
+
+model = RandomForestClassifier(n_estimators=100, max_depth=4)
+model.fit(X_train, y_train)
+
+print("Accuracy:", model.score(X_test, y_test))
+print("Feature importances:", model.feature_importances_)</code></pre>
+
+                    <div class="concept-visual">
+                        <div class="learning-type">
+                            <h4>✅ Advantages</h4>
+                            <div class="visual-box">
+                                • Reduces overfitting vs single tree<br>
+                                • Handles missing values<br>
+                                • Provides feature importance<br>
+                                • Works with mixed data types<br>
+                                • Robust to outliers<br>
+                                • Parallel training possible
+                            </div>
+                        </div>
+                        <div class="learning-type">
+                            <h4>❌ Disadvantages</h4>
+                            <div class="visual-box">
+                                • Less interpretable than single tree<br>
+                                • Can overfit with very noisy data<br>
+                                • Biased toward categorical variables<br>
+                                • Memory intensive<br>
+                                • Slower prediction than single tree
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <p>&copy; 2024 My AI Learning Blog</p>
+    </footer>
+
+    <!-- Gemini AI Chatbot -->
+    <div id="chatbot-container">
+        <div id="chatbot-toggle">
+            <img src="AI_img-removebg-preview.png" alt="AI" style="width: 40px; height: 40px; border-radius: 50%; object-fit: cover;">
+        </div>
+        <div id="chatbot-window">
+            <div id="chatbot-header">
+                <span>AI Assistant</span>
+                <div class="chatbot-controls">
+                    <button id="chatbot-refresh" class="refresh-btn">
+                        <svg viewBox="0 0 24 24">
+                            <path d="M17.65 6.35C16.2 4.9 14.21 4 12 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08c-.82 2.33-3.04 4-5.65 4-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"/>
+                        </svg>
+                    </button>
+                    <button id="chatbot-close">×</button>
+                </div>
+            </div>
+            <div id="chatbot-messages"></div>
+            <div id="chatbot-input-container">
+                <input type="text" id="chatbot-input" placeholder="Ask me about AI...">
+                <button id="chatbot-send">Send</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="ai-background.js"></script>
+    <script src="chatbot-frontend.js"></script>
+    <script>
+        function showClassificationTab(tabName) {
+            // Hide all tab panels
+            const panels = document.querySelectorAll('.tab-panel');
+            panels.forEach(panel => {
+                panel.classList.remove('active');
+            });
+            
+            // Remove active class from all buttons
+            const buttons = document.querySelectorAll('.tab-btn');
+            buttons.forEach(btn => {
+                btn.classList.remove('active');
+            });
+            
+            // Show selected tab panel
+            document.getElementById(tabName).classList.add('active');
+            
+            // Add active class to clicked button
+            event.target.classList.add('active');
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,712 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Clustering Guide - My AI Learning Blog</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <nav class="back-nav">
+        <button onclick="window.location.href='unsupervised-learning.html'" class="back-btn">← Back to Unsupervised Learning</button>
+    </nav>
+    
+    <header>
+        <h1>🔗 Clustering Guide</h1>
+        <p>Complete guide to clustering algorithms with examples and implementations</p>
+    </header>
+
+    <main>
+        <!-- Overview Block -->
+        <div class="blog-post">
+            <div class="topic-header">
+                <div class="topic-icon">🔗</div>
+                <div>
+                    <h3>What is Clustering?</h3>
+                </div>
+            </div>
+            <p>Clustering is an unsupervised learning technique used to group similar data points together without prior knowledge of group labels. It discovers hidden patterns and structures in data.</p>
+            
+            <div class="visual-box">
+                <strong>Key Goal:</strong> Partition data into clusters where points within clusters are similar and points between clusters are dissimilar.
+            </div>
+
+            <h4>Types of Clustering:</h4>
+            <ul>
+                <li><strong>Partitional Clustering:</strong> Divides data into non-overlapping clusters (K-means)</li>
+                <li><strong>Hierarchical Clustering:</strong> Creates tree-like cluster structures</li>
+                <li><strong>Density-based Clustering:</strong> Groups points in dense regions (DBSCAN)</li>
+                <li><strong>Model-based Clustering:</strong> Assumes data follows statistical models (GMM)</li>
+            </ul>
+
+            <h4>Common Applications:</h4>
+            <ul>
+                <li>Customer segmentation</li>
+                <li>Market research</li>
+                <li>Image segmentation</li>
+                <li>Gene sequencing</li>
+                <li>Social network analysis</li>
+                <li>Anomaly detection</li>
+            </ul>
+        </div>
+
+        <!-- Clustering Algorithms Tabs -->
+        <div class="blog-post">
+            <div class="topic-header">
+                <div class="topic-icon">🤖</div>
+                <div>
+                    <h3>Clustering Algorithms</h3>
+                </div>
+            </div>
+            
+            <div class="algorithm-tabs">
+                <button class="tab-btn active" onclick="showClusteringTab('k-means')">🎯 K-Means</button>
+                <button class="tab-btn" onclick="showClusteringTab('hierarchical')">🌳 Hierarchical</button>
+                <button class="tab-btn" onclick="showClusteringTab('dbscan')">🔍 DBSCAN</button>
+                <button class="tab-btn" onclick="showClusteringTab('gmm')">📊 Gaussian Mixture</button>
+                <button class="tab-btn" onclick="showClusteringTab('mean-shift')">🎪 Mean Shift</button>
+                <button class="tab-btn" onclick="showClusteringTab('spectral')">🌈 Spectral</button>
+            </div>
+
+            <div class="tab-content">
+                <!-- K-Means Tab -->
+                <div id="k-means" class="tab-panel active">
+                    <h4>🎯 K-Means Clustering</h4>
+                    <p>Partitions data into k clusters by minimizing within-cluster sum of squares. Each point belongs to the cluster with the nearest centroid.</p>
+
+                    <h4>Algorithm:</h4>
+                    <div class="visual-box">
+                        1. Choose number of clusters (k)
+                        2. Initialize k centroids randomly
+                        3. Assign each point to nearest centroid
+                        4. Update centroids to cluster means
+                        5. Repeat steps 3-4 until convergence
+                    </div>
+
+                    <h4>Objective Function:</h4>
+                    <div class="visual-box">
+                        Minimize: J = Σᵢ₌₁ᵏ Σₓ∈Cᵢ ||x - μᵢ||²
+                        <br><br>
+                        Where:
+                        • k = number of clusters
+                        • Cᵢ = cluster i
+                        • μᵢ = centroid of cluster i
+                        • ||x - μᵢ||² = squared Euclidean distance
+                    </div>
+
+                    <div class="visual-box">
+                        <h4>Example: Customer Segmentation</h4>
+                        <p><strong>Features:</strong> Annual spending, Age</p>
+                        <div class="visual-box">
+Customer data:
+A: Spending=$2000, Age=25
+B: Spending=$8000, Age=45  
+C: Spending=$3000, Age=30
+D: Spending=$9000, Age=50
+E: Spending=$2500, Age=28
+
+K-means with k=2:
+
+Initial centroids:
+C1: ($3000, 35)
+C2: ($7000, 40)
+
+Iteration 1:
+Distances and assignments:
+A to C1: √[(2000-3000)² + (25-35)²] = 1414 → Cluster 1
+A to C2: √[(2000-7000)² + (25-40)²] = 5022
+B to C1: √[(8000-3000)² + (45-35)²] = 5010 → Cluster 2  
+B to C2: √[(8000-7000)² + (45-40)²] = 1118
+
+Final clusters:
+Cluster 1: Young, low spenders {A, C, E}
+Cluster 2: Mature, high spenders {B, D}
+                        </div>
+                    </div>
+
+                    <h4>Choosing K:</h4>
+                    <div class="visual-box">
+                        <strong>Elbow Method:</strong> Plot SSE vs k, look for "elbow"
+                        <br><br>
+                        <strong>Silhouette Analysis:</strong> Measure cluster cohesion and separation
+                        <br><br>
+                        <strong>Gap Statistic:</strong> Compare with random data clustering
+                    </div>
+
+                    <h4>💻 Sample Code:</h4>
+                    <pre class="visual-box" style="text-align:left;overflow-x:auto;"><code>from sklearn.cluster import KMeans
+import numpy as np
+
+# Customer data: [spending, age]
+X = np.array([[2000,25],[8000,45],[3000,30],[9000,50],[2500,28]])
+
+model = KMeans(n_clusters=2, random_state=42)
+model.fit(X)
+
+print("Cluster labels:", model.labels_)
+print("Centroids:", model.cluster_centers_)
+print("Inertia (SSE):", model.inertia_)</code></pre>
+
+                    <div class="concept-visual">
+                        <div class="learning-type">
+                            <h4>✅ Advantages</h4>
+                            <div class="visual-box">
+                                • Simple and fast algorithm<br>
+                                • Works well with spherical clusters<br>
+                                • Scales well to large datasets<br>
+                                • Guaranteed convergence<br>
+                                • Memory efficient
+                            </div>
+                        </div>
+                        <div class="learning-type">
+                            <h4>❌ Disadvantages</h4>
+                            <div class="visual-box">
+                                • Need to specify k beforehand<br>
+                                • Sensitive to initialization<br>
+                                • Assumes spherical clusters<br>
+                                • Sensitive to outliers<br>
+                                • Struggles with varying cluster sizes
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Hierarchical Clustering Tab -->
+                <div id="hierarchical" class="tab-panel">
+                    <h4>🌳 Hierarchical Clustering</h4>
+                    <p>Creates a tree-like hierarchy of clusters. Can be agglomerative (bottom-up) or divisive (top-down).</p>
+
+                    <h4>Agglomerative Algorithm:</h4>
+                    <div class="visual-box">
+                        1. Start with each point as its own cluster
+                        2. Find two closest clusters
+                        3. Merge them into one cluster
+                        4. Update distance matrix
+                        5. Repeat until one cluster remains
+                        6. Cut dendrogram at desired level
+                    </div>
+
+                    <h4>Linkage Criteria:</h4>
+                    <div class="visual-box">
+                        <strong>Single Linkage:</strong> min(d(a,b)) where a∈A, b∈B
+                        <br><br>
+                        <strong>Complete Linkage:</strong> max(d(a,b)) where a∈A, b∈B
+                        <br><br>
+                        <strong>Average Linkage:</strong> mean(d(a,b)) where a∈A, b∈B
+                        <br><br>
+                        <strong>Ward Linkage:</strong> Minimizes within-cluster variance
+                    </div>
+
+                    <div class="visual-box">
+                        <h4>Example: Gene Expression Clustering</h4>
+                        <div class="visual-box">
+Genes: A, B, C, D, E
+Expression levels: [Gene1_expr, Gene2_expr]
+
+Distance matrix (Euclidean):
+    A    B    C    D    E
+A   0   2.1  5.2  8.1  3.4
+B  2.1   0   4.8  7.9  2.8
+C  5.2  4.8   0   3.2  6.1
+D  8.1  7.9  3.2   0   7.8
+E  3.4  2.8  6.1  7.8   0
+
+Agglomerative clustering (Complete linkage):
+Step 1: Merge A-B (distance 2.1)
+Step 2: Merge E to (A,B) (max distance 3.4)
+Step 3: Merge C-D (distance 3.2)
+Step 4: Merge (A,B,E) with (C,D)
+
+Dendrogram shows hierarchy of gene relationships
+                        </div>
+                    </div>
+
+                    <h4>Dendrogram Interpretation:</h4>
+                    <div class="visual-box">
+                        • Height = distance at which clusters merge
+                        • Horizontal cut = determines number of clusters
+                        • Longer branches = more dissimilar clusters
+                        • Use inconsistency coefficient to find optimal cut
+                    </div>
+
+                    <h4>💻 Sample Code:</h4>
+                    <pre class="visual-box" style="text-align:left;overflow-x:auto;"><code>from sklearn.cluster import AgglomerativeClustering
+import numpy as np
+
+X = np.array([[1,2],[2,3],[8,7],[9,8],[3,2],[8,9]])
+
+model = AgglomerativeClustering(n_clusters=2, linkage='ward')
+labels = model.fit_predict(X)
+
+print("Cluster labels:", labels)</code></pre>
+
+                    <div class="concept-visual">
+                        <div class="learning-type">
+                            <h4>✅ Advantages</h4>
+                            <div class="visual-box">
+                                • No need to specify number of clusters<br>
+                                • Deterministic results<br>
+                                • Creates interpretable hierarchy<br>
+                                • Works with any distance metric<br>
+                                • Handles non-spherical clusters
+                            </div>
+                        </div>
+                        <div class="learning-type">
+                            <h4>❌ Disadvantages</h4>
+                            <div class="visual-box">
+                                • O(n³) time complexity<br>
+                                • Sensitive to noise and outliers<br>
+                                • Difficult to handle large datasets<br>
+                                • Cannot undo previous steps<br>
+                                • Choice of linkage affects results
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- DBSCAN Tab -->
+                <div id="dbscan" class="tab-panel">
+                    <h4>🔍 DBSCAN (Density-Based Spatial Clustering)</h4>
+                    <p>Groups together points in high-density areas and marks points in low-density areas as outliers.</p>
+
+                    <h4>Key Concepts:</h4>
+                    <div class="visual-box">
+                        • <strong>ε (epsilon):</strong> Maximum distance between points in same cluster
+                        • <strong>MinPts:</strong> Minimum points required to form dense region
+                        • <strong>Core point:</strong> Has ≥ MinPts within ε distance
+                        • <strong>Border point:</strong> Within ε of core point but not core itself
+                        • <strong>Noise point:</strong> Neither core nor border point
+                    </div>
+
+                    <h4>Algorithm:</h4>
+                    <div class="visual-box">
+                        1. For each unvisited point:
+                        2. Find all points within ε distance
+                        3. If ≥ MinPts neighbors → mark as core point
+                        4. Create new cluster with core point
+                        5. Add all density-reachable points to cluster
+                        6. Mark isolated points as noise
+                    </div>
+
+                    <div class="visual-box">
+                        <h4>Example: Anomaly Detection in Network Traffic</h4>
+                        <div class="visual-box">
+Network connections with features: [Duration, Bytes_sent]
+Parameters: ε = 2.0, MinPts = 3
+
+Data points:
+A: (1, 100)    F: (8, 200)
+B: (2, 120)    G: (9, 180)  
+C: (1.5, 110)  H: (15, 50)  ← Potential anomaly
+D: (7, 190)    I: (8.5, 210)
+E: (7.5, 180)  J: (9.2, 195)
+
+DBSCAN clustering:
+Cluster 1: Normal web traffic {A, B, C} (core: A, B)
+Cluster 2: File transfer traffic {D, E, F, G, I, J} (core: F, G, I)
+Noise: {H} → Flagged as anomaly (isolated point)
+
+Point H is far from both clusters → potential security threat
+                        </div>
+                    </div>
+
+                    <h4>Parameter Selection:</h4>
+                    <div class="visual-box">
+                        <strong>ε selection:</strong> Use k-distance graph, look for "knee"
+                        <br><br>
+                        <strong>MinPts selection:</strong> Rule of thumb: MinPts ≥ dimensions + 1
+                        <br><br>
+                        <strong>Trade-off:</strong> Small ε → many small clusters, Large ε → few large clusters
+                    </div>
+
+                    <h4>💻 Sample Code:</h4>
+                    <pre class="visual-box" style="text-align:left;overflow-x:auto;"><code>from sklearn.cluster import DBSCAN
+import numpy as np
+
+X = np.array([[1,100],[2,120],[1.5,110],[7,190],[7.5,180],
+              [8,200],[9,180],[15,50],[8.5,210],[9.2,195]])
+
+model = DBSCAN(eps=2.0, min_samples=3)
+labels = model.fit_predict(X)
+
+print("Cluster labels:", labels)  # -1 = noise/anomaly
+print("Noise points:", np.where(labels == -1)[0])</code></pre>
+
+                    <div class="concept-visual">
+                        <div class="learning-type">
+                            <h4>✅ Advantages</h4>
+                            <div class="visual-box">
+                                • Finds arbitrary shaped clusters<br>
+                                • Automatically determines cluster count<br>
+                                • Robust to outliers<br>
+                                • Identifies noise points<br>
+                                • No assumption about cluster shape
+                            </div>
+                        </div>
+                        <div class="learning-type">
+                            <h4>❌ Disadvantages</h4>
+                            <div class="visual-box">
+                                • Sensitive to ε and MinPts parameters<br>
+                                • Struggles with varying densities<br>
+                                • High memory usage for large datasets<br>
+                                • Difficulty with high-dimensional data<br>
+                                • Border points can belong to multiple clusters
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Gaussian Mixture Model Tab -->
+                <div id="gmm" class="tab-panel">
+                    <h4>📊 Gaussian Mixture Model (GMM)</h4>
+                    <p>Assumes data comes from a mixture of Gaussian distributions. Uses Expectation-Maximization algorithm to find parameters.</p>
+
+                    <h4>Model:</h4>
+                    <div class="visual-box">
+                        P(x) = Σᵢ₌₁ᵏ πᵢ × N(x|μᵢ, Σᵢ)
+                        <br><br>
+                        Where:
+                        • πᵢ = mixing coefficient (weight) of component i
+                        • N(x|μᵢ, Σᵢ) = Gaussian distribution with mean μᵢ and covariance Σᵢ
+                        • Σπᵢ = 1 (weights sum to 1)
+                    </div>
+
+                    <h4>EM Algorithm:</h4>
+                    <div class="visual-box">
+                        <strong>E-step (Expectation):</strong>
+                        Calculate responsibility γᵢⱼ = P(component i | data point j)
+                        <br><br>
+                        <strong>M-step (Maximization):</strong>
+                        Update parameters:
+                        • πᵢ = (1/n) × Σⱼ γᵢⱼ
+                        • μᵢ = Σⱼ(γᵢⱼ × xⱼ) / Σⱼ γᵢⱼ
+                        • Σᵢ = Σⱼ(γᵢⱼ × (xⱼ-μᵢ)(xⱼ-μᵢ)ᵀ) / Σⱼ γᵢⱼ
+                    </div>
+
+                    <div class="visual-box">
+                        <h4>Example: Customer Purchase Behavior</h4>
+                        <div class="visual-box">
+Features: [Purchase_frequency, Average_amount]
+Assume 2 customer types with different spending patterns
+
+Initial parameters:
+Component 1: μ₁=[2, 50], Σ₁=[[1,0],[0,100]], π₁=0.6
+Component 2: μ₂=[8, 200], Σ₂=[[4,0],[0,400]], π₂=0.4
+
+Customer data point: x = [5, 120]
+
+E-step: Calculate probabilities
+P(x|comp1) = N([5,120]|[2,50], Σ₁) = 0.001
+P(x|comp2) = N([5,120]|[8,200], Σ₂) = 0.008
+
+Responsibilities:
+γ₁ = (0.6 × 0.001) / (0.6×0.001 + 0.4×0.008) = 0.16
+γ₂ = (0.4 × 0.008) / (0.6×0.001 + 0.4×0.008) = 0.84
+
+Customer more likely belongs to high-spending segment
+                        </div>
+                    </div>
+
+                    <h4>Model Selection:</h4>
+                    <div class="visual-box">
+                        <strong>AIC (Akaike Information Criterion):</strong>
+                        AIC = -2×log(likelihood) + 2×parameters
+                        <br><br>
+                        <strong>BIC (Bayesian Information Criterion):</strong>
+                        BIC = -2×log(likelihood) + parameters×log(n)
+                        <br><br>
+                        Lower values indicate better model fit
+                    </div>
+
+                    <h4>💻 Sample Code:</h4>
+                    <pre class="visual-box" style="text-align:left;overflow-x:auto;"><code>from sklearn.mixture import GaussianMixture
+import numpy as np
+
+X = np.array([[2,50],[3,60],[8,200],[9,210],[2.5,55],[8.5,195]])
+
+model = GaussianMixture(n_components=2, random_state=42)
+model.fit(X)
+
+print("Cluster labels:", model.predict(X))
+print("Probabilities:", model.predict_proba(X).round(2))
+print("Means:", model.means_)</code></pre>
+
+                    <div class="concept-visual">
+                        <div class="learning-type">
+                            <h4>✅ Advantages</h4>
+                            <div class="visual-box">
+                                • Provides soft clustering (probabilities)<br>
+                                • Handles overlapping clusters<br>
+                                • Flexible cluster shapes (elliptical)<br>
+                                • Principled statistical foundation<br>
+                                • Can handle missing data
+                            </div>
+                        </div>
+                        <div class="learning-type">
+                            <h4>❌ Disadvantages</h4>
+                            <div class="visual-box">
+                                • Assumes Gaussian distributions<br>
+                                • Sensitive to initialization<br>
+                                • May converge to local optima<br>
+                                • Requires specifying number of components<br>
+                                • Computationally expensive
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Mean Shift Tab -->
+                <div id="mean-shift" class="tab-panel">
+                    <h4>🎪 Mean Shift Clustering</h4>
+                    <p>Finds dense areas by shifting points towards the mode (highest density) of their local neighborhood.</p>
+
+                    <h4>Algorithm:</h4>
+                    <div class="visual-box">
+                        1. For each data point, define a window around it
+                        2. Calculate mean of points within window
+                        3. Shift window center to the mean
+                        4. Repeat until convergence
+                        5. Points converging to same mode form cluster
+                    </div>
+
+                    <h4>Mean Shift Vector:</h4>
+                    <div class="visual-box">
+                        m(x) = (Σᵢ xᵢ × K(||x-xᵢ||/h)) / (Σᵢ K(||x-xᵢ||/h))
+                        <br><br>
+                        Where:
+                        • K = kernel function (usually Gaussian)
+                        • h = bandwidth parameter
+                        • xᵢ = data points within window
+                    </div>
+
+                    <div class="visual-box">
+                        <h4>Example: Image Segmentation</h4>
+                        <div class="visual-box">
+Color-based image segmentation using RGB values
+Image pixels as 3D points in RGB space
+
+Pixel data (R, G, B):
+P1: (255, 0, 0)    ← Red region
+P2: (250, 10, 5)   ← Red region  
+P3: (0, 255, 0)    ← Green region
+P4: (5, 250, 10)   ← Green region
+P5: (0, 0, 255)    ← Blue region
+
+Bandwidth h = 50
+
+Mean shift for P1:
+Window contains P1, P2 (similar red colors)
+Mean = [(255+250)/2, (0+10)/2, (0+5)/2] = [252.5, 5, 2.5]
+Shift P1 towards this mean
+
+After convergence:
+Cluster 1: Red pixels {P1, P2} → mode at (252, 7, 3)
+Cluster 2: Green pixels {P3, P4} → mode at (2, 252, 7)  
+Cluster 3: Blue pixels {P5} → mode at (0, 0, 255)
+                        </div>
+                    </div>
+
+                    <h4>Bandwidth Selection:</h4>
+                    <div class="visual-box">
+                        • Small h: Many small clusters, sensitive to noise
+                        • Large h: Few large clusters, may merge distinct groups
+                        • Rule of thumb: h = 0.2 × data_range
+                        • Use cross-validation for optimal selection
+                    </div>
+
+                    <h4>💻 Sample Code:</h4>
+                    <pre class="visual-box" style="text-align:left;overflow-x:auto;"><code>from sklearn.cluster import MeanShift, estimate_bandwidth
+import numpy as np
+
+X = np.array([[255,0,0],[250,10,5],[0,255,0],
+              [5,250,10],[0,0,255],[248,5,3]])
+
+bandwidth = estimate_bandwidth(X, quantile=0.5)
+model = MeanShift(bandwidth=bandwidth)
+labels = model.fit_predict(X)
+
+print("Cluster labels:", labels)
+print("Cluster centers:", model.cluster_centers_)</code></pre>
+
+                    <div class="concept-visual">
+                        <div class="learning-type">
+                            <h4>✅ Advantages</h4>
+                            <div class="visual-box">
+                                • Automatically finds number of clusters<br>
+                                • No assumption about cluster shape<br>
+                                • Robust to outliers<br>
+                                • Single parameter (bandwidth)<br>
+                                • Finds cluster centers naturally
+                            </div>
+                        </div>
+                        <div class="learning-type">
+                            <h4>❌ Disadvantages</h4>
+                            <div class="visual-box">
+                                • Computationally expensive O(n²)<br>
+                                • Sensitive to bandwidth selection<br>
+                                • Doesn't work well in high dimensions<br>
+                                • May not work with varying densities<br>
+                                • Memory intensive for large datasets
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Spectral Clustering Tab -->
+                <div id="spectral" class="tab-panel">
+                    <h4>🌈 Spectral Clustering</h4>
+                    <p>Uses eigenvalues and eigenvectors of similarity matrix to perform dimensionality reduction before clustering.</p>
+
+                    <h4>Algorithm:</h4>
+                    <div class="visual-box">
+                        1. Construct similarity matrix S (e.g., RBF kernel)
+                        2. Compute degree matrix D and Laplacian L = D - S
+                        3. Find k smallest eigenvectors of L
+                        4. Create matrix Y with eigenvectors as columns
+                        5. Apply K-means to rows of Y
+                        6. Assign original points to resulting clusters
+                    </div>
+
+                    <h4>Similarity Matrix:</h4>
+                    <div class="visual-box">
+                        <strong>RBF Kernel:</strong> S(i,j) = exp(-||xᵢ-xⱼ||²/2σ²)
+                        <br><br>
+                        <strong>k-NN Graph:</strong> S(i,j) = 1 if j ∈ k-nearest neighbors of i
+                        <br><br>
+                        <strong>ε-neighborhood:</strong> S(i,j) = 1 if ||xᵢ-xⱼ|| < ε
+                    </div>
+
+                    <div class="visual-box">
+                        <h4>Example: Social Network Community Detection</h4>
+                        <div class="visual-box">
+Social network with 6 users and their connections
+Users: A, B, C, D, E, F
+
+Adjacency matrix (connections):
+   A B C D E F
+A [0 1 1 0 0 0]
+B [1 0 1 0 0 0]  
+C [1 1 0 1 0 0]
+D [0 0 1 0 1 1]
+E [0 0 0 1 0 1]
+F [0 0 0 1 1 0]
+
+Degree matrix D:
+D = diag([2, 2, 3, 3, 2, 2])
+
+Laplacian L = D - A:
+L = [2 -1 -1  0  0  0]
+    [-1 2 -1  0  0  0]
+    [-1 -1 3 -1  0  0]
+    [0  0 -1  3 -1 -1]
+    [0  0  0 -1  2 -1]
+    [0  0  0 -1 -1  2]
+
+Eigenvectors reveal community structure:
+Community 1: {A, B, C} (highly connected)
+Community 2: {D, E, F} (highly connected)
+                        </div>
+                    </div>
+
+                    <h4>Laplacian Types:</h4>
+                    <div class="visual-box">
+                        <strong>Unnormalized:</strong> L = D - S
+                        <br><br>
+                        <strong>Normalized (Symmetric):</strong> L = D⁻¹/²(D-S)D⁻¹/²
+                        <br><br>
+                        <strong>Random Walk:</strong> L = D⁻¹(D-S)
+                    </div>
+
+                    <h4>💻 Sample Code:</h4>
+                    <pre class="visual-box" style="text-align:left;overflow-x:auto;"><code>from sklearn.cluster import SpectralClustering
+import numpy as np
+
+X = np.array([[1,1],[1.5,2],[3,4],[5,7],[3.5,5],[4.5,5],[3.5,4.5]])
+
+model = SpectralClustering(n_clusters=2, affinity='rbf', random_state=42)
+labels = model.fit_predict(X)
+
+print("Cluster labels:", labels)</code></pre>
+
+                    <div class="concept-visual">
+                        <div class="learning-type">
+                            <h4>✅ Advantages</h4>
+                            <div class="visual-box">
+                                • Handles non-convex clusters<br>
+                                • Works with graph-structured data<br>
+                                • Strong theoretical foundation<br>
+                                • Effective for image segmentation<br>
+                                • Can find complex cluster shapes
+                            </div>
+                        </div>
+                        <div class="learning-type">
+                            <h4>❌ Disadvantages</h4>
+                            <div class="visual-box">
+                                • Computationally expensive (eigendecomposition)<br>
+                                • Sensitive to similarity matrix construction<br>
+                                • Requires specifying number of clusters<br>
+                                • Parameter selection can be tricky<br>
+                                • May not scale to very large datasets
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <p>&copy; 2024 My AI Learning Blog</p>
+    </footer>
+
+    <!-- Gemini AI Chatbot -->
+    <div id="chatbot-container">
+        <div id="chatbot-toggle">
+            <img src="AI_img-removebg-preview.png" alt="AI" style="width: 40px; height: 40px; border-radius: 50%; object-fit: cover;">
+        </div>
+        <div id="chatbot-window">
+            <div id="chatbot-header">
+                <span>AI Assistant</span>
+                <div class="chatbot-controls">
+                    <button id="chatbot-refresh" class="refresh-btn">
+                        <svg viewBox="0 0 24 24">
+                            <path d="M17.65 6.35C16.2 4.9 14.21 4 12 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08c-.82 2.33-3.04 4-5.65 4-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"/>
+                        </svg>
+                    </button>
+                    <button id="chatbot-close">×</button>
+                </div>
+            </div>
+            <div id="chatbot-messages"></div>
+            <div id="chatbot-input-container">
+                <input type="text" id="chatbot-input" placeholder="Ask me about AI...">
+                <button id="chatbot-send">Send</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="ai-background.js"></script>
+    <script src="chatbot-frontend.js"></script>
+    <script>
+        function showClusteringTab(tabName) {
+            // Hide all tab panels
+            const panels = document.querySelectorAll('.tab-panel');
+            panels.forEach(panel => {
+                panel.classList.remove('active');
+            });
+            
+            // Remove active class from all buttons
+            const buttons = document.querySelectorAll('.tab-btn');
+            buttons.forEach(btn => {
+                btn.classList.remove('active');
+            });
+            
+            // Show selected tab panel
+            document.getElementById(tabName).classList.add('active');
+            
+            // Add active class to clicked button
+            event.target.classList.add('active');
+        }
+    </script>
+</body>
+</html>
