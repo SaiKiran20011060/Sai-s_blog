@@ -5,7 +5,7 @@ A modern, interactive blog documenting my journey learning Artificial Intelligen
 ## ✨ Features
 
 - **Interactive UI**: Glow animations on topic cards
-- **AI Chatbot**: Built-in AI assistant for questions
+- **AI Chatbot**: Built-in offline assistant for AI questions (no API key, no internet, free)
 - **WebGL Background**: Dynamic particle animations
 - **Responsive Design**: Works on all devices
 - **Multiple Topics**: Comprehensive AI learning sections
@@ -18,6 +18,7 @@ A modern, interactive blog documenting my journey learning Artificial Intelligen
 - **Generative AI**: ChatGPT, Gemini, Midjourney
 - **AI on Cloud**: Vertex AI, AWS SageMaker, Azure AI
 - **Data Engineering**: Preprocessing, pipelines, ML workflows
+- **AI Frameworks**: LangChain, LangGraph, Hugging Face, OpenAI, LLaMA 2
 
 ## 🚀 Getting Started
 
@@ -26,19 +27,18 @@ A modern, interactive blog documenting my journey learning Artificial Intelligen
 git clone https://github.com/SaiKiran20011060/Sai-s_blog.git
 ```
 
-2. Open `main.html` in your browser to start exploring
-
-3. For the chatbot feature, run:
+2. Open `index.html` in your browser, or run a local server:
 ```bash
-pip install -r requirements.txt
-python ai_chatbot.py
+python -m http.server 8000
 ```
+Then visit http://localhost:8000
+
+The chatbot works fully offline, so no backend or API key is needed.
 
 ## 🛠️ Technologies Used
 
 - **Frontend**: HTML5, CSS3, JavaScript
 - **Graphics**: WebGL for particle animations
-- **Backend**: Python Flask (for chatbot)
 - **Styling**: Custom CSS with glassmorphism effects
 
 ## 📱 Live Demo

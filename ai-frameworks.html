@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Frameworks - My AI Learning Blog</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .code-snippet {
+            background: rgba(0, 0, 0, 0.45);
+            border-radius: 8px;
+            padding: 14px 16px;
+            overflow-x: auto;
+            font-family: Consolas, "Courier New", monospace;
+            font-size: 0.9rem;
+            line-height: 1.5;
+            margin: 12px 0;
+            white-space: pre;
+        }
+    </style>
+</head>
+<body>
+
+    <nav class="back-nav">
+        <button onclick="window.location.href='ai.html'" class="back-btn">← Back to AI Hub</button>
+    </nav>
+
+    <header>
+        <h1>🛠️ AI Frameworks</h1>
+        <p>The tools and libraries used to build AI applications</p>
+    </header>
+
+    <main>
+        <div class="blog-post">
+            <div class="topic-header">
+                <div class="topic-icon">🧰</div>
+                <div>
+                    <h3>Popular AI Frameworks</h3>
+                </div>
+            </div>
+
+            <div class="algorithm-tabs">
+                <button class="tab-btn active" onclick="showTab('langchain')">🦜 LangChain</button>
+                <button class="tab-btn" onclick="showTab('langgraph')">🕸️ LangGraph</button>
+                <button class="tab-btn" onclick="showTab('huggingface')">🤗 Hugging Face</button>
+                <button class="tab-btn" onclick="showTab('openai')">🤖 OpenAI</button>
+                <button class="tab-btn" onclick="showTab('llama2')">🦙 LLaMA 2</button>
+            </div>
+
+            <div class="tab-content">
+                <!-- LangChain Tab -->
+                <div id="langchain" class="tab-panel active">
+                    <h4>🦜 LangChain</h4>
+                    <div class="visual-box">
+                        <strong>What it is:</strong> A framework for building applications powered by LLMs by chaining together prompts, models, tools, and data sources
+                    </div>
+                    <div class="concept-visual">
+                        <div class="learning-type">
+                            <h4>Key Components</h4>
+                            <div class="visual-box">
+                                • Prompt Templates<br>
+                                • Models (LLMs &amp; Chat Models)<br>
+                                • Chains (LCEL)<br>
+                                • Retrievers &amp; Vector Stores<br>
+                                • Memory &amp; Tools
+                            </div>
+                        </div>
+                        <div class="learning-type">
+                            <h4>Use Cases</h4>
+                            <div class="visual-box">
+                                • RAG (chat with your documents)<br>
+                                • Chatbots with memory<br>
+                                • Summarization pipelines<br>
+                                • Tool-using agents
+                            </div>
+                        </div>
+                    </div>
+                    <div class="code-snippet">from langchain_core.prompts import ChatPromptTemplate
+from langchain_openai import ChatOpenAI
+
+prompt = ChatPromptTemplate.from_template("Explain {topic} in simple terms")
+chain = prompt | ChatOpenAI(model="gpt-4o-mini")
+print(chain.invoke({"topic": "embeddings"}).content)</div>
+                    <p><strong>How it works:</strong> Each piece (prompt, model, output parser, retriever) is a building block you connect with the <code>|</code> operator, so data flows from one step to the next like a pipeline.</p>
+                </div>
+
+                <!-- LangGraph Tab -->
+                <div id="langgraph" class="tab-panel">
+                    <h4>🕸️ LangGraph</h4>
+                    <div class="visual-box">
+                        <strong>What it is:</strong> A library from the LangChain team for building stateful, multi-step AI agents as graphs of nodes and edges
+                    </div>
+                    <div class="training-visual">
+                        <div class="training-step">
+                            <div class="step-name">State</div>
+                            <div class="step-desc">Shared data passed between nodes</div>
+                        </div>
+                        <div class="arrow">→</div>
+                        <div class="training-step">
+                            <div class="step-name">Nodes</div>
+                            <div class="step-desc">Functions / LLM calls / tools</div>
+                        </div>
+                        <div class="arrow">→</div>
+                        <div class="training-step">
+                            <div class="step-name">Edges</div>
+                            <div class="step-desc">Decide which node runs next</div>
+                        </div>
+                    </div>
+                    <div class="concept-visual">
+                        <div class="learning-type">
+                            <h4>Why LangGraph?</h4>
+                            <div class="visual-box">
+                                • Loops &amp; conditional branching<br>
+                                • Persistent memory (checkpoints)<br>
+                                • Human-in-the-loop approval<br>
+                                • Multi-agent collaboration
+                            </div>
+                        </div>
+                        <div class="learning-type">
+                            <h4>Use Cases</h4>
+                            <div class="visual-box">
+                                • ReAct agents<br>
+                                • Research assistants<br>
+                                • Customer-support workflows<br>
+                                • Planner → executor agents
+                            </div>
+                        </div>
+                    </div>
+                    <div class="code-snippet">from langgraph.graph import StateGraph, START, END
+from typing import TypedDict
+
+class State(TypedDict):
+    question: str
+    answer: str
+
+def answer_node(state: State):
+    return {"answer": f"Thinking about: {state['question']}"}
+
+graph = StateGraph(State)
+graph.add_node("answer", answer_node)
+graph.add_edge(START, "answer")
+graph.add_edge("answer", END)
+app = graph.compile()
+print(app.invoke({"question": "What is RAG?"}))</div>
+                    <p><strong>How it works:</strong> Where LangChain chains run in a straight line, LangGraph lets the agent loop, branch, and revisit steps until the task is done.</p>
+                </div>
+
+                <!-- Hugging Face Tab -->
+                <div id="huggingface" class="tab-panel">
+                    <h4>🤗 Hugging Face</h4>
+                    <div class="visual-box">
+                        <strong>What it is:</strong> The open-source hub for AI — hundreds of thousands of pretrained models, datasets, and demo apps, plus the <em>transformers</em> library to use them
+                    </div>
+                    <div class="concept-visual">
+                        <div class="learning-type">
+                            <h4>Ecosystem</h4>
+                            <div class="visual-box">
+                                • Model Hub &amp; Datasets<br>
+                                • Transformers library<br>
+                                • Tokenizers<br>
+                                • PEFT / LoRA fine-tuning<br>
+                                • Spaces (Gradio / Streamlit demos)
+                            </div>
+                        </div>
+                        <div class="learning-type">
+                            <h4>Common Tasks</h4>
+                            <div class="visual-box">
+                                • Sentiment analysis<br>
+                                • Text generation &amp; summarization<br>
+                                • Translation<br>
+                                • Image classification
+                            </div>
+                        </div>
+                    </div>
+                    <div class="code-snippet">from transformers import pipeline
+
+classifier = pipeline("sentiment-analysis")
+print(classifier("I love learning about AI!"))
+# [{'label': 'POSITIVE', 'score': 0.9998}]</div>
+                    <p><strong>How it works:</strong> The <code>pipeline()</code> function downloads a pretrained model and its tokenizer, so you can run state-of-the-art models in just a few lines of code.</p>
+                </div>
+
+                <!-- OpenAI Tab -->
+                <div id="openai" class="tab-panel">
+                    <h4>🤖 OpenAI</h4>
+                    <div class="visual-box">
+                        <strong>What it is:</strong> The company behind ChatGPT and the GPT models, offering an API and SDK to add powerful language, vision, and audio models to your apps
+                    </div>
+                    <div class="concept-visual">
+                        <div class="learning-type">
+                            <h4>Models &amp; APIs</h4>
+                            <div class="visual-box">
+                                • GPT models (chat &amp; reasoning)<br>
+                                • Embeddings<br>
+                                • DALL·E (image generation)<br>
+                                • Whisper (speech-to-text)<br>
+                                • Function / tool calling
+                            </div>
+                        </div>
+                        <div class="learning-type">
+                            <h4>Use Cases</h4>
+                            <div class="visual-box">
+                                • Chatbots &amp; assistants<br>
+                                • Semantic search with embeddings<br>
+                                • Structured data extraction<br>
+                                • Code generation
+                            </div>
+                        </div>
+                    </div>
+                    <div class="code-snippet">from openai import OpenAI
+
+client = OpenAI()  # reads OPENAI_API_KEY from env
+response = client.chat.completions.create(
+    model="gpt-4o-mini",
+    messages=[{"role": "user", "content": "Explain transformers in one line"}],
+)
+print(response.choices[0].message.content)</div>
+                    <p><strong>How it works:</strong> You send a list of messages (system, user, assistant) to the API and the model returns the next reply. Models run on OpenAI's servers, so no GPU is needed locally.</p>
+                </div>
+
+                <!-- LLaMA 2 Tab -->
+                <div id="llama2" class="tab-panel">
+                    <h4>🦙 LLaMA 2</h4>
+                    <div class="visual-box">
+                        <strong>What it is:</strong> Meta's family of open-weight large language models (7B, 13B, and 70B parameters) that you can download, run locally, and fine-tune
+                    </div>
+                    <div class="training-visual">
+                        <div class="training-step">
+                            <div class="step-name">7B</div>
+                            <div class="step-desc">Fast, runs on a laptop GPU</div>
+                        </div>
+                        <div class="arrow">→</div>
+                        <div class="training-step">
+                            <div class="step-name">13B</div>
+                            <div class="step-desc">Balanced quality &amp; speed</div>
+                        </div>
+                        <div class="arrow">→</div>
+                        <div class="training-step">
+                            <div class="step-name">70B</div>
+                            <div class="step-desc">Highest quality, needs big GPUs</div>
+                        </div>
+                    </div>
+                    <div class="concept-visual">
+                        <div class="learning-type">
+                            <h4>Highlights</h4>
+                            <div class="visual-box">
+                                • Trained on 2 trillion tokens<br>
+                                • 4K token context window<br>
+                                • Llama-2-Chat tuned with RLHF<br>
+                                • Free for research &amp; commercial use
+                            </div>
+                        </div>
+                        <div class="learning-type">
+                            <h4>Ways to Run It</h4>
+                            <div class="visual-box">
+                                • Hugging Face Transformers<br>
+                                • Ollama / llama.cpp (local)<br>
+                                • Fine-tune with LoRA / QLoRA<br>
+                                • Cloud (AWS, Azure, GCP)
+                            </div>
+                        </div>
+                    </div>
+                    <div class="code-snippet">from transformers import pipeline
+
+generator = pipeline("text-generation", model="meta-llama/Llama-2-7b-chat-hf")
+print(generator("What is machine learning?", max_new_tokens=100)[0]["generated_text"])</div>
+                    <p><strong>How it works:</strong> Because the weights are open, you can run LLaMA 2 on your own hardware, keep data private, and fine-tune it for your specific domain.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="blog-post">
+            <div class="topic-header">
+                <div class="topic-icon">🔗</div>
+                <div>
+                    <h3>How They Fit Together</h3>
+                </div>
+            </div>
+            <div class="training-visual">
+                <div class="training-step">
+                    <div class="step-name">Models</div>
+                    <div class="step-desc">OpenAI GPT · LLaMA 2 · Hugging Face Hub</div>
+                </div>
+                <div class="arrow">→</div>
+                <div class="training-step">
+                    <div class="step-name">Orchestration</div>
+                    <div class="step-desc">LangChain chains &amp; RAG</div>
+                </div>
+                <div class="arrow">→</div>
+                <div class="training-step">
+                    <div class="step-name">Agents</div>
+                    <div class="step-desc">LangGraph stateful workflows</div>
+                </div>
+            </div>
+        </div>
+
+        <article class="blog-post">
+            <h2>Choosing the Right Framework</h2>
+            <h3>Key Takeaways:</h3>
+            <ul>
+                <li><strong>OpenAI</strong> — quickest way to get top-quality results through an API</li>
+                <li><strong>LLaMA 2</strong> — open weights for local, private, and fine-tuned models</li>
+                <li><strong>Hugging Face</strong> — the go-to hub for open models, datasets, and fine-tuning tools</li>
+                <li><strong>LangChain</strong> — glue code for prompts, retrieval (RAG), and tool use</li>
+                <li><strong>LangGraph</strong> — for complex agents that need loops, memory, and branching</li>
+            </ul>
+        </article>
+    </main>
+
+    <footer>
+        <p>&copy; 2024 My AI Learning Blog</p>
+    </footer>
+
+    <!-- Offline AI Chatbot (no API key needed) -->
+    <div id="chatbot-container">
+        <div id="chatbot-toggle">
+            <img src="AI_img-removebg-preview.png" alt="AI" style="width: 40px; height: 40px; border-radius: 50%; object-fit: cover;">
+        </div>
+        <div id="chatbot-window">
+            <div id="chatbot-header">
+                <span>AI Assistant</span>
+                <div class="chatbot-controls">
+                    <button id="chatbot-refresh" class="refresh-btn">
+                        <svg viewBox="0 0 24 24">
+                            <path d="M17.65 6.35C16.2 4.9 14.21 4 12 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08c-.82 2.33-3.04 4-5.65 4-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"/>
+                        </svg>
+                    </button>
+                    <button id="chatbot-close">×</button>
+                </div>
+            </div>
+            <div id="chatbot-messages"></div>
+            <div id="chatbot-input-container">
+                <input type="text" id="chatbot-input" placeholder="Ask me about AI...">
+                <button id="chatbot-send">Send</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="ai-background.js"></script>
+    <script src="chatbot-frontend.js"></script>
+    <script>
+        function showTab(tabName) {
+            document.querySelectorAll('.tab-panel').forEach(panel => panel.classList.remove('active'));
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+            document.getElementById(tabName).classList.add('active');
+            event.target.classList.add('active');
+        }
+    </script>
+</body>
+</html>

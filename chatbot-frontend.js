@@ -153,26 +153,13 @@ class AIChatbot {
         }
     }
 
+    // Fully offline: replies come from the built-in knowledge base below.
+    // No API key, no internet connection, no cost.
     async callChatAPI(message) {
-        // For demo purposes, using a mock response
-        // Replace this with actual API call when backend is running
-        return this.getMockResponse(message);
-        
-        /* Uncomment when backend is ready:
-        const response = await fetch('http://localhost:5000/chat', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ message: message })
-        });
-        
-        const data = await response.json();
-        return data.response;
-        */
+        return this.getOfflineResponse(message);
     }
 
-    getMockResponse(message) {
+    getOfflineResponse(message) {
         const responses = {
             'machine learning': 'Machine Learning is a subset of AI that enables computers to learn and make decisions from data without being explicitly programmed. It includes **supervised learning** (with labeled data), **unsupervised learning** (finding patterns), and **reinforcement learning** (learning through rewards).',
             
@@ -215,9 +202,33 @@ class AIChatbot {
             'feature engineering': '**Feature Engineering** is the process of selecting, modifying, or creating features from raw data to improve model performance. Techniques:\n• **Feature selection**: Choosing relevant features\n• **Feature scaling**: Normalizing feature ranges\n• **Feature creation**: Combining existing features\n• **Dimensionality reduction**: Reducing feature count'
         };
 
-        // Enhanced keyword matching
+        Object.assign(responses, {
+            'langchain': '**LangChain** is a framework for building LLM apps by chaining prompts, models, retrievers and tools together. Key parts:\n• **Prompt templates**\n• **Chains (LCEL)** using the `|` operator\n• **Retrievers & vector stores** for RAG\n• **Memory & tools** for agents',
+            'langgraph': '**LangGraph** builds stateful AI agents as a graph:\n• **State**: shared data between steps\n• **Nodes**: functions, LLM calls or tools\n• **Edges**: decide which node runs next\nIt supports loops, branching, memory and human-in-the-loop, which plain chains cannot do.',
+            'hugging face': '**Hugging Face** is the open-source AI hub with thousands of pretrained models and datasets. Main tools:\n• **Transformers** library and `pipeline()`\n• **Tokenizers** and **Datasets**\n• **PEFT / LoRA** for fine-tuning\n• **Spaces** to host demos',
+            'openai': '**OpenAI** makes the GPT models behind ChatGPT. Its API offers:\n• **Chat / reasoning models**\n• **Embeddings** for semantic search\n• **DALL·E** for images and **Whisper** for speech-to-text\n• **Function calling** for tool use',
+            'llama': '**LLaMA 2** is Meta\'s open-weight LLM family (7B, 13B, 70B parameters):\n• Trained on 2 trillion tokens, 4K context\n• **Llama-2-Chat** is tuned with RLHF\n• Can run locally with **Ollama** or **llama.cpp**\n• Fine-tune cheaply with **LoRA / QLoRA**',
+            'rag': '**RAG (Retrieval-Augmented Generation)** gives an LLM relevant documents before it answers:\n1. Split documents into chunks\n2. Convert chunks to **embeddings** and store them in a vector DB\n3. Retrieve the closest chunks for the question\n4. Pass them to the LLM as context\nThis reduces hallucinations and keeps answers up to date.',
+            'prompt engineering': '**Prompt Engineering** is designing inputs to get better AI output. Techniques:\n• **Zero-shot**: direct instruction\n• **Few-shot**: give 2-5 examples\n• **Chain-of-thought**: ask for step-by-step reasoning\n• **Role prompting**: "You are an expert..."',
+            'generative ai': '**Generative AI** creates new content such as text, images, code and audio. Main techniques:\n• **Transformers** (GPT, Gemini)\n• **GANs** (generator vs discriminator)\n• **VAEs**\n• **Diffusion models** (Stable Diffusion, Midjourney)',
+            'llm': '**Large Language Models (LLMs)** are transformer models trained on huge text datasets to predict the next token. Examples: GPT, Gemini, Claude, LLaMA. They power chatbots, summarization, translation and code generation.',
+            'embedding': '**Embeddings** turn words, sentences or images into vectors of numbers, so that similar meanings end up close together. They are used for semantic search, recommendations and RAG.',
+            'fine tuning': '**Fine-tuning** continues training a pretrained model on your own data to specialize it. **LoRA / QLoRA** fine-tune only small adapter layers, so it is much cheaper.',
+            'cloud': '**AI on Cloud** platforms let you train and deploy models without your own hardware:\n• **Vertex AI** (Google Cloud)\n• **AWS SageMaker**\n• **Azure AI / Azure ML**',
+            'data preprocessing': '**Data Preprocessing** prepares raw data for ML:\n• Handle missing values\n• Remove duplicates and outliers\n• Encode categorical data\n• Scale / normalize features\n• Split into train / test sets'
+        });
+
         const lowerMessage = message.toLowerCase();
-        
+        // Whole-word / phrase match so "hi" doesn't match "machine" and "ai" doesn't match "explain"
+        const has = (term) => new RegExp(`\\b${term.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}s?\\b`, 'i').test(lowerMessage);
+        const reply = (text) => new Promise(resolve => setTimeout(() => resolve(text), 600));
+
+        // 1. AI topics first (longest phrases first, so "unsupervised learning" beats "supervised learning")
+        const topicKeys = Object.keys(responses).sort((a, b) => b.length - a.length);
+        for (const key of topicKeys) {
+            if (has(key)) return reply(responses[key]);
+        }
+
         // General conversation responses
         const generalResponses = {
             'hello': 'Hello! 👋 I\'m here to help you learn about AI and machine learning. What would you like to explore today?',
@@ -236,25 +247,7 @@ class AIChatbot {
             'help': 'I\'m here to help! 🆘 You can ask me about any AI or machine learning topic. Try questions like "What is machine learning?", "How do neural networks work?", or "Explain deep learning".'
         };
         
-        // Check for general responses first
-        for (const [key, response] of Object.entries(generalResponses)) {
-            if (lowerMessage.includes(key)) {
-                return new Promise(resolve => {
-                    setTimeout(() => resolve(response), 1000);
-                });
-            }
-        }
-        
-        // Direct AI keyword matching
-        for (const [key, response] of Object.entries(responses)) {
-            if (lowerMessage.includes(key)) {
-                return new Promise(resolve => {
-                    setTimeout(() => resolve(response), 1000);
-                });
-            }
-        }
-        
-        // Additional keyword mappings
+        // 2. Short forms / synonyms
         const keywordMappings = {
             'cnn': 'convolutional neural network',
             'rnn': 'recurrent neural network',
@@ -266,34 +259,44 @@ class AIChatbot {
             'ai': 'artificial intelligence',
             'backprop': 'backpropagation',
             'gradient': 'gradient descent',
-            'overfitting': 'overfitting',
-            'underfitting': 'overfitting'
+            'underfitting': 'overfitting',
+            'chatgpt': 'openai',
+            'gpt': 'openai',
+            'huggingface': 'hugging face',
+            'transformers library': 'hugging face',
+            'genai': 'generative ai',
+            'gan': 'generative ai',
+            'diffusion': 'generative ai',
+            'prompt': 'prompt engineering',
+            'retrieval': 'rag',
+            'vector': 'embedding',
+            'finetune': 'fine tuning',
+            'fine-tuning': 'fine tuning',
+            'lora': 'fine tuning',
+            'vertex': 'cloud',
+            'sagemaker': 'cloud',
+            'azure': 'cloud',
+            'aws': 'cloud',
+            'gcp': 'cloud',
+            'preprocessing': 'data preprocessing',
+            'k-means': 'clustering',
+            'kmeans': 'clustering',
+            'agent': 'langgraph',
+            'large language model': 'llm',
+            'attention': 'transformer'
         };
-        
+
         for (const [keyword, mappedKey] of Object.entries(keywordMappings)) {
-            if (lowerMessage.includes(keyword) && responses[mappedKey]) {
-                return new Promise(resolve => {
-                    setTimeout(() => resolve(responses[mappedKey]), 1000);
-                });
-            }
-        }
-        
-        // Context-aware responses
-        if (lowerMessage.includes('what is') || lowerMessage.includes('define') || lowerMessage.includes('explain')) {
-            return new Promise(resolve => {
-                setTimeout(() => resolve("I can explain various AI concepts! Try asking about: machine learning, neural networks, deep learning, supervised/unsupervised learning, classification, regression, clustering, NLP, computer vision, or any specific AI algorithm."), 1000);
-            });
-        }
-        
-        if (lowerMessage.includes('how') && (lowerMessage.includes('work') || lowerMessage.includes('train'))) {
-            return new Promise(resolve => {
-                setTimeout(() => resolve("I can explain how AI algorithms work! Ask me about specific topics like 'how does machine learning work', 'how to train neural networks', 'how does backpropagation work', etc."), 1000);
-            });
+            if (has(keyword) && responses[mappedKey]) return reply(responses[mappedKey]);
         }
 
-        return new Promise(resolve => {
-            setTimeout(() => resolve("I'm here to help with AI and machine learning questions! I can explain concepts like neural networks, machine learning algorithms, deep learning, NLP, computer vision, and more. What would you like to learn about?"), 1000);
-        });
+        // 3. Greetings / small talk (whole words only)
+        for (const [key, response] of Object.entries(generalResponses)) {
+            if (has(key)) return reply(response);
+        }
+
+        // 4. Anything else: stay on topic
+        return reply("I can only answer AI and machine learning questions from this blog 📚. Try asking about:\n• **Basics**: machine learning, supervised / unsupervised learning, classification, regression, clustering\n• **Deep learning**: neural networks, CNN, RNN, transformers\n• **Generative AI**: LLMs, prompt engineering, RAG, embeddings\n• **Frameworks**: LangChain, LangGraph, Hugging Face, OpenAI, LLaMA 2\n• **Cloud & data**: Vertex AI, SageMaker, data preprocessing");
     }
 }
 
