@@ -5,19 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AI Frameworks - My AI Learning Blog</title>
     <link rel="stylesheet" href="style.css">
-    <style>
-        .code-snippet {
-            background: rgba(0, 0, 0, 0.45);
-            border-radius: 8px;
-            padding: 14px 16px;
-            overflow-x: auto;
-            font-family: Consolas, "Courier New", monospace;
-            font-size: 0.9rem;
-            line-height: 1.5;
-            margin: 12px 0;
-            white-space: pre;
-        }
-    </style>
 </head>
 <body>
 
@@ -45,6 +32,8 @@
                 <button class="tab-btn" onclick="showTab('huggingface')">🤗 Hugging Face</button>
                 <button class="tab-btn" onclick="showTab('openai')">🤖 OpenAI</button>
                 <button class="tab-btn" onclick="showTab('llama2')">🦙 LLaMA 2</button>
+                <button class="tab-btn link-tab" onclick="window.location.href='langchain.html'">📘 LangChain in Detail →</button>
+                <button class="tab-btn link-tab" onclick="window.location.href='langgraph.html'">📗 LangGraph in Detail →</button>
             </div>
 
             <div class="tab-content">
@@ -82,6 +71,9 @@ prompt = ChatPromptTemplate.from_template("Explain {topic} in simple terms")
 chain = prompt | ChatOpenAI(model="gpt-4o-mini")
 print(chain.invoke({"topic": "embeddings"}).content)</div>
                     <p><strong>How it works:</strong> Each piece (prompt, model, output parser, retriever) is a building block you connect with the <code>|</code> operator, so data flows from one step to the next like a pipeline.</p>
+
+                    <p>Memory, RAG, agents, output parsers and more are covered in the full guide.</p>
+                    <a href="langchain.html" class="guide-btn">📘 Read LangChain in Detail →</a>
                 </div>
 
                 <!-- LangGraph Tab -->
@@ -143,6 +135,7 @@ graph.add_edge("answer", END)
 app = graph.compile()
 print(app.invoke({"question": "What is RAG?"}))</div>
                     <p><strong>How it works:</strong> Where LangChain chains run in a straight line, LangGraph lets the agent loop, branch, and revisit steps until the task is done.</p>
+                    <a href="langgraph.html" class="guide-btn">📗 Read LangGraph in Detail →</a>
                 </div>
 
                 <!-- Hugging Face Tab -->
@@ -267,6 +260,95 @@ print(generator("What is machine learning?", max_new_tokens=100)[0]["generated_t
                     <p><strong>How it works:</strong> Because the weights are open, you can run LLaMA 2 on your own hardware, keep data private, and fine-tune it for your specific domain.</p>
                 </div>
             </div>
+        </div>
+
+        <!-- LangChain vs LangGraph -->
+        <div class="blog-post">
+            <div class="topic-header">
+                <div class="topic-icon">⚖️</div>
+                <div>
+                    <h3>LangChain vs LangGraph</h3>
+                </div>
+            </div>
+
+            <div class="info-box">
+                <strong>In one line:</strong> <strong>LangChain</strong> gives you the building blocks (models, prompts, retrievers, tools) and connects them in a <em>straight line</em>. <strong>LangGraph</strong> connects those same blocks as a <em>graph</em>, so the app can loop, branch, remember and pause. They are made by the same team and are used <strong>together</strong>, not instead of each other.
+            </div>
+
+            <div class="training-visual">
+                <div class="training-step">
+                    <div class="step-name">🦜 LangChain</div>
+                    <div class="step-desc">A → B → C → done<br>(a pipeline)</div>
+                </div>
+                <div class="arrow">vs</div>
+                <div class="training-step">
+                    <div class="step-name">🕸️ LangGraph</div>
+                    <div class="step-desc">A → B → (check) → back to A or → C<br>(a state machine)</div>
+                </div>
+            </div>
+
+            <h4>📊 Key Differences</h4>
+            <div class="table-wrap">
+                <table class="compare-table">
+                    <tr><th>Feature</th><th>🦜 LangChain</th><th>🕸️ LangGraph</th></tr>
+                    <tr><td>Structure</td><td>Linear chains (A → B → C)</td><td>Graph of nodes &amp; edges</td></tr>
+                    <tr><td>Flow control</td><td>Fixed order of steps</td><td>Loops, conditional branching, parallel steps</td></tr>
+                    <tr><td>State</td><td>Data just passes from one step to the next</td><td>Explicit shared <strong>state</strong> that every node reads &amp; updates</td></tr>
+                    <tr><td>Memory</td><td>Chat history (<code>RunnableWithMessageHistory</code>, legacy memory classes)</td><td>Built-in <strong>checkpointers</strong>: every step is saved per thread</td></tr>
+                    <tr><td>Human-in-the-loop</td><td>Not built in</td><td>Built in: <code>interrupt()</code> pauses for approval, then resumes</td></tr>
+                    <tr><td>Error recovery</td><td>Re-run the whole chain</td><td>Resume or replay from any saved step (time travel)</td></tr>
+                    <tr><td>Multi-agent</td><td>Hard to coordinate</td><td>Supervisor, swarm &amp; hierarchical agent patterns</td></tr>
+                    <tr><td>Learning curve</td><td>Easy: a few lines with <code>|</code></td><td>Moderate: you design states, nodes and edges</td></tr>
+                    <tr><td>Main role</td><td>Components &amp; integrations (700+ models, vector DBs, loaders, tools)</td><td>Orchestration &amp; runtime for agents</td></tr>
+                </table>
+            </div>
+
+            <h4>🎯 Where to Use Each</h4>
+            <div class="concept-visual">
+                <div class="learning-type">
+                    <h4>🦜 Use LangChain when…</h4>
+                    <div class="visual-box" style="text-align:left;">
+                        • The steps are fixed and run once, top to bottom<br>
+                        • Simple <strong>RAG</strong>: question → retrieve → answer<br>
+                        • Summarizing, translating, classifying text<br>
+                        • Extracting structured data (JSON / Pydantic)<br>
+                        • A basic chatbot with chat history<br>
+                        • You want a quick prototype in a few lines
+                    </div>
+                </div>
+                <div class="learning-type">
+                    <h4>🕸️ Use LangGraph when…</h4>
+                    <div class="visual-box" style="text-align:left;">
+                        • The AI must <strong>decide</strong> what to do next<br>
+                        • Agents that call tools in a loop (ReAct)<br>
+                        • Retry / self-correct until the answer is good<br>
+                        • A human must <strong>approve</strong> a step (send email, payment)<br>
+                        • Long-running chats that must survive restarts<br>
+                        • Several agents working together
+                    </div>
+                </div>
+            </div>
+
+            <h4>🧪 Real Examples</h4>
+            <div class="table-wrap">
+                <table class="compare-table">
+                    <tr><th>Project</th><th>Best choice</th><th>Why</th></tr>
+                    <tr><td>"Chat with my PDF" app</td><td>🦜 LangChain</td><td>Fixed steps: load → split → embed → retrieve → answer</td></tr>
+                    <tr><td>Product review sentiment classifier</td><td>🦜 LangChain</td><td>One prompt + structured output, no decisions</td></tr>
+                    <tr><td>Blog post summarizer</td><td>🦜 LangChain</td><td>Single straight pipeline</td></tr>
+                    <tr><td>Customer-support bot that can refund orders</td><td>🕸️ LangGraph</td><td>Uses tools, branches on intent, needs human approval for refunds</td></tr>
+                    <tr><td>Research assistant that searches until it's sure</td><td>🕸️ LangGraph</td><td>Loop: search → read → "enough info?" → search again</td></tr>
+                    <tr><td>Code generator that runs tests &amp; fixes bugs</td><td>🕸️ LangGraph</td><td>Generate → test → if fail, fix → test again</td></tr>
+                    <tr><td>Agentic RAG (decides <em>whether</em> to retrieve, rewrites bad queries)</td><td>🕸️ LangGraph + 🦜 LangChain</td><td>LangGraph controls the flow; LangChain supplies the retriever &amp; prompts</td></tr>
+                </table>
+            </div>
+
+            <div class="info-box">
+                <strong>💡 Rule of thumb:</strong> Start with <strong>LangChain</strong>. When you notice you need <em>"if this, go back and try again"</em>, memory that survives restarts, or a human approval step, move the flow into <strong>LangGraph</strong>, and keep using LangChain's models, prompts and retrievers inside the graph's nodes. (In LangChain 1.0, even <code>create_agent</code> runs on LangGraph under the hood.)
+            </div>
+
+            <a href="langchain.html" class="guide-btn">📘 LangChain in Detail →</a>
+            <a href="langgraph.html" class="guide-btn">📗 LangGraph in Detail →</a>
         </div>
 
         <div class="blog-post">

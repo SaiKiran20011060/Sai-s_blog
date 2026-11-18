@@ -19,7 +19,9 @@ A modern, interactive blog documenting my journey learning Artificial Intelligen
 - **Generative AI**: ChatGPT, Gemini, Midjourney
 - **AI on Cloud**: Vertex AI, AWS SageMaker, Azure AI
 - **Data Engineering**: Preprocessing, pipelines, ML workflows
-- **AI Frameworks**: LangChain, LangGraph, Hugging Face, OpenAI, LLaMA 2
+- **AI Frameworks**: LangChain, LangGraph, Hugging Face, OpenAI, LLaMA 2, LangChain vs LangGraph
+- **LangChain in Detail**: models, prompts, parsers, LCEL, memory, RAG, tools & agents, LangSmith
+- **LangGraph in Detail**: state, edges & loops, ReAct agents, persistence, human-in-the-loop, multi-agent
 
 ## 🚀 Getting Started
 

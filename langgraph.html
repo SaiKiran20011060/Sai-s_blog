@@ -1,0 +1,764 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LangGraph in Detail - My AI Learning Blog</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <nav class="back-nav">
+        <button onclick="window.location.href='ai-frameworks.html'" class="back-btn">← Back to AI Frameworks</button>
+    </nav>
+
+    <header>
+        <h1>🕸️ LangGraph in Detail</h1>
+        <p>Build stateful, looping, multi-agent AI applications as graphs</p>
+    </header>
+
+    <main>
+        <div class="blog-post">
+            <div class="topic-header">
+                <div class="topic-icon">📗</div>
+                <div>
+                    <h3>LangGraph Complete Guide</h3>
+                </div>
+            </div>
+
+            <div class="algorithm-tabs">
+                <button class="tab-btn active" onclick="showTab('lg-overview', this)">🧭 Overview &amp; Concepts</button>
+                <button class="tab-btn" onclick="showTab('lg-state', this)">📦 State &amp; Reducers</button>
+                <button class="tab-btn" onclick="showTab('lg-edges', this)">🔀 Nodes, Edges &amp; Loops</button>
+                <button class="tab-btn" onclick="showTab('lg-chatbot', this)">💬 Chatbot</button>
+                <button class="tab-btn" onclick="showTab('lg-agent', this)">🛠️ Tools &amp; ReAct Agent</button>
+                <button class="tab-btn" onclick="showTab('lg-memory', this)">🧠 Memory &amp; Persistence</button>
+                <button class="tab-btn" onclick="showTab('lg-hitl', this)">🙋 Human-in-the-Loop</button>
+                <button class="tab-btn" onclick="showTab('lg-multi', this)">👥 Multi-Agent</button>
+                <button class="tab-btn" onclick="showTab('lg-stream', this)">📡 Streaming &amp; Deploy</button>
+                <button class="tab-btn" onclick="showTab('lg-cheatsheet', this)">📋 Cheat Sheet</button>
+            </div>
+
+            <div class="tab-content">
+
+                <!-- ============ 1. OVERVIEW ============ -->
+                <div id="lg-overview" class="tab-panel active">
+                    <h4>🧭 What is LangGraph?</h4>
+                    <div class="visual-box">
+                        <strong>LangGraph</strong> is a library from the LangChain team for building <strong>stateful AI agents and workflows as graphs</strong>. Steps are <em>nodes</em>, connections are <em>edges</em>, and a shared <em>state</em> flows through them.
+                    </div>
+
+                    <h5>Why was LangGraph created?</h5>
+                    <p>LangChain chains run in a straight line: A → B → C. Real agents need more:</p>
+                    <ul>
+                        <li>🔁 <strong>Loops</strong>: call a tool, look at the result, maybe call another tool…</li>
+                        <li>🔀 <strong>Branching</strong>: go to a different step depending on the result</li>
+                        <li>💾 <strong>Persistence</strong>: remember everything, even after a crash or restart</li>
+                        <li>🙋 <strong>Human-in-the-loop</strong>: pause and wait for a person to approve</li>
+                        <li>👥 <strong>Multiple agents</strong> working together</li>
+                        <li>🎛️ <strong>Full control</strong>: you decide exactly how the agent behaves</li>
+                    </ul>
+
+                    <h5>The 3 Core Concepts</h5>
+                    <div class="training-visual">
+                        <div class="training-step">
+                            <div class="step-name">📦 State</div>
+                            <div class="step-desc">Shared data (a TypedDict) that every node can read &amp; update</div>
+                        </div>
+                        <div class="arrow">+</div>
+                        <div class="training-step">
+                            <div class="step-name">⚙️ Nodes</div>
+                            <div class="step-desc">Python functions: take state, return updates</div>
+                        </div>
+                        <div class="arrow">+</div>
+                        <div class="training-step">
+                            <div class="step-name">➡️ Edges</div>
+                            <div class="step-desc">Decide which node runs next (fixed or conditional)</div>
+                        </div>
+                    </div>
+                    <p>Special nodes: <code>START</code> (entry point) and <code>END</code> (finish). You build the graph with <code>StateGraph</code>, then <code>.compile()</code> it into a runnable app.</p>
+
+                    <h5>Installation</h5>
+                    <div class="code-snippet">pip install langgraph langchain-openai
+# free local model option:
+pip install langchain-ollama</div>
+
+                    <h5>Your First Graph</h5>
+                    <div class="code-snippet">from typing import TypedDict
+from langgraph.graph import StateGraph, START, END
+
+# 1. Define the state
+class State(TypedDict):
+    text: str
+
+# 2. Define nodes (functions that return state updates)
+def uppercase(state: State):
+    return {"text": state["text"].upper()}
+
+def add_exclaim(state: State):
+    return {"text": state["text"] + "!"}
+
+# 3. Build the graph
+builder = StateGraph(State)
+builder.add_node("uppercase", uppercase)
+builder.add_node("add_exclaim", add_exclaim)
+builder.add_edge(START, "uppercase")
+builder.add_edge("uppercase", "add_exclaim")
+builder.add_edge("add_exclaim", END)
+
+# 4. Compile &amp; run
+graph = builder.compile()
+print(graph.invoke({"text": "hello"}))     # {'text': 'HELLO!'}</div>
+                    <div class="code-snippet">START ──▶ uppercase ──▶ add_exclaim ──▶ END</div>
+
+                    <div class="info-box">
+                        <strong>How it runs:</strong> the graph starts at <code>START</code>, runs each node, and <strong>merges</strong> the dictionary each node returns into the state. A node only returns the keys it wants to change. When it reaches <code>END</code>, the final state is returned.
+                    </div>
+                </div>
+
+                <!-- ============ 2. STATE ============ -->
+                <div id="lg-state" class="tab-panel">
+                    <h4>📦 State &amp; Reducers</h4>
+                    <div class="visual-box">
+                        The <strong>state</strong> is the memory of one graph run. A <strong>reducer</strong> decides <em>how</em> a node's update is combined with the existing value.
+                    </div>
+
+                    <h5>Default: Overwrite</h5>
+                    <div class="code-snippet">class State(TypedDict):
+    question: str
+    answer: str
+
+# a node returning {"answer": "42"} REPLACES the old answer</div>
+
+                    <h5>With a Reducer: Append / Combine</h5>
+                    <div class="code-snippet">import operator
+from typing import Annotated, TypedDict
+
+class State(TypedDict):
+    question: str                                # overwritten
+    steps: Annotated[list[str], operator.add]    # new items are APPENDED
+
+def step_a(state: State):
+    return {"steps": ["searched the web"]}
+
+def step_b(state: State):
+    return {"steps": ["wrote the answer"]}
+
+# final state["steps"] == ["searched the web", "wrote the answer"]</div>
+
+                    <h5>Messages State with add_messages ✅ used for every chatbot / agent</h5>
+                    <div class="code-snippet">from typing import Annotated, TypedDict
+from langgraph.graph.message import add_messages
+
+class State(TypedDict):
+    messages: Annotated[list, add_messages]
+
+# Even shorter: the built-in MessagesState is exactly this
+from langgraph.graph import MessagesState
+
+class MyState(MessagesState):      # extend it with your own fields
+    user_name: str
+    documents: list[str]</div>
+                    <div class="info-box">
+                        <code>add_messages</code> is smarter than <code>operator.add</code>: it <strong>appends</strong> new messages, <strong>updates</strong> a message if one with the same ID already exists, and converts dicts like <code>{"role": "user", "content": "hi"}</code> into proper message objects.
+                    </div>
+
+                    <h5>Input / Output Schemas (optional)</h5>
+                    <div class="code-snippet">class InputState(TypedDict):
+    question: str
+
+class OutputState(TypedDict):
+    answer: str
+
+class OverallState(InputState, OutputState):
+    notes: list[str]          # internal only, hidden from the caller
+
+builder = StateGraph(OverallState, input_schema=InputState, output_schema=OutputState)</div>
+
+                    <h5>Tips for Designing State</h5>
+                    <ul>
+                        <li>Keep it small: store only what nodes need.</li>
+                        <li>Use reducers for anything that <strong>accumulates</strong> (messages, logs, results from parallel nodes).</li>
+                        <li>Pydantic models or dataclasses also work if you want validation.</li>
+                    </ul>
+                </div>
+
+                <!-- ============ 3. EDGES ============ -->
+                <div id="lg-edges" class="tab-panel">
+                    <h4>🔀 Nodes, Edges, Branching &amp; Loops</h4>
+
+                    <h5>Types of Edges</h5>
+                    <div class="table-wrap">
+                        <table class="compare-table">
+                            <tr><th>Edge</th><th>Code</th><th>Behaviour</th></tr>
+                            <tr><td>Normal</td><td><code>add_edge("a", "b")</code></td><td>Always go from a to b</td></tr>
+                            <tr><td>Conditional</td><td><code>add_conditional_edges("a", fn)</code></td><td>A function looks at the state and picks the next node</td></tr>
+                            <tr><td>Entry</td><td><code>add_edge(START, "a")</code></td><td>Where the graph starts</td></tr>
+                            <tr><td>Finish</td><td><code>add_edge("a", END)</code></td><td>Stop the graph</td></tr>
+                            <tr><td>Fan-out</td><td><code>add_edge(START, "a")</code> + <code>add_edge(START, "b")</code></td><td>a and b run <strong>in parallel</strong></td></tr>
+                        </table>
+                    </div>
+
+                    <h5>Conditional Edge + Loop: Retry Until Good</h5>
+                    <div class="code-snippet">import random
+from typing import TypedDict
+from langgraph.graph import StateGraph, START, END
+
+class State(TypedDict):
+    attempts: int
+    answer: str
+
+def generate(state: State):
+    return {"attempts": state["attempts"] + 1,
+            "answer": random.choice(["good", "bad"])}
+
+def check_quality(state: State) -> str:      # the router function
+    if state["answer"] == "good" or state["attempts"] >= 3:
+        return "done"
+    return "retry"
+
+builder = StateGraph(State)
+builder.add_node("generate", generate)
+builder.add_edge(START, "generate")
+builder.add_conditional_edges(
+    "generate",
+    check_quality,
+    {"retry": "generate", "done": END},      # map router output -> next node
+)
+graph = builder.compile()
+graph.invoke({"attempts": 0, "answer": ""})</div>
+                    <div class="code-snippet">START ──▶ generate ──▶ (check_quality)
+              ▲                │
+              └──── "retry" ───┤
+                               └── "done" ──▶ END</div>
+                    <div class="info-box">
+                        <strong>⚠️ Recursion limit:</strong> to stop infinite loops, a graph stops after <strong>25 steps</strong> by default and raises <code>GraphRecursionError</code>. Change it with <code>graph.invoke(inputs, {"recursion_limit": 50})</code>.
+                    </div>
+
+                    <h5>Command: Update State AND Jump in One Step</h5>
+                    <div class="code-snippet">from typing import Literal
+from langgraph.types import Command
+
+def router(state: State) -> Command[Literal["math_node", "chat_node"]]:
+    if any(ch.isdigit() for ch in state["question"]):
+        return Command(update={"route": "math"}, goto="math_node")
+    return Command(update={"route": "chat"}, goto="chat_node")</div>
+
+                    <h5>Parallel Nodes (Fan-out / Fan-in)</h5>
+                    <div class="code-snippet">class State(TypedDict):
+    topic: str
+    results: Annotated[list[str], operator.add]   # reducer needed to merge parallel writes
+
+builder.add_edge(START, "search_web")
+builder.add_edge(START, "search_docs")             # both run at the same time
+builder.add_edge("search_web", "combine")
+builder.add_edge("search_docs", "combine")         # combine waits for both
+builder.add_edge("combine", END)</div>
+
+                    <h5>Subgraphs</h5>
+                    <p>A compiled graph can be used as a <strong>node inside another graph</strong>. This is great for splitting a big agent into reusable parts.</p>
+                    <div class="code-snippet">research_graph = research_builder.compile()
+main_builder.add_node("research", research_graph)   # whole graph as one node</div>
+                </div>
+
+                <!-- ============ 4. CHATBOT ============ -->
+                <div id="lg-chatbot" class="tab-panel">
+                    <h4>💬 Building a Chatbot</h4>
+                    <div class="visual-box">
+                        The simplest real LangGraph app: one node that calls the LLM with all messages in the state.
+                    </div>
+                    <div class="code-snippet">from langgraph.graph import StateGraph, MessagesState, START, END
+from langchain_openai import ChatOpenAI
+# from langchain_ollama import ChatOllama   # free local alternative
+
+llm = ChatOpenAI(model="gpt-4o-mini", temperature=0)
+
+def chatbot(state: MessagesState):
+    reply = llm.invoke(state["messages"])
+    return {"messages": [reply]}           # add_messages appends it
+
+builder = StateGraph(MessagesState)
+builder.add_node("chatbot", chatbot)
+builder.add_edge(START, "chatbot")
+builder.add_edge("chatbot", END)
+graph = builder.compile()
+
+result = graph.invoke({"messages": [{"role": "user", "content": "Hi! What is LangGraph?"}]})
+print(result["messages"][-1].content)</div>
+
+                    <h5>Adding a System Prompt</h5>
+                    <div class="code-snippet">from langchain_core.messages import SystemMessage
+
+SYSTEM = SystemMessage(content="You are a friendly AI tutor. Explain simply.")
+
+def chatbot(state: MessagesState):
+    return {"messages": [llm.invoke([SYSTEM] + state["messages"])]}</div>
+
+                    <h5>Chat Loop in the Terminal</h5>
+                    <div class="code-snippet">while True:
+    user = input("You: ")
+    if user.lower() in {"quit", "exit"}:
+        break
+    result = graph.invoke({"messages": [{"role": "user", "content": user}]})
+    print("Bot:", result["messages"][-1].content)</div>
+                    <div class="info-box">
+                        <strong>⚠️ Problem:</strong> this bot forgets everything between <code>invoke()</code> calls, because each call starts with a fresh state. The fix is a <strong>checkpointer</strong>; see the <em>Memory &amp; Persistence</em> tab.
+                    </div>
+                </div>
+
+                <!-- ============ 5. AGENT ============ -->
+                <div id="lg-agent" class="tab-panel">
+                    <h4>🛠️ Tools &amp; the ReAct Agent</h4>
+                    <div class="visual-box">
+                        A ReAct agent loops: <strong>LLM thinks → calls a tool → reads the result → thinks again</strong>, until it can answer without tools.
+                    </div>
+                    <div class="code-snippet">START ──▶ agent ──(tool_calls?)── yes ──▶ tools
+              ▲                                  │
+              └──────────────────────────────────┘
+                          no ──▶ END</div>
+
+                    <h5>Building it from Scratch</h5>
+                    <div class="code-snippet">from langchain_core.tools import tool
+from langchain_openai import ChatOpenAI
+from langgraph.graph import StateGraph, MessagesState, START
+from langgraph.prebuilt import ToolNode, tools_condition
+
+@tool
+def get_weather(city: str) -> str:
+    """Get the current weather for a city."""
+    return f"It's 28°C and sunny in {city}."
+
+@tool
+def multiply(a: int, b: int) -> int:
+    """Multiply two numbers."""
+    return a * b
+
+tools = [get_weather, multiply]
+llm_with_tools = ChatOpenAI(model="gpt-4o-mini").bind_tools(tools)
+
+def agent(state: MessagesState):
+    return {"messages": [llm_with_tools.invoke(state["messages"])]}
+
+builder = StateGraph(MessagesState)
+builder.add_node("agent", agent)
+builder.add_node("tools", ToolNode(tools))         # runs whatever tools the LLM asked for
+builder.add_edge(START, "agent")
+builder.add_conditional_edges("agent", tools_condition)   # -> "tools" or END
+builder.add_edge("tools", "agent")                 # loop back after tools run
+graph = builder.compile()
+
+result = graph.invoke({"messages": [
+    {"role": "user", "content": "Weather in Hyderabad? Also what is 12 x 7?"}
+]})
+for m in result["messages"]:
+    m.pretty_print()</div>
+
+                    <h5>What each piece does</h5>
+                    <ul>
+                        <li><code>bind_tools</code>: tells the LLM which tools exist (name, description, arguments).</li>
+                        <li><code>ToolNode</code>: a prebuilt node that executes the tool calls and returns <code>ToolMessage</code>s.</li>
+                        <li><code>tools_condition</code>: a prebuilt router: if the last message has <code>tool_calls</code> go to <code>"tools"</code>, else go to <code>END</code>.</li>
+                    </ul>
+
+                    <h5>The Prebuilt Shortcut</h5>
+                    <div class="code-snippet"># LangChain 1.0+ (built on LangGraph)
+from langchain.agents import create_agent
+agent = create_agent("openai:gpt-4o-mini", tools=tools, system_prompt="You are helpful.")
+
+# Older LangGraph versions
+from langgraph.prebuilt import create_react_agent
+agent = create_react_agent(ChatOpenAI(model="gpt-4o-mini"), tools)
+
+agent.invoke({"messages": [{"role": "user", "content": "What is 6 x 9?"}]})</div>
+                    <div class="info-box">
+                        <strong>When to build from scratch?</strong> Use the prebuilt agent for standard tool-calling. Build your own graph when you need custom steps, e.g. a "check the answer" node, approval before certain tools, or a planning step before acting.
+                    </div>
+                </div>
+
+                <!-- ============ 6. MEMORY ============ -->
+                <div id="lg-memory" class="tab-panel">
+                    <h4>🧠 Memory &amp; Persistence</h4>
+                    <div class="visual-box">
+                        A <strong>checkpointer</strong> saves the state after every step. Give each conversation a <strong>thread_id</strong> and the graph remembers it across calls.
+                    </div>
+
+                    <h5>Short-term Memory (per conversation)</h5>
+                    <div class="code-snippet">from langgraph.checkpoint.memory import InMemorySaver
+
+graph = builder.compile(checkpointer=InMemorySaver())
+
+config = {"configurable": {"thread_id": "sai-chat-1"}}
+
+graph.invoke({"messages": [{"role": "user", "content": "Hi, I'm Sai"}]}, config)
+result = graph.invoke({"messages": [{"role": "user", "content": "What's my name?"}]}, config)
+print(result["messages"][-1].content)       # "Your name is Sai" ✅
+
+# a different thread = a brand-new conversation
+graph.invoke({"messages": [{"role": "user", "content": "What's my name?"}]},
+             {"configurable": {"thread_id": "other-user"}})   # "I don't know" ✅</div>
+
+                    <h5>Checkpointer Options</h5>
+                    <div class="table-wrap">
+                        <table class="compare-table">
+                            <tr><th>Checkpointer</th><th>Package</th><th>Use for</th></tr>
+                            <tr><td><code>InMemorySaver</code></td><td>built in</td><td>Learning &amp; testing (lost on restart)</td></tr>
+                            <tr><td><code>SqliteSaver</code></td><td><code>langgraph-checkpoint-sqlite</code></td><td>Local apps, saved to a file</td></tr>
+                            <tr><td><code>PostgresSaver</code></td><td><code>langgraph-checkpoint-postgres</code></td><td>Production</td></tr>
+                        </table>
+                    </div>
+
+                    <h5>Inspecting &amp; Time Travel</h5>
+                    <div class="code-snippet">snapshot = graph.get_state(config)
+print(snapshot.values)        # current state
+print(snapshot.next)          # which node runs next (if paused)
+
+for past in graph.get_state_history(config):   # every saved step
+    print(past.config, past.values.get("messages", [])[-1:])
+
+# Replay / fork from an older step
+graph.invoke(None, past.config)
+
+# Manually edit the state
+graph.update_state(config, {"messages": [{"role": "user", "content": "Actually, call me Sai Kiran"}]})</div>
+
+                    <h5>Long-term Memory (across conversations): the Store</h5>
+                    <div class="code-snippet">from langgraph.store.memory import InMemoryStore
+
+store = InMemoryStore()
+store.put(("users", "sai"), "preferences", {"language": "Python", "level": "beginner"})
+
+graph = builder.compile(checkpointer=InMemorySaver(), store=store)
+
+# inside a node you can read it:
+# def node(state, *, store): prefs = store.get(("users", "sai"), "preferences")</div>
+
+                    <div class="concept-visual">
+                        <div class="learning-type">
+                            <h4>Short-term (checkpointer)</h4>
+                            <div class="visual-box">
+                                One thread / conversation<br>
+                                Messages &amp; graph state<br>
+                                Key: <code>thread_id</code>
+                            </div>
+                        </div>
+                        <div class="learning-type">
+                            <h4>Long-term (store)</h4>
+                            <div class="visual-box">
+                                Shared across all threads<br>
+                                User facts &amp; preferences<br>
+                                Key: namespace + key
+                            </div>
+                        </div>
+                    </div>
+
+                    <h5>Keeping Long Chats Small</h5>
+                    <ul>
+                        <li><strong>Trim:</strong> use <code>trim_messages</code> to send only the last N tokens to the LLM.</li>
+                        <li><strong>Delete:</strong> return <code>RemoveMessage(id=...)</code> to remove old messages from state.</li>
+                        <li><strong>Summarize:</strong> add a node that summarizes old messages when the list gets long (like <em>ConversationSummaryBufferMemory</em>).</li>
+                    </ul>
+                </div>
+
+                <!-- ============ 7. HUMAN IN THE LOOP ============ -->
+                <div id="lg-hitl" class="tab-panel">
+                    <h4>🙋 Human-in-the-Loop</h4>
+                    <div class="visual-box">
+                        Pause the graph, show something to a person, and continue only after they respond. This is essential for risky actions like sending emails, payments or deleting data.
+                    </div>
+                    <div class="training-visual">
+                        <div class="training-step">
+                            <div class="step-name">Draft</div>
+                            <div class="step-desc">Agent prepares an action</div>
+                        </div>
+                        <div class="arrow">→</div>
+                        <div class="training-step">
+                            <div class="step-name">⏸️ interrupt()</div>
+                            <div class="step-desc">Graph pauses &amp; saves state</div>
+                        </div>
+                        <div class="arrow">→</div>
+                        <div class="training-step">
+                            <div class="step-name">Human</div>
+                            <div class="step-desc">Approves / edits / rejects</div>
+                        </div>
+                        <div class="arrow">→</div>
+                        <div class="training-step">
+                            <div class="step-name">▶️ Resume</div>
+                            <div class="step-desc">Command(resume=…)</div>
+                        </div>
+                    </div>
+
+                    <h5>Dynamic interrupt() ✅ recommended</h5>
+                    <div class="code-snippet">from typing import TypedDict
+from langgraph.graph import StateGraph, START, END
+from langgraph.types import interrupt, Command
+from langgraph.checkpoint.memory import InMemorySaver
+
+class State(TypedDict):
+    draft: str
+    approved: bool
+
+def write_email(state: State):
+    return {"draft": "Hi team, the model training finished successfully."}
+
+def human_review(state: State):
+    decision = interrupt({"question": "Send this email?", "draft": state["draft"]})
+    return {"approved": decision == "yes"}
+
+def send_email(state: State):
+    print("📧 Sent!" if state["approved"] else "❌ Cancelled")
+    return {}
+
+builder = StateGraph(State)
+builder.add_node("write_email", write_email)
+builder.add_node("human_review", human_review)
+builder.add_node("send_email", send_email)
+builder.add_edge(START, "write_email")
+builder.add_edge("write_email", "human_review")
+builder.add_edge("human_review", "send_email")
+builder.add_edge("send_email", END)
+
+graph = builder.compile(checkpointer=InMemorySaver())   # a checkpointer is REQUIRED
+config = {"configurable": {"thread_id": "email-1"}}
+
+result = graph.invoke({"draft": "", "approved": False}, config)
+print(result["__interrupt__"])          # shows the question &amp; draft, graph is paused
+
+graph.invoke(Command(resume="yes"), config)    # 📧 Sent!</div>
+
+                    <h5>Common Patterns</h5>
+                    <ul>
+                        <li><strong>Approve / reject</strong> a tool call before it runs.</li>
+                        <li><strong>Edit</strong>: let the human change the draft, then continue with the edited version.</li>
+                        <li><strong>Ask for missing info</strong>: "Which date should I book?"</li>
+                        <li><strong>Review the final answer</strong> before showing it to a customer.</li>
+                    </ul>
+
+                    <h5>Static Breakpoints (for debugging)</h5>
+                    <div class="code-snippet">graph = builder.compile(checkpointer=InMemorySaver(), interrupt_before=["tools"])
+graph.invoke(inputs, config)       # stops before the "tools" node
+graph.invoke(None, config)         # continue</div>
+                </div>
+
+                <!-- ============ 8. MULTI-AGENT ============ -->
+                <div id="lg-multi" class="tab-panel">
+                    <h4>👥 Multi-Agent Systems</h4>
+                    <div class="visual-box">
+                        Instead of one agent with 20 tools, use several <strong>specialist agents</strong>, each with a few tools and a focused prompt, and let them work together.
+                    </div>
+
+                    <h5>Architectures</h5>
+                    <div class="table-wrap">
+                        <table class="compare-table">
+                            <tr><th>Pattern</th><th>How it works</th><th>Good for</th></tr>
+                            <tr><td>👔 Supervisor</td><td>A manager agent decides which worker runs next</td><td>Clear task delegation (research → write → review)</td></tr>
+                            <tr><td>🐝 Swarm / Network</td><td>Agents hand off directly to each other</td><td>Customer support (sales ↔ billing ↔ tech)</td></tr>
+                            <tr><td>🏢 Hierarchical</td><td>Supervisors of supervisors (teams of teams)</td><td>Large, complex projects</td></tr>
+                            <tr><td>🔗 Sequential</td><td>Fixed pipeline of agents</td><td>Predictable multi-step processes</td></tr>
+                        </table>
+                    </div>
+
+                    <h5>Supervisor Example</h5>
+                    <div class="code-snippet">from typing import Literal
+from pydantic import BaseModel
+from langchain_openai import ChatOpenAI
+from langchain.agents import create_agent
+from langgraph.graph import StateGraph, MessagesState, START, END
+from langgraph.types import Command
+
+llm = ChatOpenAI(model="gpt-4o-mini")
+
+research_agent = create_agent(llm, tools=[web_search], system_prompt="You find facts.")
+writer_agent   = create_agent(llm, tools=[], system_prompt="You write clear answers.")
+
+class Route(BaseModel):
+    next: Literal["researcher", "writer", "FINISH"]
+
+def supervisor(state: MessagesState) -> Command[Literal["researcher", "writer", "__end__"]]:
+    route = llm.with_structured_output(Route).invoke(
+        [{"role": "system", "content":
+          "You manage a researcher and a writer. Pick who acts next, or FINISH when done."}]
+        + state["messages"]
+    )
+    return Command(goto=END if route.next == "FINISH" else route.next)
+
+def researcher(state: MessagesState) -> Command[Literal["supervisor"]]:
+    result = research_agent.invoke(state)
+    return Command(goto="supervisor", update={"messages": [result["messages"][-1]]})
+
+def writer(state: MessagesState) -> Command[Literal["supervisor"]]:
+    result = writer_agent.invoke(state)
+    return Command(goto="supervisor", update={"messages": [result["messages"][-1]]})
+
+builder = StateGraph(MessagesState)
+builder.add_node("supervisor", supervisor)
+builder.add_node("researcher", researcher)
+builder.add_node("writer", writer)
+builder.add_edge(START, "supervisor")
+graph = builder.compile()</div>
+                    <div class="code-snippet">                ┌──────────────┐
+      START ──▶ │  supervisor  │ ──▶ END
+                └──┬────────▲──┘
+             goto  │        │  back
+            ┌──────▼──┐  ┌──┴──────┐
+            │researcher│  │ writer  │
+            └──────────┘  └─────────┘</div>
+                    <div class="info-box">
+                        <strong>Shortcut packages:</strong> <code>langgraph-supervisor</code> (<code>create_supervisor</code>) and <code>langgraph-swarm</code> (<code>create_swarm</code>) build these patterns for you in a few lines.
+                    </div>
+                </div>
+
+                <!-- ============ 9. STREAMING & DEPLOY ============ -->
+                <div id="lg-stream" class="tab-panel">
+                    <h4>📡 Streaming, Visualization &amp; Deployment</h4>
+
+                    <h5>Stream Modes</h5>
+                    <div class="table-wrap">
+                        <table class="compare-table">
+                            <tr><th>stream_mode</th><th>You get</th></tr>
+                            <tr><td><code>"values"</code></td><td>The full state after every step</td></tr>
+                            <tr><td><code>"updates"</code></td><td>Only what each node changed</td></tr>
+                            <tr><td><code>"messages"</code></td><td>LLM tokens one by one (typing effect)</td></tr>
+                            <tr><td><code>"custom"</code></td><td>Your own progress events from inside nodes</td></tr>
+                            <tr><td><code>"debug"</code></td><td>Everything, for debugging</td></tr>
+                        </table>
+                    </div>
+                    <div class="code-snippet">inputs = {"messages": [{"role": "user", "content": "Explain LoRA"}]}
+
+for update in graph.stream(inputs, config, stream_mode="updates"):
+    print(update)                       # {'agent': {'messages': [...]}}
+
+for token, metadata in graph.stream(inputs, config, stream_mode="messages"):
+    print(token.content, end="", flush=True)</div>
+
+                    <h5>Visualize Your Graph</h5>
+                    <div class="code-snippet">print(graph.get_graph().draw_mermaid())    # Mermaid text (paste into mermaid.live)
+graph.get_graph().print_ascii()             # ASCII art (needs: pip install grandalf)
+
+# In Jupyter:
+from IPython.display import Image
+Image(graph.get_graph().draw_mermaid_png())</div>
+
+                    <h5>Deployment &amp; Tools</h5>
+                    <ul>
+                        <li><strong>LangGraph Studio:</strong> a visual IDE to see your graph run step by step, inspect state and test interrupts. Start it with <code>langgraph dev</code> (from <code>pip install "langgraph-cli[inmem]"</code>).</li>
+                        <li><strong>langgraph.json:</strong> config file that tells the CLI where your graph is.</li>
+                        <li><strong>LangSmith Deployment (LangGraph Platform):</strong> hosts your graph as an API with built-in persistence, streaming and task queues.</li>
+                        <li><strong>Self-host:</strong> wrap <code>graph.invoke</code> in FastAPI / Flask and use a Postgres checkpointer.</li>
+                        <li><strong>LangSmith tracing:</strong> set <code>LANGSMITH_TRACING=true</code> to see every node, LLM call and tool call.</li>
+                    </ul>
+                    <div class="code-snippet">// langgraph.json
+{
+  "dependencies": ["."],
+  "graphs": { "agent": "./agent.py:graph" },
+  "env": ".env"
+}</div>
+                </div>
+
+                <!-- ============ 10. CHEAT SHEET ============ -->
+                <div id="lg-cheatsheet" class="tab-panel">
+                    <h4>📋 LangGraph Cheat Sheet</h4>
+
+                    <h5>Most-used Imports</h5>
+                    <div class="code-snippet">from langgraph.graph import StateGraph, MessagesState, START, END
+from langgraph.graph.message import add_messages
+from langgraph.prebuilt import ToolNode, tools_condition
+from langgraph.checkpoint.memory import InMemorySaver
+from langgraph.store.memory import InMemoryStore
+from langgraph.types import Command, interrupt
+from langchain.agents import create_agent          # prebuilt agent (LangChain 1.0)</div>
+
+                    <h5>The Recipe</h5>
+                    <ol>
+                        <li>Define <strong>State</strong> (TypedDict / MessagesState, add reducers for lists)</li>
+                        <li>Write <strong>node</strong> functions: <code>def node(state) -&gt; dict</code></li>
+                        <li><code>builder = StateGraph(State)</code> and <code>add_node</code> for each node</li>
+                        <li>Connect with <code>add_edge</code> / <code>add_conditional_edges</code></li>
+                        <li><code>graph = builder.compile(checkpointer=...)</code></li>
+                        <li>Run with <code>invoke</code> / <code>stream</code> and a <code>thread_id</code></li>
+                    </ol>
+
+                    <h5>Quick Reference</h5>
+                    <div class="table-wrap">
+                        <table class="compare-table">
+                            <tr><th>I want to…</th><th>Use</th></tr>
+                            <tr><td>Store chat messages in state</td><td><code>MessagesState</code> / <code>add_messages</code></td></tr>
+                            <tr><td>Append to a list from many nodes</td><td><code>Annotated[list, operator.add]</code></td></tr>
+                            <tr><td>Choose the next step</td><td><code>add_conditional_edges</code> or <code>Command(goto=...)</code></td></tr>
+                            <tr><td>Loop</td><td>An edge pointing back to an earlier node</td></tr>
+                            <tr><td>Run steps in parallel</td><td>Multiple edges from the same node</td></tr>
+                            <tr><td>Run tools</td><td><code>ToolNode</code> + <code>tools_condition</code></td></tr>
+                            <tr><td>Remember a conversation</td><td>Checkpointer + <code>thread_id</code></td></tr>
+                            <tr><td>Remember a user forever</td><td><code>Store</code></td></tr>
+                            <tr><td>Ask a human</td><td><code>interrupt()</code> + <code>Command(resume=...)</code></td></tr>
+                            <tr><td>Stream tokens</td><td><code>stream_mode="messages"</code></td></tr>
+                            <tr><td>Reuse a graph inside another</td><td>Subgraph as a node</td></tr>
+                        </table>
+                    </div>
+
+                    <h5>LangGraph vs LangChain</h5>
+                    <div class="table-wrap">
+                        <table class="compare-table">
+                            <tr><th></th><th>🦜 LangChain</th><th>🕸️ LangGraph</th></tr>
+                            <tr><td>Flow</td><td>Straight line</td><td>Graph with loops &amp; branches</td></tr>
+                            <tr><td>State</td><td>Passed step to step</td><td>Shared, persistent, checkpointed</td></tr>
+                            <tr><td>Best for</td><td>RAG, summarizing, extraction, simple chat</td><td>Agents, approvals, multi-agent, long-running tasks</td></tr>
+                        </table>
+                    </div>
+
+                    <h5>Best Practices</h5>
+                    <ul>
+                        <li>🧩 Keep each node small and focused on one job.</li>
+                        <li>🔁 Always have an exit condition for loops (and remember the recursion limit).</li>
+                        <li>💾 Use a real checkpointer (SQLite / Postgres) outside of learning.</li>
+                        <li>🙋 Put <code>interrupt()</code> before any irreversible action.</li>
+                        <li>✂️ Trim or summarize messages so long chats don't blow the context window.</li>
+                        <li>🔍 Use LangGraph Studio + LangSmith to see exactly what your agent did.</li>
+                        <li>🦜 Use LangChain components (models, retrievers, tools) <em>inside</em> your nodes.</li>
+                    </ul>
+                    <a href="langchain.html" class="guide-btn">📘 Back to LangChain in Detail</a>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <p>&copy; 2024 My AI Learning Blog</p>
+    </footer>
+
+    <!-- Offline AI Chatbot (no API key needed) -->
+    <div id="chatbot-container">
+        <div id="chatbot-toggle">
+            <img src="AI_img-removebg-preview.png" alt="AI" style="width: 40px; height: 40px; border-radius: 50%; object-fit: cover;">
+        </div>
+        <div id="chatbot-window">
+            <div id="chatbot-header">
+                <span>AI Assistant</span>
+                <div class="chatbot-controls">
+                    <button id="chatbot-refresh" class="refresh-btn">
+                        <svg viewBox="0 0 24 24">
+                            <path d="M17.65 6.35C16.2 4.9 14.21 4 12 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08c-.82 2.33-3.04 4-5.65 4-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"/>
+                        </svg>
+                    </button>
+                    <button id="chatbot-close">×</button>
+                </div>
+            </div>
+            <div id="chatbot-messages"></div>
+            <div id="chatbot-input-container">
+                <input type="text" id="chatbot-input" placeholder="Ask me about AI...">
+                <button id="chatbot-send">Send</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="ai-background.js"></script>
+    <script src="chatbot-frontend.js"></script>
+    <script>
+        function showTab(tabName, btn) {
+            document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+            document.querySelectorAll('.algorithm-tabs .tab-btn').forEach(b => b.classList.remove('active'));
+            document.getElementById(tabName).classList.add('active');
+            btn.classList.add('active');
+        }
+    </script>
+</body>
+</html>

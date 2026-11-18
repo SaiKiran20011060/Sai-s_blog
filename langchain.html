@@ -1,0 +1,918 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LangChain in Detail - My AI Learning Blog</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <nav class="back-nav">
+        <button onclick="window.location.href='ai-frameworks.html'" class="back-btn">← Back to AI Frameworks</button>
+    </nav>
+
+    <header>
+        <h1>🦜 LangChain in Detail</h1>
+        <p>Everything you need to build LLM applications with LangChain, from first prompt to agents</p>
+    </header>
+
+    <main>
+        <div class="blog-post">
+            <div class="topic-header">
+                <div class="topic-icon">📘</div>
+                <div>
+                    <h3>LangChain Complete Guide</h3>
+                </div>
+            </div>
+
+            <div class="algorithm-tabs">
+                <button class="tab-btn active" onclick="showTab('lc-overview', this)">🧭 Overview &amp; Setup</button>
+                <button class="tab-btn" onclick="showTab('lc-models', this)">🤖 Models &amp; Messages</button>
+                <button class="tab-btn" onclick="showTab('lc-prompts', this)">📝 Prompt Templates</button>
+                <button class="tab-btn" onclick="showTab('lc-parsers', this)">📦 Output Parsers</button>
+                <button class="tab-btn" onclick="showTab('lc-lcel', this)">🔗 LCEL &amp; Runnables</button>
+                <button class="tab-btn" onclick="showTab('lc-memory', this)">🧠 Memory</button>
+                <button class="tab-btn" onclick="showTab('lc-rag', this)">📚 RAG</button>
+                <button class="tab-btn" onclick="showTab('lc-agents', this)">🛠️ Tools &amp; Agents</button>
+                <button class="tab-btn" onclick="showTab('lc-stream', this)">📡 Streaming &amp; LangSmith</button>
+                <button class="tab-btn" onclick="showTab('lc-cheatsheet', this)">📋 Cheat Sheet</button>
+            </div>
+
+            <div class="tab-content">
+
+                <!-- ============ 1. OVERVIEW ============ -->
+                <div id="lc-overview" class="tab-panel active">
+                    <h4>🧭 What is LangChain?</h4>
+                    <div class="visual-box">
+                        <strong>LangChain</strong> is an open-source framework (Python &amp; JavaScript) for building apps powered by Large Language Models. It gives you ready-made, swappable building blocks so you don't have to write the glue code yourself.
+                    </div>
+
+                    <h5>Why use LangChain?</h5>
+                    <ul>
+                        <li><strong>One interface for every model:</strong> switch from OpenAI to Gemini, Claude or a free local LLaMA by changing one line.</li>
+                        <li><strong>Connect LLMs to your data:</strong> PDFs, websites, databases (RAG).</li>
+                        <li><strong>Let LLMs take actions:</strong> call tools like search, calculators and APIs (agents).</li>
+                        <li><strong>Composable:</strong> join steps with the <code>|</code> pipe operator (LCEL).</li>
+                        <li><strong>Huge ecosystem:</strong> hundreds of integrations for models, vector stores, loaders and tools.</li>
+                    </ul>
+
+                    <h5>The Building Blocks</h5>
+                    <div class="training-visual">
+                        <div class="training-step">
+                            <div class="step-name">Prompt</div>
+                            <div class="step-desc">Template with {variables}</div>
+                        </div>
+                        <div class="arrow">→</div>
+                        <div class="training-step">
+                            <div class="step-name">Model</div>
+                            <div class="step-desc">LLM / Chat model</div>
+                        </div>
+                        <div class="arrow">→</div>
+                        <div class="training-step">
+                            <div class="step-name">Parser</div>
+                            <div class="step-desc">Text / JSON / objects</div>
+                        </div>
+                    </div>
+                    <p>Add-ons around that core: <strong>Retrievers</strong> (fetch your data), <strong>Tools</strong> (actions), <strong>Memory</strong> (chat history), and <strong>Agents</strong> (LLM decides which tools to use).</p>
+
+                    <h5>The Package Structure</h5>
+                    <div class="table-wrap">
+                        <table class="compare-table">
+                            <tr><th>Package</th><th>What it contains</th></tr>
+                            <tr><td><code>langchain-core</code></td><td>Base interfaces: messages, prompts, runnables, output parsers, tools</td></tr>
+                            <tr><td><code>langchain</code></td><td>High-level pieces like <code>create_agent</code> and <code>init_chat_model</code></td></tr>
+                            <tr><td><code>langchain-openai</code>, <code>langchain-ollama</code>, <code>langchain-google-genai</code>, <code>langchain-huggingface</code>…</td><td>Integration packages for each provider</td></tr>
+                            <tr><td><code>langchain-community</code></td><td>Community integrations: document loaders, vector stores, tools</td></tr>
+                            <tr><td><code>langchain-text-splitters</code></td><td>Splitting documents into chunks</td></tr>
+                            <tr><td><code>langchain-classic</code></td><td>Old (pre-1.0) chains &amp; memory classes, kept for backward compatibility</td></tr>
+                            <tr><td><code>langgraph</code></td><td>Graph-based agent orchestration (see LangGraph in Detail)</td></tr>
+                            <tr><td><code>langsmith</code></td><td>Tracing, debugging &amp; evaluation platform</td></tr>
+                        </table>
+                    </div>
+
+                    <h5>Installation</h5>
+                    <div class="code-snippet"># core + OpenAI integration
+pip install langchain langchain-openai
+
+# extras used in this guide
+pip install langchain-community langchain-text-splitters faiss-cpu pypdf
+
+# 100% free &amp; local alternative (needs Ollama installed: https://ollama.com)
+pip install langchain-ollama
+ollama pull llama2</div>
+                    <div class="code-snippet"># Set your API key (only for paid providers like OpenAI)
+# Windows PowerShell:   $env:OPENAI_API_KEY = "sk-..."
+# macOS / Linux:        export OPENAI_API_KEY="sk-..."
+
+import os
+from dotenv import load_dotenv   # pip install python-dotenv
+load_dotenv()                     # reads keys from a .env file, never hardcode keys!</div>
+
+                    <h5>Your First Chain</h5>
+                    <div class="code-snippet">from langchain_core.prompts import ChatPromptTemplate
+from langchain_core.output_parsers import StrOutputParser
+from langchain_openai import ChatOpenAI
+
+prompt = ChatPromptTemplate.from_template("Explain {topic} to a beginner in 3 lines.")
+llm = ChatOpenAI(model="gpt-4o-mini", temperature=0)
+
+chain = prompt | llm | StrOutputParser()
+print(chain.invoke({"topic": "neural networks"}))</div>
+                    <div class="info-box">
+                        <strong>📌 Version note:</strong> LangChain <strong>1.0</strong> (Oct 2025) simplified the library: agents are built with <code>create_agent</code>, and old classes like <code>ConversationChain</code>, <code>LLMChain</code> and the memory classes moved to <code>langchain-classic</code>. Everything in <code>langchain-core</code> (prompts, LCEL, parsers, tools) works the same in both versions.
+                    </div>
+                </div>
+
+                <!-- ============ 2. MODELS ============ -->
+                <div id="lc-models" class="tab-panel">
+                    <h4>🤖 Models &amp; Messages</h4>
+                    <div class="visual-box">
+                        LangChain wraps every provider in the <strong>same interface</strong>, so <code>invoke()</code>, <code>stream()</code> and <code>batch()</code> work for all of them.
+                    </div>
+
+                    <h5>LLMs vs Chat Models</h5>
+                    <div class="concept-visual">
+                        <div class="learning-type">
+                            <h4>LLM (text-in, text-out)</h4>
+                            <div class="visual-box">
+                                Input: a plain string<br>
+                                Output: a plain string<br>
+                                Older style, rarely used now
+                            </div>
+                        </div>
+                        <div class="learning-type">
+                            <h4>Chat Model (messages-in, message-out)</h4>
+                            <div class="visual-box">
+                                Input: a list of messages<br>
+                                Output: an <code>AIMessage</code><br>
+                                ✅ Use this for all modern models
+                            </div>
+                        </div>
+                    </div>
+
+                    <h5>Message Types</h5>
+                    <div class="table-wrap">
+                        <table class="compare-table">
+                            <tr><th>Message</th><th>Role</th><th>Purpose</th></tr>
+                            <tr><td><code>SystemMessage</code></td><td>system</td><td>Sets behavior / persona ("You are a helpful AI tutor")</td></tr>
+                            <tr><td><code>HumanMessage</code></td><td>user</td><td>What the user says</td></tr>
+                            <tr><td><code>AIMessage</code></td><td>assistant</td><td>The model's reply (may contain <code>tool_calls</code>)</td></tr>
+                            <tr><td><code>ToolMessage</code></td><td>tool</td><td>The result of a tool call, sent back to the model</td></tr>
+                        </table>
+                    </div>
+                    <div class="code-snippet">from langchain_openai import ChatOpenAI
+from langchain_core.messages import SystemMessage, HumanMessage
+
+llm = ChatOpenAI(model="gpt-4o-mini", temperature=0)
+
+messages = [
+    SystemMessage(content="You are a helpful AI tutor."),
+    HumanMessage(content="What is overfitting?"),
+]
+response = llm.invoke(messages)
+
+print(response.content)          # the text reply
+print(response.usage_metadata)   # input / output token counts
+
+# Shortcut: tuples or dicts work too
+llm.invoke([("system", "Answer in one line."), ("human", "What is ML?")])</div>
+
+                    <h5>Swapping Providers</h5>
+                    <div class="code-snippet">from langchain_openai import ChatOpenAI
+from langchain_google_genai import ChatGoogleGenerativeAI
+from langchain_ollama import ChatOllama           # free, runs on your PC
+
+llm = ChatOpenAI(model="gpt-4o-mini")
+llm = ChatGoogleGenerativeAI(model="gemini-2.0-flash")
+llm = ChatOllama(model="llama2")
+
+# or one helper for all providers:
+from langchain.chat_models import init_chat_model
+llm = init_chat_model("gpt-4o-mini", model_provider="openai")</div>
+
+                    <h5>Important Parameters</h5>
+                    <ul>
+                        <li><strong>temperature</strong>: 0 = focused &amp; repeatable, 1 = creative &amp; random</li>
+                        <li><strong>max_tokens</strong>: limit the length of the reply</li>
+                        <li><strong>timeout / max_retries</strong>: handle slow or failed API calls</li>
+                    </ul>
+
+                    <h5>invoke vs stream vs batch</h5>
+                    <div class="code-snippet">llm.invoke("What is AI?")                       # one input  -> one full answer
+
+for chunk in llm.stream("Explain RAG"):         # tokens arrive one by one (typing effect)
+    print(chunk.content, end="", flush=True)
+
+llm.batch(["What is ML?", "What is DL?"])       # many inputs in parallel -> list of answers
+
+await llm.ainvoke("Hi")                          # async versions: ainvoke / astream / abatch</div>
+                </div>
+
+                <!-- ============ 3. PROMPTS ============ -->
+                <div id="lc-prompts" class="tab-panel">
+                    <h4>📝 Prompt Templates</h4>
+                    <div class="visual-box">
+                        A prompt template is a reusable prompt with <strong>{placeholders}</strong> that get filled in at run time.
+                    </div>
+
+                    <h5>1. PromptTemplate (plain text)</h5>
+                    <div class="code-snippet">from langchain_core.prompts import PromptTemplate
+
+prompt = PromptTemplate.from_template("Explain {topic} to a {level} in simple words.")
+print(prompt.invoke({"topic": "embeddings", "level": "10 year old"}).to_string())
+# Explain embeddings to a 10 year old in simple words.</div>
+
+                    <h5>2. ChatPromptTemplate (list of messages) ✅ most used</h5>
+                    <div class="code-snippet">from langchain_core.prompts import ChatPromptTemplate
+
+prompt = ChatPromptTemplate.from_messages([
+    ("system", "You are an expert in {subject}. Keep answers short."),
+    ("human", "{question}"),
+])
+prompt.invoke({"subject": "deep learning", "question": "What is a CNN?"})</div>
+
+                    <h5>3. MessagesPlaceholder (insert a list of messages, e.g. chat history)</h5>
+                    <div class="code-snippet">from langchain_core.prompts import ChatPromptTemplate, MessagesPlaceholder
+
+prompt = ChatPromptTemplate.from_messages([
+    ("system", "You are a helpful assistant."),
+    MessagesPlaceholder("history"),        # past conversation goes here
+    ("human", "{question}"),
+])</div>
+
+                    <h5>4. Few-Shot Prompts (teach by example)</h5>
+                    <div class="code-snippet">from langchain_core.prompts import ChatPromptTemplate, FewShotChatMessagePromptTemplate
+
+examples = [
+    {"input": "happy", "output": "sad"},
+    {"input": "tall",  "output": "short"},
+]
+example_prompt = ChatPromptTemplate.from_messages([("human", "{input}"), ("ai", "{output}")])
+few_shot = FewShotChatMessagePromptTemplate(examples=examples, example_prompt=example_prompt)
+
+prompt = ChatPromptTemplate.from_messages([
+    ("system", "Give the opposite of each word."),
+    few_shot,
+    ("human", "{input}"),
+])
+chain = prompt | llm
+chain.invoke({"input": "fast"}).content     # -> "slow"</div>
+
+                    <h5>5. Partial Variables (pre-fill some values)</h5>
+                    <div class="code-snippet">prompt = PromptTemplate.from_template("Today is {date}. {question}")
+prompt_today = prompt.partial(date="17 Nov 2026")
+prompt_today.invoke({"question": "What day is it?"})</div>
+
+                    <div class="info-box">
+                        <strong>💡 Tips:</strong> put rules &amp; persona in the <strong>system</strong> message, keep variables descriptive, and use few-shot examples when you need a specific format or style. You can also pull ready-made prompts from the <strong>LangChain Hub</strong>.
+                    </div>
+                </div>
+
+                <!-- ============ 4. OUTPUT PARSERS ============ -->
+                <div id="lc-parsers" class="tab-panel">
+                    <h4>📦 Output Parsers &amp; Structured Output</h4>
+                    <div class="visual-box">
+                        Models return an <code>AIMessage</code>. Output parsers turn it into something your code can use: a <strong>string</strong>, a <strong>dict</strong>, a <strong>list</strong> or a <strong>Python object</strong>.
+                    </div>
+
+                    <h5>StrOutputParser: just the text</h5>
+                    <div class="code-snippet">from langchain_core.output_parsers import StrOutputParser
+
+chain = prompt | llm | StrOutputParser()
+chain.invoke({"topic": "RAG"})        # -> "RAG stands for ..." (a plain str)</div>
+
+                    <h5>JsonOutputParser: a dictionary</h5>
+                    <div class="code-snippet">from langchain_core.output_parsers import JsonOutputParser
+
+prompt = ChatPromptTemplate.from_template(
+    "Return JSON with keys 'name' and 'use_case' for the AI framework {framework}."
+)
+chain = prompt | llm | JsonOutputParser()
+chain.invoke({"framework": "LangGraph"})
+# {'name': 'LangGraph', 'use_case': 'Building stateful agents'}</div>
+
+                    <h5>with_structured_output(): ✅ the recommended way</h5>
+                    <p>Define the shape you want with <strong>Pydantic</strong>; the model is forced to fill it in (uses the provider's native JSON / tool-calling support).</p>
+                    <div class="code-snippet">from pydantic import BaseModel, Field
+
+class Review(BaseModel):
+    sentiment: str = Field(description="positive, negative or neutral")
+    score: int = Field(description="rating from 1 to 5")
+    summary: str = Field(description="one-line summary")
+
+structured_llm = llm.with_structured_output(Review)
+result = structured_llm.invoke("The course was great but a bit too fast.")
+
+print(result.sentiment, result.score)   # positive 4
+print(result.summary)</div>
+
+                    <h5>Other Parsers</h5>
+                    <div class="table-wrap">
+                        <table class="compare-table">
+                            <tr><th>Parser</th><th>Returns</th></tr>
+                            <tr><td><code>PydanticOutputParser</code></td><td>A Pydantic object (adds format instructions to the prompt; for models without native structured output)</td></tr>
+                            <tr><td><code>CommaSeparatedListOutputParser</code></td><td>A Python list from "a, b, c"</td></tr>
+                            <tr><td><code>XMLOutputParser</code></td><td>A dict from XML output</td></tr>
+                            <tr><td><code>OutputFixingParser</code></td><td>Asks the LLM to fix output that failed to parse</td></tr>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- ============ 5. LCEL ============ -->
+                <div id="lc-lcel" class="tab-panel">
+                    <h4>🔗 LCEL: LangChain Expression Language</h4>
+                    <div class="visual-box">
+                        Every component is a <strong>Runnable</strong>. Join Runnables with <code>|</code> and the output of one becomes the input of the next.
+                    </div>
+
+                    <h5>Every Runnable has the same methods</h5>
+                    <div class="table-wrap">
+                        <table class="compare-table">
+                            <tr><th>Method</th><th>What it does</th></tr>
+                            <tr><td><code>invoke(input)</code></td><td>Run once, get the full result</td></tr>
+                            <tr><td><code>stream(input)</code></td><td>Get the result piece by piece</td></tr>
+                            <tr><td><code>batch([inputs])</code></td><td>Run many inputs in parallel</td></tr>
+                            <tr><td><code>ainvoke / astream / abatch</code></td><td>Async versions</td></tr>
+                        </table>
+                    </div>
+
+                    <h5>RunnableParallel: run branches at the same time</h5>
+                    <div class="code-snippet">from langchain_core.runnables import RunnableParallel
+
+summary  = ChatPromptTemplate.from_template("Summarize: {text}") | llm | StrOutputParser()
+keywords = ChatPromptTemplate.from_template("List 5 keywords: {text}") | llm | StrOutputParser()
+
+both = RunnableParallel(summary=summary, keywords=keywords)
+result = both.invoke({"text": "LangChain is a framework for ..."})
+print(result["summary"], result["keywords"])
+
+# A plain dict inside a chain is automatically a RunnableParallel:
+chain = {"summary": summary, "keywords": keywords} | some_next_step</div>
+
+                    <h5>RunnablePassthrough: pass the input along unchanged</h5>
+                    <div class="code-snippet">from langchain_core.runnables import RunnablePassthrough
+
+chain = {"context": retriever, "question": RunnablePassthrough()} | prompt | llm
+chain.invoke("What is LoRA?")   # the question goes to the retriever AND to the prompt
+
+# .assign() adds new keys and keeps the old ones
+chain = RunnablePassthrough.assign(word_count=lambda x: len(x["text"].split()))
+chain.invoke({"text": "hello world"})   # {'text': 'hello world', 'word_count': 2}</div>
+
+                    <h5>RunnableLambda: use any Python function</h5>
+                    <div class="code-snippet">from langchain_core.runnables import RunnableLambda
+
+to_upper = RunnableLambda(lambda text: text.upper())
+chain = prompt | llm | StrOutputParser() | to_upper</div>
+
+                    <h5>Routing / Branching</h5>
+                    <div class="code-snippet">math_chain    = ChatPromptTemplate.from_template("Solve step by step: {q}") | llm
+general_chain = ChatPromptTemplate.from_template("Answer briefly: {q}") | llm
+
+def route(inputs):
+    if any(ch.isdigit() for ch in inputs["q"]):
+        return math_chain
+    return general_chain
+
+chain = RunnableLambda(route)       # a function that returns a Runnable = router
+chain.invoke({"q": "What is 25 * 4?"})</div>
+
+                    <h5>Useful extras</h5>
+                    <ul>
+                        <li><code>chain.with_retry(stop_after_attempt=3)</code>: retry on errors</li>
+                        <li><code>chain.with_fallbacks([backup_chain])</code>: use another model if one fails</li>
+                        <li><code>llm.bind(stop=["\n"])</code>: fix some arguments in advance</li>
+                        <li><code>chain.get_graph().print_ascii()</code>: draw the chain</li>
+                    </ul>
+                </div>
+
+                <!-- ============ 6. MEMORY ============ -->
+                <div id="lc-memory" class="tab-panel">
+                    <!-- LangChain Memory -->
+                    <h4>🧠 LangChain Memory &amp; ConversationChain</h4>
+                    <div class="visual-box">
+                        <strong>Why memory?</strong> LLMs are <em>stateless</em>: each call forgets the previous one. Memory classes store the chat history and add it to every new prompt, so the bot can remember what you said earlier.
+                    </div>
+
+                    <h4>💬 ConversationChain</h4>
+                    <p>The simplest chain for chatting. It connects an <strong>LLM</strong>, a <strong>prompt</strong> (with a <code>{history}</code> slot), and a <strong>memory</strong> object. On every turn it:</p>
+                    <div class="training-visual">
+                        <div class="training-step">
+                            <div class="step-name">1. Load</div>
+                            <div class="step-desc">Read past messages from memory</div>
+                        </div>
+                        <div class="arrow">→</div>
+                        <div class="training-step">
+                            <div class="step-name">2. Prompt</div>
+                            <div class="step-desc">History + new input sent to the LLM</div>
+                        </div>
+                        <div class="arrow">→</div>
+                        <div class="training-step">
+                            <div class="step-name">3. Save</div>
+                            <div class="step-desc">Store the input &amp; reply back in memory</div>
+                        </div>
+                    </div>
+                    <div class="code-snippet">from langchain_openai import ChatOpenAI
+from langchain.chains import ConversationChain
+from langchain.memory import ConversationBufferMemory
+
+llm = ChatOpenAI(model="gpt-4o-mini", temperature=0)
+conversation = ConversationChain(llm=llm, memory=ConversationBufferMemory(), verbose=True)
+
+conversation.predict(input="Hi, my name is Sai")
+conversation.predict(input="What is my name?")   # -> "Your name is Sai"</div>
+
+                    <h4>1️⃣ ConversationBufferMemory</h4>
+                    <p>Stores the <strong>entire conversation word for word</strong> and sends all of it with every prompt.</p>
+                    <div class="concept-visual">
+                        <div class="learning-type">
+                            <h4>✅ Pros</h4>
+                            <div class="visual-box">
+                                • Nothing is ever lost<br>
+                                • Simple and exact
+                            </div>
+                        </div>
+                        <div class="learning-type">
+                            <h4>⚠️ Cons</h4>
+                            <div class="visual-box">
+                                • Prompt grows every turn<br>
+                                • More tokens = higher cost<br>
+                                • Can exceed the context window
+                            </div>
+                        </div>
+                    </div>
+                    <div class="code-snippet">from langchain.memory import ConversationBufferMemory
+
+memory = ConversationBufferMemory()
+memory.save_context({"input": "Hi"}, {"output": "Hello! How can I help?"})
+print(memory.load_memory_variables({}))
+# {'history': 'Human: Hi\nAI: Hello! How can I help?'}</div>
+                    <p><strong>Best for:</strong> short chats and demos.</p>
+
+                    <h4>2️⃣ ConversationBufferWindowMemory</h4>
+                    <p>Keeps only the <strong>last k exchanges</strong> (a sliding window). Older messages are dropped.</p>
+                    <div class="visual-box">
+                        <strong>Example (k=2):</strong> after 5 turns, only turns 4 and 5 are sent to the LLM. Turns 1 to 3 are forgotten.
+                    </div>
+                    <div class="code-snippet">from langchain.memory import ConversationBufferWindowMemory
+
+memory = ConversationBufferWindowMemory(k=2)   # remember last 2 exchanges</div>
+                    <p><strong>Best for:</strong> long chats where only recent context matters. <strong>Downside:</strong> it forgets early details like the user's name.</p>
+
+                    <h4>3️⃣ ConversationSummaryMemory</h4>
+                    <p>Instead of storing raw messages, it uses an <strong>LLM to write a running summary</strong> of the conversation and updates it after each turn.</p>
+                    <div class="visual-box">
+                        <strong>Stored history:</strong> "The user, Sai, is learning AI and asked how transformers work. The AI explained self-attention."
+                    </div>
+                    <div class="code-snippet">from langchain.memory import ConversationSummaryMemory
+
+memory = ConversationSummaryMemory(llm=llm)   # needs an LLM to summarize</div>
+                    <p><strong>Best for:</strong> very long conversations. <strong>Downside:</strong> extra LLM calls, and small details can be lost in the summary.</p>
+
+                    <h4>4️⃣ ConversationSummaryBufferMemory</h4>
+                    <p>A <strong>hybrid</strong>: keeps recent messages word for word, and summarizes older ones once the history passes a <strong>token limit</strong>.</p>
+                    <div class="training-visual">
+                        <div class="training-step">
+                            <div class="step-name">Old messages</div>
+                            <div class="step-desc">Compressed into a summary</div>
+                        </div>
+                        <div class="arrow">+</div>
+                        <div class="training-step">
+                            <div class="step-name">Recent messages</div>
+                            <div class="step-desc">Kept exactly (within max_token_limit)</div>
+                        </div>
+                    </div>
+                    <div class="code-snippet">from langchain.memory import ConversationSummaryBufferMemory
+
+memory = ConversationSummaryBufferMemory(llm=llm, max_token_limit=200)</div>
+                    <p><strong>Best for:</strong> production chatbots, because it balances exact recent context with a low token cost.</p>
+
+                    <h4>📊 Quick Comparison</h4>
+                    <div class="table-wrap">
+                        <table class="compare-table">
+                            <tr><th>Memory Type</th><th>What it stores</th><th>Token use</th><th>Extra LLM calls</th></tr>
+                            <tr><td>BufferMemory</td><td>Full history</td><td>High (keeps growing)</td><td>No</td></tr>
+                            <tr><td>BufferWindowMemory</td><td>Last k exchanges</td><td>Low (fixed)</td><td>No</td></tr>
+                            <tr><td>SummaryMemory</td><td>Running summary</td><td>Low</td><td>Yes</td></tr>
+                            <tr><td>SummaryBufferMemory</td><td>Summary + recent messages</td><td>Medium (capped)</td><td>Yes</td></tr>
+                        </table>
+                    </div>
+                    <div class="info-box">
+                        <strong>📝 Version note:</strong> These classes are <em>legacy</em>. The imports above (<code>from langchain.memory ...</code>, <code>from langchain.chains ...</code>) work in LangChain <strong>0.x</strong>. In LangChain <strong>1.0+</strong> they moved to the <code>langchain-classic</code> package: <code>pip install langchain-classic</code>, then <code>from langchain_classic.memory import ConversationBufferMemory</code>. The ideas (buffer, window, summary) are still how modern memory works.
+                    </div>
+
+                    <h4 style="margin-top: 32px;">✅ Modern Way: RunnableWithMessageHistory</h4>
+                    <p>Wraps any chain and automatically loads / saves chat history per <strong>session_id</strong>, so different users get separate conversations.</p>
+                    <div class="code-snippet">from langchain_core.chat_history import InMemoryChatMessageHistory
+from langchain_core.runnables.history import RunnableWithMessageHistory
+from langchain_core.prompts import ChatPromptTemplate, MessagesPlaceholder
+
+store = {}   # session_id -> history
+
+def get_history(session_id: str):
+    if session_id not in store:
+        store[session_id] = InMemoryChatMessageHistory()
+    return store[session_id]
+
+prompt = ChatPromptTemplate.from_messages([
+    ("system", "You are a helpful assistant."),
+    MessagesPlaceholder("history"),
+    ("human", "{input}"),
+])
+
+chat = RunnableWithMessageHistory(
+    prompt | llm,
+    get_history,
+    input_messages_key="input",
+    history_messages_key="history",
+)
+
+config = {"configurable": {"session_id": "sai"}}
+chat.invoke({"input": "Hi, I'm Sai"}, config=config)
+chat.invoke({"input": "What's my name?"}, config=config)   # -> "Your name is Sai"</div>
+                    <div class="info-box">
+                        <strong>Keeping history short:</strong> use <code>trim_messages</code> from <code>langchain_core.messages</code> to keep only the last N tokens (like BufferWindowMemory). For saving history to disk, swap <code>InMemoryChatMessageHistory</code> for Redis, SQL or file-based histories. For agents, <strong>LangGraph checkpointers</strong> are the recommended memory.
+                    </div>
+                </div>
+
+                <!-- ============ 7. RAG ============ -->
+                <div id="lc-rag" class="tab-panel">
+                    <h4>📚 RAG: Retrieval-Augmented Generation</h4>
+                    <div class="visual-box">
+                        LLMs don't know <em>your</em> documents. RAG finds the most relevant pieces of your data and puts them in the prompt, so the model answers from facts instead of guessing.
+                    </div>
+
+                    <h5>Part 1: Indexing (done once)</h5>
+                    <div class="training-visual">
+                        <div class="training-step">
+                            <div class="step-name">Load</div>
+                            <div class="step-desc">PDF, web, CSV…</div>
+                        </div>
+                        <div class="arrow">→</div>
+                        <div class="training-step">
+                            <div class="step-name">Split</div>
+                            <div class="step-desc">Small chunks</div>
+                        </div>
+                        <div class="arrow">→</div>
+                        <div class="training-step">
+                            <div class="step-name">Embed</div>
+                            <div class="step-desc">Text → vectors</div>
+                        </div>
+                        <div class="arrow">→</div>
+                        <div class="training-step">
+                            <div class="step-name">Store</div>
+                            <div class="step-desc">Vector database</div>
+                        </div>
+                    </div>
+                    <h5>Part 2: Retrieval &amp; Generation (every question)</h5>
+                    <div class="training-visual">
+                        <div class="training-step">
+                            <div class="step-name">Question</div>
+                            <div class="step-desc">User asks</div>
+                        </div>
+                        <div class="arrow">→</div>
+                        <div class="training-step">
+                            <div class="step-name">Retrieve</div>
+                            <div class="step-desc">Top-k similar chunks</div>
+                        </div>
+                        <div class="arrow">→</div>
+                        <div class="training-step">
+                            <div class="step-name">Generate</div>
+                            <div class="step-desc">LLM answers using chunks</div>
+                        </div>
+                    </div>
+
+                    <h5>Step 1: Document Loaders</h5>
+                    <div class="code-snippet">from langchain_community.document_loaders import PyPDFLoader, WebBaseLoader, TextLoader, CSVLoader
+
+docs = PyPDFLoader("ml_notes.pdf").load()                 # one Document per page
+docs = WebBaseLoader("https://example.com/blog").load()
+docs = TextLoader("notes.txt").load()
+
+print(docs[0].page_content[:200])   # the text
+print(docs[0].metadata)             # {'source': 'ml_notes.pdf', 'page': 0}</div>
+
+                    <h5>Step 2: Text Splitters</h5>
+                    <div class="code-snippet">from langchain_text_splitters import RecursiveCharacterTextSplitter
+
+splitter = RecursiveCharacterTextSplitter(
+    chunk_size=1000,      # characters per chunk
+    chunk_overlap=200,    # overlap so sentences aren't cut in half
+)
+chunks = splitter.split_documents(docs)</div>
+                    <div class="info-box">
+                        <strong>Why split?</strong> Small chunks = more precise search and they fit in the context window. <code>RecursiveCharacterTextSplitter</code> tries to split on paragraphs, then sentences, then words. Other splitters exist for Markdown, code, HTML and tokens.
+                    </div>
+
+                    <h5>Step 3 &amp; 4: Embeddings + Vector Store</h5>
+                    <div class="code-snippet">from langchain_openai import OpenAIEmbeddings
+from langchain_community.vectorstores import FAISS
+
+embeddings = OpenAIEmbeddings(model="text-embedding-3-small")
+
+# FREE alternative that runs locally:
+# from langchain_huggingface import HuggingFaceEmbeddings
+# embeddings = HuggingFaceEmbeddings(model_name="sentence-transformers/all-MiniLM-L6-v2")
+
+vectorstore = FAISS.from_documents(chunks, embeddings)
+vectorstore.save_local("faiss_index")                      # reuse later with FAISS.load_local
+
+vectorstore.similarity_search("What is gradient descent?", k=3)</div>
+                    <div class="table-wrap">
+                        <table class="compare-table">
+                            <tr><th>Vector store</th><th>Good for</th></tr>
+                            <tr><td>FAISS</td><td>Fast, local, in-memory, great for learning</td></tr>
+                            <tr><td>Chroma</td><td>Local with persistence, easy setup</td></tr>
+                            <tr><td>Pinecone / Weaviate / Qdrant</td><td>Managed, scalable production databases</td></tr>
+                            <tr><td>pgvector</td><td>If you already use PostgreSQL</td></tr>
+                        </table>
+                    </div>
+
+                    <h5>Step 5: Retriever</h5>
+                    <div class="code-snippet">retriever = vectorstore.as_retriever(search_kwargs={"k": 4})
+
+# MMR = relevant AND diverse results (less repetition)
+retriever = vectorstore.as_retriever(search_type="mmr", search_kwargs={"k": 4})
+
+retriever.invoke("What is backpropagation?")   # -> list of Documents</div>
+
+                    <h5>Step 6: The Full RAG Chain</h5>
+                    <div class="code-snippet">from langchain_core.prompts import ChatPromptTemplate
+from langchain_core.output_parsers import StrOutputParser
+from langchain_core.runnables import RunnablePassthrough
+
+prompt = ChatPromptTemplate.from_template("""Answer the question using ONLY the context below.
+If the answer isn't in the context, say "I don't know".
+
+Context:
+{context}
+
+Question: {question}""")
+
+def format_docs(docs):
+    return "\n\n".join(doc.page_content for doc in docs)
+
+rag_chain = (
+    {"context": retriever | format_docs, "question": RunnablePassthrough()}
+    | prompt
+    | llm
+    | StrOutputParser()
+)
+
+print(rag_chain.invoke("What is gradient descent?"))</div>
+
+                    <h5>Advanced Retrieval Techniques</h5>
+                    <ul>
+                        <li><strong>MultiQueryRetriever</strong>: LLM rewrites the question several ways and merges the results.</li>
+                        <li><strong>EnsembleRetriever</strong>: combine keyword search (BM25) with vector search (hybrid search).</li>
+                        <li><strong>ContextualCompressionRetriever</strong>: re-rank results and keep only the relevant parts.</li>
+                        <li><strong>ParentDocumentRetriever</strong>: search small chunks, return the bigger parent section.</li>
+                        <li><strong>Agentic RAG</strong>: let an agent decide <em>when</em> to search and re-search (built with LangGraph).</li>
+                    </ul>
+                </div>
+
+                <!-- ============ 8. TOOLS & AGENTS ============ -->
+                <div id="lc-agents" class="tab-panel">
+                    <h4>🛠️ Tools &amp; Agents</h4>
+                    <div class="visual-box">
+                        A <strong>tool</strong> is a function the LLM can ask to run. An <strong>agent</strong> is an LLM in a loop that decides which tools to call until the task is done.
+                    </div>
+
+                    <h5>Creating a Tool with @tool</h5>
+                    <div class="code-snippet">from langchain_core.tools import tool
+
+@tool
+def multiply(a: int, b: int) -> int:
+    """Multiply two numbers."""          # the docstring tells the LLM what the tool does
+    return a * b
+
+@tool
+def get_weather(city: str) -> str:
+    """Get the current weather for a city."""
+    return f"It's 28°C and sunny in {city}."
+
+print(multiply.name, multiply.description, multiply.args)</div>
+
+                    <h5>Tool Calling: the model asks, your code runs</h5>
+                    <div class="code-snippet">llm_with_tools = llm.bind_tools([multiply, get_weather])
+
+msg = llm_with_tools.invoke("What is 12 times 7?")
+print(msg.tool_calls)
+# [{'name': 'multiply', 'args': {'a': 12, 'b': 7}, 'id': 'call_abc'}]
+
+# run the tool and send the result back
+result = multiply.invoke(msg.tool_calls[0])   # -> ToolMessage(content='84')</div>
+                    <div class="info-box">
+                        <strong>Important:</strong> the LLM never runs code itself. It only returns <em>which</em> tool to call and with <em>what</em> arguments. Your program runs the tool and sends the result back as a <code>ToolMessage</code>.
+                    </div>
+
+                    <h5>The Agent Loop (ReAct: Reason + Act)</h5>
+                    <div class="training-visual">
+                        <div class="training-step">
+                            <div class="step-name">Think</div>
+                            <div class="step-desc">LLM decides next step</div>
+                        </div>
+                        <div class="arrow">→</div>
+                        <div class="training-step">
+                            <div class="step-name">Act</div>
+                            <div class="step-desc">Call a tool</div>
+                        </div>
+                        <div class="arrow">→</div>
+                        <div class="training-step">
+                            <div class="step-name">Observe</div>
+                            <div class="step-desc">Read tool result</div>
+                        </div>
+                        <div class="arrow">🔁</div>
+                        <div class="training-step">
+                            <div class="step-name">Answer</div>
+                            <div class="step-desc">When no more tools are needed</div>
+                        </div>
+                    </div>
+
+                    <h5>Building an Agent: create_agent (LangChain 1.0)</h5>
+                    <div class="code-snippet">from langchain.agents import create_agent
+
+agent = create_agent(
+    model="openai:gpt-4o-mini",
+    tools=[multiply, get_weather],
+    system_prompt="You are a helpful assistant. Use tools when needed.",
+)
+
+result = agent.invoke({
+    "messages": [{"role": "user", "content": "What's the weather in Hyderabad, and what is 12 x 7?"}]
+})
+print(result["messages"][-1].content)</div>
+                    <div class="info-box">
+                        <code>create_agent</code> runs on <strong>LangGraph</strong> under the hood, so it supports memory (checkpointers), streaming and human-in-the-loop. Older code used <code>AgentExecutor</code> + <code>create_tool_calling_agent</code>; these now live in <code>langchain-classic</code>.
+                    </div>
+
+                    <h5>Ready-made Tools</h5>
+                    <ul>
+                        <li><strong>Web search:</strong> Tavily, DuckDuckGo, Google Search</li>
+                        <li><strong>Knowledge:</strong> Wikipedia, Arxiv</li>
+                        <li><strong>Code:</strong> Python REPL (be careful, it runs real code)</li>
+                        <li><strong>Data:</strong> SQL database toolkit, CSV / Pandas agents</li>
+                        <li><strong>Retriever as a tool:</strong> let the agent search your vector store</li>
+                    </ul>
+                </div>
+
+                <!-- ============ 9. STREAMING & LANGSMITH ============ -->
+                <div id="lc-stream" class="tab-panel">
+                    <h4>📡 Streaming, Callbacks &amp; LangSmith</h4>
+
+                    <h5>Streaming</h5>
+                    <p>Show the answer as it's being written (like ChatGPT) instead of waiting for the whole reply.</p>
+                    <div class="code-snippet">chain = prompt | llm | StrOutputParser()
+
+for chunk in chain.stream({"topic": "transformers"}):
+    print(chunk, end="", flush=True)
+
+# Fine-grained events from every step (great for UIs)
+async for event in chain.astream_events({"topic": "RAG"}, version="v2"):
+    if event["event"] == "on_chat_model_stream":
+        print(event["data"]["chunk"].content, end="")</div>
+
+                    <h5>Callbacks</h5>
+                    <p>Hook into events like "LLM started" or "LLM finished" for logging, cost tracking, or progress bars.</p>
+                    <div class="code-snippet">from langchain_core.callbacks import BaseCallbackHandler
+
+class LoggingHandler(BaseCallbackHandler):
+    def on_llm_start(self, serialized, prompts, **kwargs):
+        print("🚀 LLM started")
+    def on_llm_end(self, response, **kwargs):
+        print("✅ LLM finished")
+
+chain.invoke({"topic": "LoRA"}, config={"callbacks": [LoggingHandler()]})</div>
+
+                    <h5>LangSmith: Debugging, Tracing &amp; Evaluation</h5>
+                    <div class="concept-visual">
+                        <div class="learning-type">
+                            <h4>What it shows</h4>
+                            <div class="visual-box">
+                                • Every step of every chain / agent<br>
+                                • Exact prompts &amp; responses<br>
+                                • Latency &amp; token cost<br>
+                                • Errors and where they happened
+                            </div>
+                        </div>
+                        <div class="learning-type">
+                            <h4>Extra features</h4>
+                            <div class="visual-box">
+                                • Datasets &amp; automated evaluation<br>
+                                • Compare prompt versions<br>
+                                • Production monitoring<br>
+                                • Prompt playground
+                            </div>
+                        </div>
+                    </div>
+                    <div class="code-snippet"># Just set environment variables, no code changes needed
+LANGSMITH_TRACING=true
+LANGSMITH_API_KEY=your-langsmith-key
+LANGSMITH_PROJECT=my-first-app      # optional</div>
+                    <div class="info-box">LangSmith has a free tier for personal projects. Every <code>invoke()</code> then appears as a trace at <strong>smith.langchain.com</strong>.</div>
+                </div>
+
+                <!-- ============ 10. CHEAT SHEET ============ -->
+                <div id="lc-cheatsheet" class="tab-panel">
+                    <h4>📋 LangChain Cheat Sheet</h4>
+
+                    <h5>Most-used Imports</h5>
+                    <div class="code-snippet"># models
+from langchain_openai import ChatOpenAI, OpenAIEmbeddings
+from langchain_ollama import ChatOllama
+from langchain.chat_models import init_chat_model
+
+# messages &amp; prompts
+from langchain_core.messages import SystemMessage, HumanMessage, AIMessage, ToolMessage
+from langchain_core.prompts import ChatPromptTemplate, MessagesPlaceholder
+
+# parsers &amp; runnables
+from langchain_core.output_parsers import StrOutputParser, JsonOutputParser
+from langchain_core.runnables import RunnablePassthrough, RunnableParallel, RunnableLambda
+
+# RAG
+from langchain_community.document_loaders import PyPDFLoader
+from langchain_text_splitters import RecursiveCharacterTextSplitter
+from langchain_community.vectorstores import FAISS
+
+# tools, agents, memory
+from langchain_core.tools import tool
+from langchain.agents import create_agent
+from langchain_core.runnables.history import RunnableWithMessageHistory</div>
+
+                    <h5>Quick Reference</h5>
+                    <div class="table-wrap">
+                        <table class="compare-table">
+                            <tr><th>I want to…</th><th>Use</th></tr>
+                            <tr><td>Call an LLM</td><td><code>ChatOpenAI(...).invoke()</code></td></tr>
+                            <tr><td>Reuse a prompt with variables</td><td><code>ChatPromptTemplate</code></td></tr>
+                            <tr><td>Get clean text</td><td><code>StrOutputParser</code></td></tr>
+                            <tr><td>Get typed JSON / objects</td><td><code>llm.with_structured_output(Model)</code></td></tr>
+                            <tr><td>Connect steps</td><td><code>prompt | llm | parser</code></td></tr>
+                            <tr><td>Run steps in parallel</td><td><code>RunnableParallel</code> / a dict</td></tr>
+                            <tr><td>Remember the conversation</td><td><code>RunnableWithMessageHistory</code></td></tr>
+                            <tr><td>Answer from my documents</td><td>Loader → Splitter → Embeddings → Vector store → Retriever</td></tr>
+                            <tr><td>Let the LLM use functions</td><td><code>@tool</code> + <code>bind_tools</code></td></tr>
+                            <tr><td>Build an agent</td><td><code>create_agent</code> (or LangGraph for custom flows)</td></tr>
+                            <tr><td>Debug what happened</td><td>LangSmith tracing</td></tr>
+                        </table>
+                    </div>
+
+                    <h5>Best Practices</h5>
+                    <ul>
+                        <li>🔑 Never hardcode API keys: use environment variables or a <code>.env</code> file.</li>
+                        <li>🌡️ Use <code>temperature=0</code> for factual / structured tasks.</li>
+                        <li>📏 Watch token usage: trim chat history and keep chunks small.</li>
+                        <li>✅ Prefer <code>with_structured_output</code> over parsing free text.</li>
+                        <li>🔍 Turn on LangSmith early: it saves hours of debugging.</li>
+                        <li>🆓 Learn for free with <strong>Ollama + LLaMA</strong> and HuggingFace embeddings.</li>
+                        <li>🕸️ When you need loops, branching or human approval, move to <a href="langgraph.html" style="color:#00ff88;">LangGraph</a>.</li>
+                    </ul>
+                    <a href="langgraph.html" class="guide-btn">📗 Next: LangGraph in Detail →</a>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <p>&copy; 2024 My AI Learning Blog</p>
+    </footer>
+
+    <!-- Offline AI Chatbot (no API key needed) -->
+    <div id="chatbot-container">
+        <div id="chatbot-toggle">
+            <img src="AI_img-removebg-preview.png" alt="AI" style="width: 40px; height: 40px; border-radius: 50%; object-fit: cover;">
+        </div>
+        <div id="chatbot-window">
+            <div id="chatbot-header">
+                <span>AI Assistant</span>
+                <div class="chatbot-controls">
+                    <button id="chatbot-refresh" class="refresh-btn">
+                        <svg viewBox="0 0 24 24">
+                            <path d="M17.65 6.35C16.2 4.9 14.21 4 12 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08c-.82 2.33-3.04 4-5.65 4-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"/>
+                        </svg>
+                    </button>
+                    <button id="chatbot-close">×</button>
+                </div>
+            </div>
+            <div id="chatbot-messages"></div>
+            <div id="chatbot-input-container">
+                <input type="text" id="chatbot-input" placeholder="Ask me about AI...">
+                <button id="chatbot-send">Send</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="ai-background.js"></script>
+    <script src="chatbot-frontend.js"></script>
+    <script>
+        function showTab(tabName, btn) {
+            document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+            document.querySelectorAll('.algorithm-tabs .tab-btn').forEach(b => b.classList.remove('active'));
+            document.getElementById(tabName).classList.add('active');
+            btn.classList.add('active');
+        }
+    </script>
+</body>
+</html>

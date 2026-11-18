@@ -215,8 +215,20 @@ class AIChatbot {
             'embedding': '**Embeddings** turn words, sentences or images into vectors of numbers, so that similar meanings end up close together. They are used for semantic search, recommendations and RAG.',
             'fine tuning': '**Fine-tuning** continues training a pretrained model on your own data to specialize it. **LoRA / QLoRA** fine-tune only small adapter layers, so it is much cheaper.',
             'cloud': '**AI on Cloud** platforms let you train and deploy models without your own hardware:\n• **Vertex AI** (Google Cloud)\n• **AWS SageMaker**\n• **Azure AI / Azure ML**',
-            'data preprocessing': '**Data Preprocessing** prepares raw data for ML:\n• Handle missing values\n• Remove duplicates and outliers\n• Encode categorical data\n• Scale / normalize features\n• Split into train / test sets'
+            'conversationchain': '**ConversationChain** is LangChain\'s simple chat chain: **LLM + prompt with {history} + memory**. Each turn it loads past messages, sends them with your new input, then saves the reply back to memory.',
+            'conversationbuffermemory': '**ConversationBufferMemory** stores the **full chat history word for word** and sends all of it every turn.\n✅ Nothing is lost\n⚠️ Token cost keeps growing and can exceed the context window\nBest for short chats.',
+            'conversationbufferwindowmemory': '**ConversationBufferWindowMemory** keeps only the **last k exchanges** (e.g. `k=2`). Older messages are dropped.\n✅ Fixed, low token use\n⚠️ Forgets early details',
+            'conversationsummarymemory': '**ConversationSummaryMemory** uses an **LLM to keep a running summary** of the chat instead of raw messages.\n✅ Great for very long chats\n⚠️ Extra LLM calls, small details may be lost',
+            'conversationsummarybuffermemory': '**ConversationSummaryBufferMemory** is a **hybrid**: recent messages are kept exactly, older ones are summarized once history passes `max_token_limit`. Best balance for production chatbots.',
+            'langchain memory': '**LangChain Memory** gives stateless LLMs a chat history. Types:\n• **BufferMemory**: full history\n• **BufferWindowMemory**: last k exchanges\n• **SummaryMemory**: running summary\n• **SummaryBufferMemory**: summary + recent messages\nThey are used with **ConversationChain**.',
+            'data preprocessing':'**Data Preprocessing** prepares raw data for ML:\n• Handle missing values\n• Remove duplicates and outliers\n• Encode categorical data\n• Scale / normalize features\n• Split into train / test sets'
         });
+
+        responses['memory in langchain'] = responses['langchain memory'];
+        responses['langchain vs langgraph'] = '**LangChain vs LangGraph**\n• **LangChain**: building blocks (models, prompts, retrievers, tools) joined in a **straight line**. Use it for RAG, summarizing, extraction, simple chatbots.\n• **LangGraph**: connects those blocks as a **graph** with loops, branching, saved state and human approval. Use it for agents, retry/self-correct flows, multi-agent systems.\n💡 Start with LangChain; move the flow to LangGraph when you need "if this, go back and try again".';
+        responses['langgraph vs langchain'] = responses['langchain vs langgraph'];
+        responses['difference between langchain and langgraph'] = responses['langchain vs langgraph'];
+        responses['difference between langgraph and langchain'] = responses['langchain vs langgraph'];
 
         const lowerMessage = message.toLowerCase();
         // Whole-word / phrase match so "hi" doesn't match "machine" and "ai" doesn't match "explain"
@@ -283,7 +295,14 @@ class AIChatbot {
             'kmeans': 'clustering',
             'agent': 'langgraph',
             'large language model': 'llm',
-            'attention': 'transformer'
+            'attention': 'transformer',
+            'buffer window memory': 'conversationbufferwindowmemory',
+            'window memory': 'conversationbufferwindowmemory',
+            'summary buffer memory': 'conversationsummarybuffermemory',
+            'summary memory': 'conversationsummarymemory',
+            'buffer memory': 'conversationbuffermemory',
+            'conversation chain': 'conversationchain',
+            'memory': 'langchain memory'
         };
 
         for (const [keyword, mappedKey] of Object.entries(keywordMappings)) {
